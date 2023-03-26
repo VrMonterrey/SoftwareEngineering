@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1050789180712",
+    "project_id": "softwareengineering-13096",
+    "storage_bucket": "softwareengineering-13096.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1050789180712:android:db54dcdefbb1c95baacc1d",
+        "android_client_info": {
+          "package_name": "com.example.softwareengineering"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1050789180712-98vk87emm5j6alt2ul7ob35e2sqeugik.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCc3TFBNJRNUzt5TE2YomtO2VGtSFgUqE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1050789180712-98vk87emm5j6alt2ul7ob35e2sqeugik.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
