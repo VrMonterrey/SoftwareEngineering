@@ -104,17 +104,14 @@
                 android:textColor="@color/white"
                 android:textSize="13dp" />
 
-            <EditText
-                android:id="@+id/lista_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
+            <Button
+                android:id="@+id/dialog_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="265dp"
-                android:background="@color/dark2"
-                android:hint="Wybierz składniki"
-                android:inputType="text"
-                android:paddingLeft="15dp"
-                android:textColorHint="@color/grey"
-                android:textSize="12dp" />
+                android:layout_marginLeft="5dp"
+                android:text="Kliknij"
+                />
 
             <TextView
                 android:layout_width="match_parent"

@@ -1,8 +1,10 @@
 package com.example.softwareengineering
 
+import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import com.example.softwareengineering.model.Posilki
@@ -22,70 +24,20 @@ class PosilkiActivity : AppCompatActivity() {
     private lateinit var ingredientsList: EditText
     private lateinit var ilosc: EditText
     private lateinit var addButton: ImageButton
+    private lateinit var dialog_button: Button
 
     private lateinit var skladnikiArr: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_posilki)
 
-        val addButton = findViewById<ImageButton>(R.id.submit_btn)
-        addButton.setOnClickListener {
-
-            nameOfProduct = findViewById<EditText>(R.id.name_edit_text)
-            spinnerCategory = findViewById<EditText>(R.id.category_edit_text)
-            imageUrl = findViewById<EditText>(R.id.image_edit_text)
-            ingredientsList = findViewById<EditText>(R.id.lista_edit_text)
-            ilosc = findViewById<EditText>(R.id.ilosc_edit_text)
-
-            val name = nameOfProduct.text.toString().trim()
-            //val category = spinnerCategory.selectedItem.toString()
-            val category = spinnerCategory.text.toString().trim()
-            val photoUrl = imageUrl.text.toString().trim()
-            val ingredients = ingredientsList.text.toString().trim().split(", ")
-            val quantity = ilosc.text.toString().toInt()
-
-            if (name.isEmpty() || category.isEmpty() || ingredients.isEmpty() ) {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            val database = Firebase.database.reference
-
-            val dish = Posilki(
-                id = database.child("posilki").push().key,
-                name = name,
-                category = category,
-                quantity = quantity,
-                products = ingredients,
-                photoUrl = photoUrl
-            )
-
-            if (dish.id != null) {
-                database.child("").child(dish.id!!).setValue(dish).addOnSuccessListener {
-                    Toast.makeText(this, "Nowy posilek dodany pomyślnie", Toast.LENGTH_SHORT).show()
-                    nameOfProduct.text.clear()
-                    spinnerCategory.text.clear()
-                    imageUrl.text.clear()
-                    ingredientsList.text.clear()
-                    ilosc.text.clear()
-                }
-                    .addOnFailureListener {
-                        Toast.makeText(
-                            this,
-                            "Błąd podczas dodawania posiłka: ${it.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-            }
-
-        }
+        dialog_button = findViewById<Button>(R.id.dialog_btn)
+        dialog_button.setOnClickListener { showCustomDialog() }
 
         logout = findViewById(R.id.logout_button)
         home = findViewById(R.id.home_button)
         categories = findViewById(R.id.categories_btn)
-        skladnikiArr = findViewById(R.id.skladniki_arr_btn)
 
         home.setOnClickListener(View.OnClickListener {
             var intent: Intent = Intent(applicationContext, MainActivity::class.java)
@@ -106,11 +58,23 @@ class PosilkiActivity : AppCompatActivity() {
             finish()
         })
 
-        skladnikiArr.setOnClickListener(View.OnClickListener {
-            var intent: Intent = Intent(applicationContext, ListOfSkladnikiActivity::class.java)
-            startActivity(intent)
-            finish()
-        })
+    }
 
+    private fun showCustomDialog() {
+        val builder = AlertDialog.Builder(this)
+        val dialogLayout = LayoutInflater.from(this).inflate(R.layout.dialog_layout, null)
+
+        builder.setTitle("Custom Dialog")
+            .setMessage("This is a custom dialog.")
+            .setView(dialogLayout)
+            .setPositiveButton("OK") { dialog, which ->
+                // User clicked OK button
+            }
+            .setNegativeButton("Cancel") { dialog, which ->
+                // User clicked Cancel button
+            }
+            .create()
+            .show()
     }
 }
+
