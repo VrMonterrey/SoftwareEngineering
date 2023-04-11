@@ -50,12 +50,10 @@ class SkladnikiToChooseAdapter(
             carbsTextView.text = product.carbs.toString()
             fatsTextView.text = product.fat.toString()
 
-            checkBox.setOnCheckedChangeListener(null)
-            checkBox.isChecked = false
+            checkBox.isChecked = product.checked
 
-            itemView.setOnClickListener {
-                checkBox.isChecked = !checkBox.isChecked
-                onProductSelected(product)
+            checkBox.setOnCheckedChangeListener { _, isChecked ->
+                product.checked = isChecked
             }
         }
     }
