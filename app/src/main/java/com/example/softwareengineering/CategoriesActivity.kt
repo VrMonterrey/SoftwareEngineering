@@ -15,7 +15,7 @@ class CategoriesActivity : AppCompatActivity() {
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
     private lateinit var skladniki: ImageButton
-    private lateinit var posilki_btn: RelativeLayout
+    private lateinit var posilki_btn: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

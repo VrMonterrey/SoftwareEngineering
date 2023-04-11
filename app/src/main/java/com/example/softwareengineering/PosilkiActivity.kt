@@ -18,13 +18,13 @@ class PosilkiActivity : AppCompatActivity() {
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
-    private lateinit var nameOfProduct: EditText
-    private lateinit var spinnerCategory: EditText
-    private lateinit var imageUrl: EditText
-    private lateinit var ingredientsList: EditText
+    private lateinit var dishName: EditText
+    private lateinit var dishCategory: EditText
+    private lateinit var dishImage: EditText
+    private lateinit var productsList: EditText
     private lateinit var ilosc: EditText
     private lateinit var addButton: ImageButton
-    private lateinit var dialog_button: Button
+    private lateinit var dialogButton: Button
 
     private lateinit var skladnikiArr: TextView
 
@@ -32,8 +32,8 @@ class PosilkiActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_posilki)
 
-        dialog_button = findViewById<Button>(R.id.dialog_btn)
-        dialog_button.setOnClickListener { showCustomDialog() }
+        dialogButton = findViewById(R.id.dialog_btn)
+        dialogButton.setOnClickListener{ showCustomDialog() }
 
         logout = findViewById(R.id.logout_button)
         home = findViewById(R.id.home_button)
@@ -77,4 +77,3 @@ class PosilkiActivity : AppCompatActivity() {
             .show()
     }
 }
-
