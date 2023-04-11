@@ -1,17 +1,24 @@
 package com.example.softwareengineering
 
 import android.app.AlertDialog
+import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
-import com.example.softwareengineering.model.Posilki
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.softwareengineering.adapter.SkladnikiToChooseAdapter
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import com.example.softwareengineering.model.Skladnik
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+
 
 class PosilkiActivity : AppCompatActivity() {
 
@@ -26,7 +33,7 @@ class PosilkiActivity : AppCompatActivity() {
     private lateinit var addButton: ImageButton
     private lateinit var dialogButton: Button
 
-    private lateinit var skladnikiArr: TextView
+    private lateinit var adapter: SkladnikiToChooseAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +70,30 @@ class PosilkiActivity : AppCompatActivity() {
     private fun showCustomDialog() {
         val builder = AlertDialog.Builder(this)
         val dialogLayout = LayoutInflater.from(this).inflate(R.layout.dialog_layout, null)
+        val recyclerView = dialogLayout.findViewById<RecyclerView>(R.id.ingredients_rv)
+
+        val database = FirebaseDatabase.getInstance()
+        val productsRef = database.getReference("products")
+        val productsListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val products = dataSnapshot.children.mapNotNull { it.getValue(Skladnik::class.java) }
+                adapter.setData(products)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.w(TAG, "loadIngredients:onCancelled", databaseError.toException())
+            }
+        }
+        productsRef.addValueEventListener(productsListener)
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        val products = mutableListOf<Skladnik>()
+        adapter = SkladnikiToChooseAdapter(products) { product ->
+            // Обработка выбора ингредиента
+        }
+
+        recyclerView.adapter = adapter
 
         builder.setTitle("Custom Dialog")
             .setMessage("This is a custom dialog.")
