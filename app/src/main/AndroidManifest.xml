@@ -14,6 +14,21 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".EditDish"
+            android:exported="false" />
+        <activity
+            android:name=".SkladPosilku"
+            android:exported="false" />
+        <activity
+            android:name=".SkladProduktu"
+            android:exported="false" />
+        <activity
+            android:name=".DishAdapter"
+            android:exported="false" />
+        <activity
+            android:name=".ListOfPosilkiActivity"
+            android:exported="false" />
+        <activity
             android:name=".PosilkiActivity"
             android:exported="false" />
         <activity
