@@ -1,14 +1,19 @@
 package com.example.softwareengineering
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.softwareengineering.adapter.SkladnikiToChooseAdapter
@@ -21,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.io.InputStream
 
 
 class PosilkiActivity : AppCompatActivity() {
@@ -30,8 +36,6 @@ class PosilkiActivity : AppCompatActivity() {
     private lateinit var categories: ImageButton
     private lateinit var dishName: EditText
     private lateinit var dishCategory: EditText
-    private lateinit var dishImage: EditText
-    private lateinit var productsList: EditText
     private lateinit var dishQuantity: EditText
     private lateinit var addButton: ImageButton
     private lateinit var dialogButton: Button
@@ -39,6 +43,12 @@ class PosilkiActivity : AppCompatActivity() {
     private lateinit var adapter: SkladnikiToChooseAdapter
 
     private var selectedProducts: List<Skladnik> = emptyList()
+
+    private lateinit var imageView: ImageView
+    private lateinit var chooseImageButton: Button
+    private lateinit var galleryLauncher: ActivityResultLauncher<String>
+    private lateinit var photoUrl: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +62,24 @@ class PosilkiActivity : AppCompatActivity() {
         categories = findViewById(R.id.categories_btn)
 
         addButton = findViewById(R.id.submit_btn)
+
+        val database = Firebase.database.reference
+
+        imageView = findViewById<ImageView>(R.id.image_view)
+        chooseImageButton = findViewById<Button>(R.id.choose_image_button)
+
+        galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            if (uri != null) {
+                imageView.setImageURI(uri)
+
+                val currentUser = FirebaseAuth.getInstance().currentUser
+                val currentUserId = currentUser?.uid ?: ""
+                val dishesRef = database.child("dishes")
+                val newDishRef = dishesRef.push()
+                val newDishKey = newDishRef.key
+                photoUrl = "$currentUserId/dishes/$newDishKey/photo.jpg"
+            }
+        }
 
         home.setOnClickListener(View.OnClickListener {
             var intent: Intent = Intent(applicationContext, MainActivity::class.java)
@@ -71,6 +99,10 @@ class PosilkiActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         })
+
+        chooseImageButton.setOnClickListener {
+            galleryLauncher.launch("image/*")
+        }
 
     }
 
@@ -124,12 +156,10 @@ class PosilkiActivity : AppCompatActivity() {
             dishName = findViewById<EditText>(R.id.name_edit_text)
             dishCategory = findViewById<EditText>(R.id.category_edit_text)
             dishQuantity = findViewById<EditText>(R.id.ilosc_edit_text)
-            dishImage = findViewById<EditText>(R.id.image_edit_text)
 
             val name = dishName.text.toString()
             val category = dishCategory.text.toString()
             val quantity = dishQuantity.text.toString().toInt()
-            val image = dishImage.text.toString().trim()
 
             val database = Firebase.database.reference
 
@@ -139,7 +169,7 @@ class PosilkiActivity : AppCompatActivity() {
                 category = category,
                 quantity = quantity,
                 products = selectedProducts,
-                photoUrl = image
+                photoUrl = photoUrl
             )
 
             if (dish.id != null) {
@@ -148,7 +178,7 @@ class PosilkiActivity : AppCompatActivity() {
                     dishName.text.clear()
                     dishCategory.text.clear()
                     dishQuantity.text.clear()
-                    dishImage.text.clear()
+                    imageView.setImageBitmap(null)
                 }
                     .addOnFailureListener {
                         Toast.makeText(
