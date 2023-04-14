@@ -67,6 +67,8 @@ class PosilkiActivity : AppCompatActivity() {
 
         val database = Firebase.database.reference
 
+        //Choose image from gallery
+
         imageView = findViewById<ImageView>(R.id.image_view)
         chooseImageButton = findViewById<Button>(R.id.choose_image_button)
 
@@ -82,6 +84,8 @@ class PosilkiActivity : AppCompatActivity() {
                 photoUrl = "$currentUserId/dishes/$newDishKey/photo.jpg"
             }
         }
+
+        //Menu navigation
 
         home.setOnClickListener(View.OnClickListener {
             var intent: Intent = Intent(applicationContext, MainActivity::class.java)
@@ -108,6 +112,8 @@ class PosilkiActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         })
+
+        //Open gallery to choose image
 
         chooseImageButton.setOnClickListener {
             galleryLauncher.launch("image/*")
@@ -148,8 +154,8 @@ class PosilkiActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
 
-        builder.setTitle("Custom Dialog")
-            .setMessage("This is a custom dialog.")
+        builder.setTitle("Wybierz składniki")
+            .setMessage("Klikni checkbpx'a żeby dodać skłądnik")
             .setView(dialogLayout)
             .setPositiveButton("OK") { dialog, which ->
                 selectedProducts = adapter.getData().filter { it.checked }

@@ -38,6 +38,7 @@ class PosilkiAdapter(
         holder.categoryTextView.text = currentItem.category
         holder.quantityTextView.text = currentItem.quantity.toString()
 
+
     }
 
     override fun getItemCount() = posilkiList.size
