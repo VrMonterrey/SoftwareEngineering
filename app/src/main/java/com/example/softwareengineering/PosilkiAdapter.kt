@@ -1,7 +1,7 @@
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
+import com.bumptech.glide.Glide
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
@@ -38,7 +38,10 @@ class PosilkiAdapter(
         holder.categoryTextView.text = currentItem.category
         holder.quantityTextView.text = currentItem.quantity.toString()
 
-
+        val photoUrl = currentItem.photoUrl
+        Glide.with(holder.itemView.context)
+            .load(photoUrl)
+            .into(holder.photoImageView)
     }
 
     override fun getItemCount() = posilkiList.size
@@ -55,6 +58,7 @@ class PosilkiAdapter(
         val quantityTextView: TextView = itemView.findViewById(R.id.posilki_quantity)
         val deleteButton: AppCompatImageView = itemView.findViewById(R.id.remove_btn)
         val editBotton: AppCompatImageView = itemView.findViewById(R.id.edit_btn)
+        val photoImageView: AppCompatImageView = itemView.findViewById(R.id.image_holder)
 
         init {
             deleteButton.setOnClickListener {

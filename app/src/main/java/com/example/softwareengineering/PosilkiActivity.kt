@@ -75,13 +75,7 @@ class PosilkiActivity : AppCompatActivity() {
         galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             if (uri != null) {
                 imageView.setImageURI(uri)
-
-                val currentUser = FirebaseAuth.getInstance().currentUser
-                val currentUserId = currentUser?.uid ?: ""
-                val dishesRef = database.child("dishes")
-                val newDishRef = dishesRef.push()
-                val newDishKey = newDishRef.key
-                photoUrl = "$currentUserId/dishes/$newDishKey/photo.jpg"
+                photoUrl = uri.toString()
             }
         }
 
