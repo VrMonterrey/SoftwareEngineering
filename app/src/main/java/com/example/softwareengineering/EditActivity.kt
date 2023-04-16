@@ -28,6 +28,7 @@ class EditActivity : AppCompatActivity() {
     private lateinit var carbsEditText: EditText
     private lateinit var fatsEditText: EditText
     private lateinit var addButton: ImageButton
+
     private lateinit var skladnikiArr: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {

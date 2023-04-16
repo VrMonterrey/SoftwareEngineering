@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
 
     <application
         android:allowBackup="true"
@@ -14,19 +16,7 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".Comment"
-            android:exported="false" />
-        <activity
-            android:name=".EditDish"
-            android:exported="false" />
-        <activity
-            android:name=".SkladPosilku"
-            android:exported="false" />
-        <activity
-            android:name=".SkladProduktu"
-            android:exported="false" />
-        <activity
-            android:name=".DishAdapter"
+            android:name=".EditDishActivity"
             android:exported="false" />
         <activity
             android:name=".ListOfPosilkiActivity"
