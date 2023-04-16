@@ -69,6 +69,13 @@ class EditDishActivity : AppCompatActivity() {
         imageView = findViewById<ImageView>(R.id.image_view)
         chooseImageButton = findViewById<Button>(R.id.choose_image_button)
 
+        galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            if (uri != null) {
+                imageView.setImageURI(uri)
+                photoUrl = uri.toString()
+            }
+        }
+
         // Initialize Firebase database
         database = Firebase.database.reference
 
@@ -101,7 +108,8 @@ class EditDishActivity : AppCompatActivity() {
                 name = name,
                 category = category,
                 quantity = quantity,
-                products = selectedProducts
+                products = selectedProducts,
+                photoUrl = photoUrl
             )
 
             database.child("dishes").child(dishId).setValue(dish)
