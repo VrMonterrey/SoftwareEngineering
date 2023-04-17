@@ -87,7 +87,7 @@ class ListOfPosilkiActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapter
         })
 
         goback.setOnClickListener(View.OnClickListener{
-            var intent : Intent = Intent(applicationContext, SkladnikiActivity::class.java)
+            var intent : Intent = Intent(applicationContext, PosilkiActivity::class.java)
             startActivity(intent)
             finish()
         })
@@ -124,7 +124,7 @@ class ListOfPosilkiActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapter
     override fun onEditClick(position: Int) {
         val dish = dishList[position]
 
-        val intent = Intent(this, EditActivity::class.java)
+        val intent = Intent(this, EditDishActivity::class.java)
         intent.putExtra("posilek", dish.id)
         startActivity(intent)
     }

@@ -69,7 +69,7 @@
                 android:layout_marginTop="105dp"
                 android:background="@color/dark2"
                 android:hint="Wpisz kategorię"
-                android:inputType="number"
+                android:inputType="text"
                 android:paddingLeft="15dp"
                 android:textColorHint="@color/grey"
                 android:textSize="12dp" />
@@ -141,7 +141,7 @@
         android:background="#00ffffff"/>
 
     <TextView
-        android:id="@+id/skladniki_arr_btn"
+        android:id="@+id/posilki_arr_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
