@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.softwareengineering.model.Posilki
@@ -28,6 +29,8 @@ class ListOfPosilkiActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapter
     private lateinit var dishRecyclerView: RecyclerView
     private lateinit var database: FirebaseDatabase
     private lateinit var dishRef: DatabaseReference
+    private lateinit var comsect: TextView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +69,16 @@ class ListOfPosilkiActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapter
         home = findViewById(R.id.home_button)
         categories = findViewById(R.id.categories_btn)
         goback = findViewById(R.id.goback_btn)
+
+        //Коментарии (только я не знаю как их связять с конкретным складником)
+        comsect = findViewById(R.id.com_sect)
+
+        comsect.setOnClickListener(View.OnClickListener {
+            var intent : Intent = Intent(applicationContext, CommentActivity::class.java)
+            startActivity(intent)
+            finish()
+        })
+
 
         home.setOnClickListener(View.OnClickListener{
             var intent : Intent = Intent(applicationContext, MainActivity::class.java)
