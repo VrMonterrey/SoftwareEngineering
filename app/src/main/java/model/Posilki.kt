@@ -6,5 +6,8 @@ data class Posilki(
     val category: String = "",
     val quantity: Int = 0,
     val products: List<Skladnik> = emptyList(),
-    val photoUrl: String = ""
+    val photoUrl: String = "",
+
+    val comments: List<Comment>? = emptyList(),
+    val userId: String? = ""
 )

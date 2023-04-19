@@ -71,13 +71,13 @@ class ListOfPosilkiActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapter
         goback = findViewById(R.id.goback_btn)
 
         //Коментарии (только я не знаю как их связять с конкретным складником)
-        comsect = findViewById(R.id.com_sect)
+        //comsect = findViewById(R.id.com_sect)
 
-        comsect.setOnClickListener(View.OnClickListener {
+        /*comsect.setOnClickListener(View.OnClickListener {
             var intent : Intent = Intent(applicationContext, CommentActivity::class.java)
             startActivity(intent)
             finish()
-        })
+        })*/
 
 
         home.setOnClickListener(View.OnClickListener{
@@ -139,6 +139,20 @@ class ListOfPosilkiActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapter
 
         val intent = Intent(this, EditDishActivity::class.java)
         intent.putExtra("posilek", dish.id)
+        startActivity(intent)
+    }
+    override fun onCommentClick(position: Int) {
+        val comment = dishList[position]
+
+        val intent = Intent(this, CommentActivity::class.java)
+        intent.putExtra("comment", comment.id)
+        startActivity(intent)
+    }
+    override fun onDishClick(position: Int) {
+        val comment = dishList[position]
+
+        val intent = Intent(this, DishDetailActivity::class.java)
+        intent.putExtra("posilek", comment.id)
         startActivity(intent)
     }
 

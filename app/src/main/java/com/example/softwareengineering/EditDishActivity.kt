@@ -85,7 +85,7 @@ class EditDishActivity : AppCompatActivity() {
         // Retrieve dish data from Firebase database
         database.child("dishes").child(dishId).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                // Populate fields with dish data
+                // Fill fields with dish data
                 val dish = snapshot.getValue(Posilki::class.java)
                 dishName.setText(dish?.name)
                 dishCategory.setText(dish?.category)
