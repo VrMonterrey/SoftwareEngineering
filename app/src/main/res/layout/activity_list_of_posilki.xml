@@ -26,26 +26,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/dishRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="330dp"
             android:padding="16dp"
             android:layout_marginTop="50dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-        <TextView
-            android:id="@+id/com_sect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="377dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="35dp"
-            android:text="Komentarz"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="18dp"
-            android:textStyle="italic" />
 
     </RelativeLayout>
 
