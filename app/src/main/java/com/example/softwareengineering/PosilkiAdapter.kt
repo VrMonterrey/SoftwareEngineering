@@ -73,11 +73,20 @@ class PosilkiAdapter(
                     listener.onEditClick(position)
                 }
             }
+
+            photoImageView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onDishClick(position)
+                }
+            }
         }
     }
 
     interface PosilkiAdapterListener {
         fun onDeleteClick(position: Int)
         fun onEditClick(position: Int)
+        fun onCommentClick(position: Int)
+        fun onDishClick(position: Int)
     }
 }

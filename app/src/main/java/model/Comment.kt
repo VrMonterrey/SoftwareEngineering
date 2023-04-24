@@ -4,5 +4,8 @@ data class Comment(
     val id: String? = "",
     val text: String = "",
     val ocena: Int = 0,
-    val posilek: Posilki
+    val date: Long = System.currentTimeMillis(),
+
+    val userId: String = "",
+    val posilekId: Posilki
 )
