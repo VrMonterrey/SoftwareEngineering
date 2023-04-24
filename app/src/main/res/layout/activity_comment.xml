@@ -22,18 +22,19 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Komentarz"
-                android:textSize="24sp"
-                android:textColor="@android:color/white"
+                android:background="@drawable/rounded_background"
                 android:padding="16dp"
-                android:background="@drawable/rounded_background"/>
+                android:text="Komentarz"
+                android:textColor="@android:color/white"
+                android:textSize="24sp" />
+
 
             <ListView
                 android:id="@+id/commentsListView"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="137dp"
                 android:layout_weight="1"
-                android:background="@android:color/white"
+                android:background="@drawable/rounded_edittext"
                 android:divider="@android:color/darker_gray"
                 android:dividerHeight="0.5dp"
                 android:padding="16dp" />
@@ -42,32 +43,55 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="16dp"
-                android:background="@android:color/white">
+                android:padding="16dp">
 
                 <EditText
                     android:id="@+id/commentEditText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@drawable/rounded_edittext"
                     android:hint="Wpisz komentarz..."
-                    android:textSize="16sp"
                     android:padding="8dp"
-                    />
+                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/addCommentButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Dodać"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp"
+                    android:background="@drawable/rounded_button"
                     android:paddingStart="16dp"
                     android:paddingTop="8dp"
                     android:paddingEnd="16dp"
-                    android:paddingBottom="8dp" />
+                    android:paddingBottom="8dp"
+                    android:text="Dodać"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp" />
+
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="88dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:paddingLeft="7dp"
+                android:text="Ocena:"
+                android:textColor="@android:color/white"
+                android:textSize="24sp" />
+
+            <Spinner
+                android:id="@+id/ratingSpinner"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_gravity="center"
+                android:background="@drawable/rounded_edittext"
+                android:entries="@array/ratings"
+                android:padding="14dp"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+
 
         </LinearLayout>
     </RelativeLayout>
