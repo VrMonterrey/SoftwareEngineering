@@ -1,5 +1,7 @@
 package com.example.softwareengineering
 
+import ProductAdapter
+import ProductAdapterDishDetails
 import android.content.ClipData
 import android.content.ContentValues
 import android.content.Intent
@@ -7,20 +9,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.*
+import androidx.recyclerview.widget.RecyclerView
 import com.example.softwareengineering.model.Posilki
 import com.example.softwareengineering.model.Skladnik
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class DishDetailActivity : AppCompatActivity() {
+class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.ProductAdapterDishDetailsListener {
 
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
@@ -34,6 +32,14 @@ class DishDetailActivity : AppCompatActivity() {
     private lateinit var proteins: TextView
     private lateinit var carbs: TextView
     private lateinit var fats: TextView
+
+    private lateinit var rating_spn: Spinner
+
+    private lateinit var productAdapter: ProductAdapterDishDetails
+    private lateinit var productList: MutableList<Skladnik>
+    private lateinit var productRecyclerView: RecyclerView
+    private lateinit var database2: FirebaseDatabase
+    private lateinit var productRef: DatabaseReference
 
     private var dishName: String? = ""
     private var dishCategory: String? = ""
@@ -74,38 +80,69 @@ class DishDetailActivity : AppCompatActivity() {
             }
         })
 
-        //nameField.text = dishName
+        //List of "składniki"
+        productRecyclerView = findViewById(R.id.productRecyclerView)
+        productAdapter = ProductAdapterDishDetails(mutableListOf(), this)
+        productRecyclerView.adapter = productAdapter
 
-        logout = findViewById(R.id.logout_button)
-        home = findViewById(R.id.home_button)
-        categories = findViewById(R.id.categories_btn)
+        database2 = FirebaseDatabase.getInstance()
+        productRef = database2.getReference("products")
+
+        productList = mutableListOf()
+
+        productRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                productList.clear()
+                val products = mutableListOf<Skladnik>()
+                for (productSnapshot in snapshot.children) {
+                    val product = productSnapshot.getValue(Skladnik::class.java)
+                    product?.let {
+                        products.add(it)
+                    }
+                }
+                productList.addAll(products)
+                productAdapter.updateData(products)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+            }
+
+        })
+
+        //Rating
+        val ratings = arrayOf("1", "2", "3", "4", "5")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, ratings)
+        rating_spn = findViewById(R.id.ratingSpinner)
+        rating_spn.adapter = adapter
+
+        rating_spn.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                Toast.makeText(this@DishDetailActivity,
+                    "${adapterView?.getItemAtPosition(position).toString()}",
+                    Toast.LENGTH_LONG).show()
+            }
+        }
+
+        //nameField.text = dishName
         goback = findViewById(R.id.goback_btn)
 
         //Menu navigation
-
-        home.setOnClickListener(View.OnClickListener {
-            var intent: Intent = Intent(applicationContext, MainActivity::class.java)
-            startActivity(intent)
-            finish()
-        })
-
-        categories.setOnClickListener(View.OnClickListener {
-            var intent: Intent = Intent(applicationContext, CategoriesActivity::class.java)
-            startActivity(intent)
-            finish()
-        })
-
-        logout.setOnClickListener(View.OnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            var intent: Intent = Intent(applicationContext, login::class.java)
-            startActivity(intent)
-            finish()
-        })
-
         goback.setOnClickListener(View.OnClickListener{
             var intent : Intent = Intent(applicationContext, ListOfPosilkiActivity::class.java)
             startActivity(intent)
             finish()
         })
+    }
+
+    override fun onDeleteClick(position: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onEditClick(position: Int) {
+        TODO("Not yet implemented")
     }
 }

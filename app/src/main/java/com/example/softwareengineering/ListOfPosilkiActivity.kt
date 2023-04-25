@@ -141,13 +141,11 @@ class ListOfPosilkiActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapter
         intent.putExtra("posilek", dish.id)
         startActivity(intent)
     }
-    override fun onCommentClick(position: Int) {
-        val comment = dishList[position]
 
-        val intent = Intent(this, CommentActivity::class.java)
-        intent.putExtra("comment", comment.id)
-        startActivity(intent)
+    override fun onCommentClick(position: Int) {
+        TODO("Not yet implemented")
     }
+
     override fun onDishClick(position: Int) {
         val comment = dishList[position]
 
