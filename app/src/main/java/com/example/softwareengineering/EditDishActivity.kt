@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.softwareengineering.adapter.SkladnikiToChooseAdapter
 import com.example.softwareengineering.model.Posilki
 import com.example.softwareengineering.model.Skladnik
@@ -90,6 +91,9 @@ class EditDishActivity : AppCompatActivity() {
                 dishName.setText(dish?.name)
                 dishCategory.setText(dish?.category)
                 dishQuantity.setText(dish?.quantity.toString())
+                Glide.with(applicationContext)
+                    .load(dish?.photoUrl)
+                    .into(imageView)
             }
 
             override fun onCancelled(error: DatabaseError) {

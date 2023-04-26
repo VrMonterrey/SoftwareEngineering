@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.softwareengineering.model.Posilki
 import com.example.softwareengineering.model.Skladnik
 import com.google.firebase.auth.FirebaseAuth
@@ -28,6 +29,7 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
     private lateinit var nameField: TextView
     private lateinit var categoryField: TextView
     private lateinit var quantityField: TextView
+    private lateinit var dishImage: ImageView
     private lateinit var kcal: TextView
     private lateinit var proteins: TextView
     private lateinit var carbs: TextView
@@ -44,13 +46,13 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
     private var dishName: String? = ""
     private var dishCategory: String? = ""
     private var dishQuantity: Int? = 1
-    private lateinit var dishProducts: List<Skladnik>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dish_detail)
 
         nameField = findViewById(R.id.dish_name)
+        dishImage = findViewById(R.id.dish_image)
         kcal = findViewById(R.id.dish_kcal)
         proteins = findViewById(R.id.dish_proteins)
         carbs = findViewById(R.id.dish_carbs)
@@ -70,9 +72,10 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
                 dishName = dish?.name
                 dishCategory = dish?.category
                 dishQuantity = dish?.quantity
-                if (dish != null) {
-                    dishProducts = dish.products
-                }
+                Glide.with(applicationContext)
+                    .load(dish?.photoUrl)
+                    .into(dishImage)
+                dishImage.background = null;
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -121,9 +124,7 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
             }
 
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                Toast.makeText(this@DishDetailActivity,
-                    "${adapterView?.getItemAtPosition(position).toString()}",
-                    Toast.LENGTH_LONG).show()
+
             }
         }
 
