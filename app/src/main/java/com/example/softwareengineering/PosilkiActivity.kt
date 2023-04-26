@@ -26,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import java.io.InputStream
 
 
@@ -47,8 +48,9 @@ class PosilkiActivity : AppCompatActivity() {
 
     private lateinit var imageView: ImageView
     private lateinit var chooseImageButton: Button
-    private lateinit var galleryLauncher: ActivityResultLauncher<String>
-    private lateinit var photoUrl: String
+    private var photoUrl: String = ""
+
+    private lateinit var getContent: ActivityResultLauncher<String>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,25 +64,35 @@ class PosilkiActivity : AppCompatActivity() {
         home = findViewById(R.id.home_button)
         categories = findViewById(R.id.categories_btn)
 
-
         addButton = findViewById(R.id.submit_btn)
 
         val database = Firebase.database.reference
 
         //Choose image from gallery
-
         imageView = findViewById<ImageView>(R.id.image_view)
         chooseImageButton = findViewById<Button>(R.id.choose_image_button)
 
-        galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        val storageRef = FirebaseStorage.getInstance().getReference("images")
+
+        getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             if (uri != null) {
                 imageView.setImageURI(uri)
-                photoUrl = uri.toString()
+                val imageRef = storageRef.child(uri.lastPathSegment!!)
+                val uploadTask = contentResolver?.openInputStream(uri)?.readBytes()?.let { imageRef.putBytes(it) }
+                uploadTask?.addOnSuccessListener {
+                    imageRef.downloadUrl.addOnSuccessListener { uri ->
+                        photoUrl = uri.toString()
+                        Log.d(TAG, "Image URL: $photoUrl")
+                    }
+                }
             }
         }
 
-        //Menu navigation
+        chooseImageButton.setOnClickListener {
+            getContent.launch("image/*")
+        }
 
+        //Menu navigation
         home.setOnClickListener(View.OnClickListener {
             var intent: Intent = Intent(applicationContext, MainActivity::class.java)
             startActivity(intent)
@@ -106,13 +118,6 @@ class PosilkiActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         })
-
-        //Open gallery to choose image
-
-        chooseImageButton.setOnClickListener {
-            galleryLauncher.launch("image/*")
-        }
-
     }
 
     private fun showCustomDialog() {
@@ -149,7 +154,7 @@ class PosilkiActivity : AppCompatActivity() {
 
 
         builder.setTitle("Wybierz składniki")
-            .setMessage("Kliknij checkbpx'a żeby dodać składnik")
+            .setMessage("Kliknij checkbox'a żeby dodać składnik \nNazwa | kalorii | białko | weglewodany | tłuszcz")
             .setView(dialogLayout)
             .setPositiveButton("OK") { dialog, which ->
                 selectedProducts = adapter.getData().filter { it.checked }
