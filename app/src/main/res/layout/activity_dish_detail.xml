@@ -11,17 +11,23 @@
         android:layout_alignParentBottom="true"
         android:layout_marginHorizontal="0dp">
 
-        <TextView
-            android:id="@+id/dish_name"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:letterSpacing=".1"
-            android:paddingVertical="45dp"
-            android:text="Dish Name"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="19dp"
-            android:textStyle="bold" />
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/dish_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing=".1"
+                android:paddingVertical="15dp"
+                android:text="Dish Name"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="19dp"
+                android:textStyle="bold"
+                android:layout_centerHorizontal="true" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -181,4 +187,5 @@
         android:src="@drawable/ic_goback"
         android:background="#00ffffff"/>
 
+</RelativeLayout>
 </RelativeLayout>

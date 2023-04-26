@@ -16,6 +16,7 @@ class CategoriesActivity : AppCompatActivity() {
     private lateinit var categories: ImageButton
     private lateinit var skladniki: ImageButton
     private lateinit var posilki_btn: ImageButton
+    private lateinit var share_btn: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +27,7 @@ class CategoriesActivity : AppCompatActivity() {
         categories = findViewById(R.id.categories_btn)
         skladniki = findViewById(R.id.skladniki_btn)
         posilki_btn = findViewById(R.id.posilki_btn)
+        share_btn = findViewById(R.id.share_btn)
 
         home.setOnClickListener(View.OnClickListener{
             var intent : Intent = Intent(applicationContext,MainActivity::class.java)
@@ -56,6 +58,14 @@ class CategoriesActivity : AppCompatActivity() {
             var intent : Intent = Intent(applicationContext,PosilkiActivity::class.java)
             startActivity(intent)
             finish()
+        })
+
+        share_btn.setOnClickListener(View.OnClickListener{
+            var shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Check out this cool app!")
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "https://github.com/VrMonterrey/SoftwareEngineering")
+            startActivity(Intent.createChooser(shareIntent, "Share via"))
         })
 
     }
