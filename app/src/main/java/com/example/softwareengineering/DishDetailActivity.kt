@@ -35,6 +35,11 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
     private lateinit var carbs: TextView
     private lateinit var fats: TextView
 
+    private lateinit var fullkcal: TextView
+    private lateinit var fullproteins: TextView
+    private lateinit var fullcarbs: TextView
+    private lateinit var fullfats: TextView
+
     private lateinit var rating_spn: Spinner
 
     private lateinit var productAdapter: ProductAdapterDishDetails
@@ -57,6 +62,11 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
         proteins = findViewById(R.id.dish_proteins)
         carbs = findViewById(R.id.dish_carbs)
         fats = findViewById(R.id.dish_fats)
+
+        fullkcal = findViewById(R.id.full_kcal)
+        fullproteins = findViewById(R.id.full_proteins)
+        fullcarbs = findViewById(R.id.full_carbs)
+        fullfats = findViewById(R.id.full_fats)
 
         // Initialize Firebase database
         val database = Firebase.database.reference
