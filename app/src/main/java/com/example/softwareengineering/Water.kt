@@ -15,7 +15,6 @@ class Water : AppCompatActivity() {
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
-    private lateinit var submit_btn: ImageButton
     private lateinit var water_edit: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
