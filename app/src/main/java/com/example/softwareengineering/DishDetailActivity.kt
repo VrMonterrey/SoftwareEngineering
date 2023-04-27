@@ -1,8 +1,6 @@
 package com.example.softwareengineering
 
-import ProductAdapter
 import ProductAdapterDishDetails
-import android.content.ClipData
 import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +10,7 @@ import android.view.View
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.softwareengineering.model.Comment
 import com.example.softwareengineering.model.Posilki
 import com.example.softwareengineering.model.Skladnik
 import com.google.firebase.auth.FirebaseAuth
@@ -47,6 +46,8 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
     private lateinit var productRecyclerView: RecyclerView
     private lateinit var database2: FirebaseDatabase
     private lateinit var productRef: DatabaseReference
+
+    private lateinit var edit_text: EditText
 
     private var dishName: String? = ""
     private var dishCategory: String? = ""
@@ -124,7 +125,8 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
         })
 
         //Rating
-        val ratings = arrayOf("1", "2", "3", "4", "5")
+        val ratings = arrayOf(1, 2, 3, 4, 5)
+        val selectedItem = 1
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, ratings)
         rating_spn = findViewById(R.id.ratingSpinner)
         rating_spn.adapter = adapter
@@ -134,7 +136,7 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
             }
 
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
-
+                val selectedItem = rating_spn.selectedItem
             }
         }
 
@@ -147,6 +149,46 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
             startActivity(intent)
             finish()
         })
+
+        val addButton = findViewById<ImageButton>(R.id.submit_btn)
+        addButton.setOnClickListener {
+
+            edit_text = findViewById<EditText>(R.id.name_edit_text)
+
+            val text = edit_text.text.toString()
+
+            val currentUser = FirebaseAuth.getInstance().currentUser
+            val currentUserId = currentUser?.uid
+
+            val database = Firebase.database.reference
+            val comment = currentUserId?.let { it1 ->
+                Comment(
+                    id = database.child("comments").push().key,
+                    text = text,
+                    ocena = selectedItem,
+                    userId = it1,
+                    posilekId = dishId
+                    )
+            }
+
+
+            if (comment != null) {
+                if (comment.id != null) {
+                    database.child("products").child(comment.id!!).setValue(comment).addOnSuccessListener {
+                        Toast.makeText(this, "Nowy komentarz dodany pomyślnie", Toast.LENGTH_SHORT).show()
+                        edit_text.text.clear()
+                    }
+                        .addOnFailureListener {
+                            Toast.makeText(
+                                this,
+                                "Błąd podczas dodawania komentarza: ${it.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                }
+            }
+
+        }
     }
 
     override fun onDeleteClick(position: Int) {

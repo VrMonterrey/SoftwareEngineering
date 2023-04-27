@@ -21,6 +21,7 @@ class PosilkiAdapter(
         return PosilkiViewHolder(itemView)
     }
 
+
     interface OnDeleteClickListener {
         fun onDeleteClick(position: Int)
     }
@@ -60,6 +61,8 @@ class PosilkiAdapter(
         val editBotton: AppCompatImageView = itemView.findViewById(R.id.edit_btn)
         val photoImageView: AppCompatImageView = itemView.findViewById(R.id.image_holder)
 
+        private var currentPosilki: Posilki? = null
+
         init {
             deleteButton.setOnClickListener {
                 val position = adapterPosition
@@ -77,9 +80,24 @@ class PosilkiAdapter(
             photoImageView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    listener.onDishClick(position)
+                    currentPosilki?.let { posilki ->
+                        listener.onDishClick(posilki.id)
+                    }
                 }
             }
+        }
+
+        fun bind(posilki: Posilki) {
+            currentPosilki = posilki
+
+            nameTextView.text = posilki.name
+            categoryTextView.text = posilki.category
+            quantityTextView.text = posilki.quantity.toString()
+
+            val photoUrl = posilki.photoUrl
+            Glide.with(itemView.context)
+                .load(photoUrl)
+                .into(photoImageView)
         }
     }
 
@@ -87,6 +105,6 @@ class PosilkiAdapter(
         fun onDeleteClick(position: Int)
         fun onEditClick(position: Int)
         fun onCommentClick(position: Int)
-        fun onDishClick(position: Int)
+        fun onDishClick(position: String?)
     }
 }

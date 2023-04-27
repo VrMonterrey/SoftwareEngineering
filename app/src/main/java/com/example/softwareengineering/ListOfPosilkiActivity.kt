@@ -1,7 +1,6 @@
 package com.example.softwareengineering
 
 import PosilkiAdapter
-import ProductAdapter
 import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +12,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.softwareengineering.model.Posilki
-import com.example.softwareengineering.model.Skladnik
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
@@ -146,8 +144,8 @@ class ListOfPosilkiActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapter
         TODO("Not yet implemented")
     }
 
-    override fun onDishClick(position: Int) {
-        val comment = dishList[position]
+    override fun onDishClick(position: String?) {
+        val comment = dishList[position?.toInt() ?: return]
 
         val intent = Intent(this, DishDetailActivity::class.java)
         intent.putExtra("posilek", comment.id)

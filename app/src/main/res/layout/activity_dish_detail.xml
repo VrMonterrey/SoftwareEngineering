@@ -226,14 +226,14 @@
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/submit_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerInParent="true"
-                android:layout_marginBottom="100dp"
-                android:text="OK" />
+                <Button
+                    android:id="@+id/submit_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginBottom="100dp"
+                    android:text="OK" />
 
         </RelativeLayout>
 
