@@ -177,13 +177,18 @@ class PosilkiActivity : AppCompatActivity() {
 
             val database = Firebase.database.reference
 
+            val currentUser = FirebaseAuth.getInstance().currentUser
+            val currentUserId = currentUser?.uid
+
             val dish = Posilki(
                 id = database.child("dishes").push().key,
                 name = name,
                 category = category,
                 quantity = quantity,
                 products = selectedProducts,
-                photoUrl = photoUrl
+                photoUrl = photoUrl,
+                comments = null,
+                userId = currentUserId
             )
 
             if (dish.id != null) {

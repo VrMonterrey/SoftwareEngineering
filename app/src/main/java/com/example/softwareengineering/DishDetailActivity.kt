@@ -64,10 +64,10 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
         carbs = findViewById(R.id.dish_carbs)
         fats = findViewById(R.id.dish_fats)
 
-        fullkcal = findViewById(R.id.full_kcal)
-        fullproteins = findViewById(R.id.full_proteins)
-        fullcarbs = findViewById(R.id.full_carbs)
-        fullfats = findViewById(R.id.full_fats)
+//        fullkcal = findViewById(R.id.full_kcal)
+//        fullproteins = findViewById(R.id.full_proteins)
+//        fullcarbs = findViewById(R.id.full_carbs)
+//        fullfats = findViewById(R.id.full_fats)
 
         // Initialize Firebase database
         val database = Firebase.database.reference
@@ -162,20 +162,22 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
             val currentUserId = currentUser?.uid
 
             val database = Firebase.database.reference
+            val commentId = database.child("dishes").child(dishId).child("comments").push().key
             val comment = currentUserId?.let { it1 ->
                 Comment(
-                    id = database.child("comments").push().key,
+                    id = commentId,
                     text = text,
                     ocena = selectedItem,
                     userId = it1,
                     posilekId = dishId
-                    )
+                )
             }
-
 
             if (comment != null) {
                 if (comment.id != null) {
-                    database.child("dishes").child(dishId).child("comments").push().setValue(comment).addOnSuccessListener {
+                    val commentsRef = database.child("dishes").child(dishId).child("comments")
+                    val newCommentRef = commentsRef.push()
+                    newCommentRef.setValue(comment).addOnSuccessListener {
                         Toast.makeText(this, "Nowy komentarz dodany pomyślnie", Toast.LENGTH_SHORT).show()
                         edit_text.text.clear()
                     }
