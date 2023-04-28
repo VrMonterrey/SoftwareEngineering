@@ -126,22 +126,23 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
 
         //Rating
         val ratings = arrayOf(1, 2, 3, 4, 5)
-        val selectedItem = 1
+        var selectedItem = 1
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, ratings)
         rating_spn = findViewById(R.id.ratingSpinner)
         rating_spn.adapter = adapter
 
         rating_spn.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(p0: AdapterView<*>?) {
+                selectedItem = 1
             }
 
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedItem = rating_spn.selectedItem
+                selectedItem = rating_spn.selectedItem.toString().toInt()
             }
         }
 
         //nameField.text = dishName
-        goback = findViewById(R.id.goback_btn)
+        goback = findViewById<ImageButton>(R.id.goback_btn)
 
         //Menu navigation
         goback.setOnClickListener(View.OnClickListener{
@@ -150,7 +151,7 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
             finish()
         })
 
-        val addButton = findViewById<ImageButton>(R.id.submit_btn)
+        val addButton = findViewById<Button>(R.id.submit_btn)
         addButton.setOnClickListener {
 
             edit_text = findViewById<EditText>(R.id.name_edit_text)
@@ -174,7 +175,7 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
 
             if (comment != null) {
                 if (comment.id != null) {
-                    database.child("products").child(comment.id!!).setValue(comment).addOnSuccessListener {
+                    database.child("dishes").child(dishId).child("comments").push().setValue(comment).addOnSuccessListener {
                         Toast.makeText(this, "Nowy komentarz dodany pomyślnie", Toast.LENGTH_SHORT).show()
                         edit_text.text.clear()
                     }

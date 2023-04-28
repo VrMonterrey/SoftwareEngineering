@@ -7,5 +7,5 @@ data class Comment(
     val date: Long = System.currentTimeMillis(),
 
     val userId: String = "",
-    val posilekId: String
+    val posilekId: String = ""
 )

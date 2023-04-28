@@ -80,9 +80,7 @@ class PosilkiAdapter(
             photoImageView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    currentPosilki?.let { posilki ->
-                        listener.onDishClick(posilki.id)
-                    }
+                    listener.onDishClick(position)
                 }
             }
         }
@@ -105,6 +103,6 @@ class PosilkiAdapter(
         fun onDeleteClick(position: Int)
         fun onEditClick(position: Int)
         fun onCommentClick(position: Int)
-        fun onDishClick(position: String?)
+        fun onDishClick(position: Int)
     }
 }
