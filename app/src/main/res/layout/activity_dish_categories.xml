@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:letterSpacing=".1"
             android:paddingVertical="20dp"
-            android:text="Utwórz składnik"
+            android:text="Dodaj kategorię"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="19dp"
@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
-                android:text="Nazwa składnika"
+                android:text="Dodaj Kategorię"
                 android:textColor="@color/white"
                 android:textSize="13dp" />
 
@@ -47,95 +47,21 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="25dp"
                 android:background="@color/dark2"
-                android:hint="Wpisz nazwę składnika"
+                android:hint="Wpisz nazwę kategorii"
                 android:inputType="text"
                 android:paddingLeft="15dp"
                 android:textColorHint="@color/grey"
                 android:textSize="12dp" />
 
-            <TextView
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/dialog_btn"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginTop="80dp"
-                android:text="Ilość kalorii"
-                android:textColor="@color/white"
-                android:textSize="13dp" />
-
-            <EditText
-                android:id="@+id/kalorii_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="105dp"
-                android:background="@color/dark2"
-                android:hint="Wpisz ilość kalorii na 100 gr."
-                android:inputType="number"
-                android:paddingLeft="15dp"
-                android:textColorHint="@color/grey"
-                android:textSize="12dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginTop="160dp"
-                android:text="Ilość białka"
-                android:textColor="@color/white"
-                android:textSize="13dp" />
-
-            <EditText
-                android:id="@+id/protein_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="185dp"
-                android:background="@color/dark2"
-                android:hint="Wpisz ilość białka na 100 gr."
-                android:inputType="number"
-                android:paddingLeft="15dp"
-                android:textColorHint="@color/grey"
-                android:textSize="12dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginTop="240dp"
-                android:text="Ilość węglowodanów"
-                android:textColor="@color/white"
-                android:textSize="13dp" />
-
-            <EditText
-                android:id="@+id/wegl_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="265dp"
-                android:background="@color/dark2"
-                android:hint="Wpisz ilość węglowodanów na 100 gr."
-                android:inputType="number"
-                android:paddingLeft="15dp"
-                android:textColorHint="@color/grey"
-                android:textSize="12dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginTop="320dp"
-                android:text="Ilość tłuszczu"
-                android:textColor="@color/white"
-                android:textSize="13dp" />
-
-            <EditText
-                android:id="@+id/tł_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="345dp"
-                android:background="@color/dark2"
-                android:hint="Wpisz ilość tłuszczu na 100 gr."
-                android:inputType="number"
-                android:paddingLeft="15dp"
-                android:textColorHint="@color/grey"
-                android:textSize="12dp" />
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="28dp"
+                android:text="Wybierz posiłki"
+                android:layout_centerHorizontal="true"
+                android:textSize="10dp" />
 
         </RelativeLayout>
 
@@ -153,11 +79,11 @@
         android:background="#00ffffff"/>
 
     <TextView
-        android:id="@+id/skladniki_arr_btn"
+        android:id="@+id/kategorie_arr_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="Spojrzeć na listę składników"
+        android:text="Spojrzeć na listę kategorii"
         android:textSize="14dp"
         android:textColor="@color/grey"
         android:textAlignment="center"

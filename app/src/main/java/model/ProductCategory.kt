@@ -3,6 +3,8 @@ package com.example.softwareengineering.model
 import com.example.softwareengineering.model.Skladnik
 
 data class ProductCategory(
+    val id: String? = "",
     val name: String,
-    val products: MutableList<Skladnik>
+    val dishes: List<Posilki>,
+    val userId: String? = ""
     )
