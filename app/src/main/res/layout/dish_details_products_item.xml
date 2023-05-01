@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="160dp"
     android:layout_height="120dp"
@@ -7,63 +6,112 @@
     android:background="@color/white10"
     android:layout_marginTop="10dp">
 
-
     <TextView
         android:id="@+id/product_name"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:text="Product Name"
-        android:textSize="10sp"
-        android:textColor="@color/white"
-        />
+        android:textSize="14sp"
+        android:textColor="@color/white" />
 
     <TextView
-        android:id="@+id/kalorii_edit_text"
+        android:id="@+id/kalorii_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0g"
+        android:text="kcal"
         android:textSize="10sp"
         android:textColor="@color/white"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        />
+        android:layout_below="@id/product_name"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/kalorii_e_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/kalorii_text"
+        android:layout_marginTop="14dp"
+        android:layout_marginRight="10dp"
+        android:text="0"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/product_proteins"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0g"
-        android:textSize="10sp"
+        android:layout_below="@id/product_name"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginRight="10dp"
+        android:layout_toEndOf="@id/kalorii_text"
+        android:text="p"
         android:textColor="@color/white"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="80dp"/>
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/product_e_proteins"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/product_proteins"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginRight="10dp"
+        android:layout_toEndOf="@id/kalorii_e_text"
+        android:text="000"
+        android:textColor="@color/white"
+        android:textSize="10sp" />
 
     <TextView
         android:id="@+id/product_carbs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0g"
-        android:textSize="10sp"
+        android:layout_below="@id/product_name"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginRight="10dp"
+        android:layout_toEndOf="@id/product_proteins"
+        android:text="c"
         android:textColor="@color/white"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="50dp"/>
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/product_e_carbs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/product_carbs"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginRight="10dp"
+        android:layout_toEndOf="@id/product_e_proteins"
+        android:text="000"
+        android:textColor="@color/white"
+        android:textSize="10sp" />
 
     <TextView
         android:id="@+id/product_fats"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0g"
-        android:textSize="10sp"
+        android:layout_below="@id/product_name"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginRight="10dp"
+        android:layout_toEndOf="@id/product_carbs"
+        android:text="f"
         android:textColor="@color/white"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"/>
+        android:textSize="10sp" />
 
+    <TextView
+        android:id="@+id/product_e_fats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/product_fats"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginRight="10dp"
+        android:layout_toEndOf="@id/product_e_proteins"
+        android:text="000"
+        android:textColor="@color/white"
+        android:textSize="10sp" />
 
 </RelativeLayout>

@@ -51,10 +51,10 @@ class ProductAdapterDishDetails(
 
     inner class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nameTextView: TextView = itemView.findViewById(R.id.product_name)
-        val caloriesTextView: TextView = itemView.findViewById(R.id.kalorii_edit_text)
-        val proteinsTextView: TextView = itemView.findViewById(R.id.product_proteins)
-        val carbsTextView: TextView = itemView.findViewById(R.id.product_carbs)
-        val fatsTextView: TextView = itemView.findViewById(R.id.product_fats)
+        val caloriesTextView: TextView = itemView.findViewById(R.id.kalorii_e_text)
+        val proteinsTextView: TextView = itemView.findViewById(R.id.product_e_proteins)
+        val carbsTextView: TextView = itemView.findViewById(R.id.product_e_carbs)
+        val fatsTextView: TextView = itemView.findViewById(R.id.product_e_fats)
     }
 
     interface ProductAdapterDishDetailsListener {
