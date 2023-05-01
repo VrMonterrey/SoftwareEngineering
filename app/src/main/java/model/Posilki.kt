@@ -9,5 +9,6 @@ data class Posilki(
     val photoUrl: String = "",
 
     val comments: Map<String, Comment>? = null,
-    val userId: String? = ""
+    val userId: String? = "",
+    var checked: Boolean = false
 )

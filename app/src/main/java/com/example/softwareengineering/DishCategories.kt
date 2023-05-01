@@ -14,6 +14,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.softwareengineering.adapter.PosilkiToChooseAdapter
 import com.example.softwareengineering.adapter.SkladnikiToChooseAdapter
 import com.example.softwareengineering.model.Posilki
 import com.example.softwareengineering.model.ProductCategory
@@ -111,7 +112,7 @@ class DishCategories : AppCompatActivity() {
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val dishes = mutableListOf<Skladnik>()
+        val dishes = mutableListOf<Posilki>()
         adapter = PosilkiToChooseAdapter(dishes) { dish ->
             if (dish.checked) {
                 dishes.add(dish)
