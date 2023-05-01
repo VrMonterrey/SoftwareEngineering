@@ -53,6 +53,11 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
     private var dishCategory: String? = ""
     private var dishQuantity: Int? = 1
 
+    private lateinit var commentRecyclerView: RecyclerView
+    private lateinit var commentAdapter: CommentAdapter
+    private lateinit var commentList: MutableList<Comment>
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dish_detail)
