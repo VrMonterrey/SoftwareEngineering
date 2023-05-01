@@ -18,6 +18,7 @@ class CategoriesActivity : AppCompatActivity() {
     private lateinit var posilki_btn: ImageButton
     private lateinit var share_btn: ImageButton
     private lateinit var water_btn: ImageButton
+    private lateinit var category_btn: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +31,7 @@ class CategoriesActivity : AppCompatActivity() {
         posilki_btn = findViewById(R.id.posilki_btn)
         share_btn = findViewById(R.id.share_btn)
         water_btn = findViewById(R.id.water_btn)
+        category_btn = findViewById(R.id.categoty_btn)
 
         home.setOnClickListener(View.OnClickListener{
             var intent : Intent = Intent(applicationContext,MainActivity::class.java)
@@ -64,6 +66,12 @@ class CategoriesActivity : AppCompatActivity() {
 
         water_btn.setOnClickListener(View.OnClickListener{
             var intent : Intent = Intent(applicationContext,Water::class.java)
+            startActivity(intent)
+            finish()
+        })
+
+        category_btn.setOnClickListener(View.OnClickListener{
+            var intent : Intent = Intent(applicationContext,DishCategories::class.java)
             startActivity(intent)
             finish()
         })

@@ -1,9 +1,8 @@
 package com.example.softwareengineering
 
 import android.app.AlertDialog
-import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,27 +11,28 @@ import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.softwareengineering.adapter.PosilkiToChooseAdapter
 import com.example.softwareengineering.adapter.SkladnikiToChooseAdapter
 import com.example.softwareengineering.model.Posilki
 import com.example.softwareengineering.model.ProductCategory
 import com.example.softwareengineering.model.Skladnik
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 
-class DishCategories : AppCompatActivity() {
+class CategoryEditActivity : AppCompatActivity() {
+
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
-    private lateinit var categoryName: EditText
+    private lateinit var catName: EditText
+    private lateinit var dishCategory: EditText
+    private lateinit var dishQuantity: EditText
     private lateinit var addButton: ImageButton
     private lateinit var dialogButton: Button
     private lateinit var kategorieArr: TextView
@@ -41,29 +41,66 @@ class DishCategories : AppCompatActivity() {
 
     private var selectedDishes: List<Posilki> = emptyList()
 
-    private lateinit var chooseImageButton: Button
-
-    private lateinit var getContent: ActivityResultLauncher<String>
-
+    private lateinit var database: DatabaseReference
+    private lateinit var categoryId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dish_categories)
+        setContentView(R.layout.activity_category_edit)
 
+        //Dialog window init.
         dialogButton = findViewById(R.id.dialog_btn)
         dialogButton.setOnClickListener{ showCustomDialog() }
 
+        catName = findViewById(R.id.name_edit_text)
         logout = findViewById(R.id.logout_button)
         home = findViewById(R.id.home_button)
         categories = findViewById(R.id.categories_btn)
 
-        addButton = findViewById(R.id.submit_btn)
+        // Initialize Firebase database
+        database = Firebase.database.reference
 
-        val database = Firebase.database.reference
+        // Get dish ID from intent
+        categoryId = intent.getStringExtra("kategoria") ?: ""
 
+        // Retrieve dish data from Firebase database
+        database.child("categories").child(categoryId).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                // Fill fields with dish data
+                val cat = snapshot.getValue(ProductCategory::class.java)
+                catName.setText(cat?.name)
+            }
 
+            override fun onCancelled(error: DatabaseError) {
+                Log.w(TAG, "loadCat:onCancelled", error.toException())
+            }
+        })
+
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val currentUserId = currentUser?.uid
+        // Save edited dish to Firebase database
+        addButton.setOnClickListener {
+            val name = catName.text.toString()
+
+            val cat = ProductCategory(
+                id = categoryId,
+                name = name,
+                dishes = selectedDishes,
+                userId = currentUserId
+            )
+
+            database.child("categories").child(categoryId).setValue(cat)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Category updated successfully", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Failed to update category", Toast.LENGTH_SHORT).show()
+                }
+        }
 
         //Menu navigation
+
         home.setOnClickListener(View.OnClickListener {
             var intent: Intent = Intent(applicationContext, MainActivity::class.java)
             startActivity(intent)
@@ -83,12 +120,14 @@ class DishCategories : AppCompatActivity() {
             finish()
         })
 
+
         kategorieArr = findViewById(R.id.kategorie_arr_btn)
         kategorieArr.setOnClickListener(View.OnClickListener {
-            var intent: Intent = Intent(applicationContext, ListOfPosilkiActivity::class.java)
+            var intent: Intent = Intent(applicationContext, ListOfCategoriesActivity::class.java)
             startActivity(intent)
             finish()
         })
+        }
     }
 
     private fun showCustomDialog() {
@@ -105,7 +144,7 @@ class DishCategories : AppCompatActivity() {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Log.w(ContentValues.TAG, "loadIngredients:onCancelled", databaseError.toException())
+                Log.w(TAG, "loadIngredients:onCancelled", databaseError.toException())
             }
         }
         dishesRef.addValueEventListener(dishesListener)
@@ -125,48 +164,16 @@ class DishCategories : AppCompatActivity() {
 
 
         builder.setTitle("Wybierz posiłki")
-            .setMessage("Kliknij checkbox'a żeby dodać posilek \nNazwa | kalorie | białko | weglewodany | tłuszcz")
+            .setMessage("Klikni checkbpx'a żeby dodać posiłek")
             .setView(dialogLayout)
             .setPositiveButton("OK") { dialog, which ->
                 selectedDishes = adapter.getData().filter { it.checked }
-                Log.d(ContentValues.TAG, "Selected dishes: $selectedDishes")
+                Log.d(TAG, "Selected products: $selectedDishes")
             }
             .setNegativeButton("Cancel") { dialog, which ->
 
             }
             .create()
             .show()
-
-        addButton.setOnClickListener {
-            categoryName = findViewById<EditText>(R.id.name_edit_text)
-
-            val name = categoryName.text.toString()
-
-            val database = Firebase.database.reference
-
-            val currentUser = FirebaseAuth.getInstance().currentUser
-            val currentUserId = currentUser?.uid
-
-            val cat = ProductCategory(
-                id = database.child("categories").push().key,
-                name = name,
-                dishes = selectedDishes,
-                userId = currentUserId
-            )
-
-            if (cat.id != null) {
-                database.child("categories").child(cat.id!!).setValue(cat).addOnSuccessListener {
-                    Toast.makeText(this, "Nowa kategoria dodana pomyślnie", Toast.LENGTH_SHORT).show()
-                    categoryName.text.clear()
-                }
-                    .addOnFailureListener {
-                        Toast.makeText(
-                            this,
-                            "Błąd podczas dodawania kategorii: ${it.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-            }
-        }
     }
 }

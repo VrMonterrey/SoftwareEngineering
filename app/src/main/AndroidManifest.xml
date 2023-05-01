@@ -20,6 +20,9 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".CategoryEditActivity"
+            android:exported="false" />
+        <activity
             android:name=".PosilkiToChooseAdapter"
             android:exported="false" />
         <activity
