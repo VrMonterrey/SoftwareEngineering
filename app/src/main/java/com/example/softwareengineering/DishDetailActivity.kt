@@ -26,6 +26,7 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
     private lateinit var goback: ImageButton
 
     private lateinit var nameField: TextView
+    private lateinit var average: TextView
     private lateinit var categoryField: TextView
     private lateinit var quantityField: TextView
     private lateinit var dishImage: ImageView
@@ -56,6 +57,20 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
     private lateinit var commentRecyclerView: RecyclerView
     private lateinit var commentAdapter: CommentAdapter
     private lateinit var commentList: MutableList<Comment>
+    fun calculateAverageRating(posilek: Posilki): Float {
+        val comments = posilek.comments ?: return 0f
+
+        var sum = 0f
+        comments.values.forEach {
+            sum += it.ocena
+        }
+
+        return if (comments.isNotEmpty()) {
+            sum / comments.size
+        } else {
+            0f
+        }
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,6 +94,7 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
 
         // Get dish ID from intent
         val dishId = intent.getStringExtra("posilek") ?: ""
+        var averageRating : Float? = 0f
 
         //Reading dish
         database.child("dishes").child(dishId).addListenerForSingleValueEvent(object : ValueEventListener {
@@ -92,6 +108,9 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
                     .load(dish?.photoUrl)
                     .into(dishImage)
                 dishImage.background = null;
+                averageRating = dish?.let { calculateAverageRating(it) }
+                average = findViewById(R.id.average_rate)
+                average.text = averageRating.toString()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -155,6 +174,7 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
             startActivity(intent)
             finish()
         })
+
 
         val addButton = findViewById<Button>(R.id.submit_btn)
         addButton.setOnClickListener {
