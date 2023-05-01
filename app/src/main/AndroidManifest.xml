@@ -20,6 +20,12 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".CategoryAdapter"
+            android:exported="false" />
+        <activity
+            android:name=".ListOfCategoriesActivity"
+            android:exported="false" />
+        <activity
             android:name=".CategoryEditActivity"
             android:exported="false" />
         <activity

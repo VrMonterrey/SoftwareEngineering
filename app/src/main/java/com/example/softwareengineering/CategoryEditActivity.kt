@@ -9,17 +9,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.softwareengineering.adapter.PosilkiToChooseAdapter
-import com.example.softwareengineering.adapter.SkladnikiToChooseAdapter
 import com.example.softwareengineering.model.Posilki
 import com.example.softwareengineering.model.ProductCategory
-import com.example.softwareengineering.model.Skladnik
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
@@ -31,15 +25,12 @@ class CategoryEditActivity : AppCompatActivity() {
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
     private lateinit var catName: EditText
-    private lateinit var dishCategory: EditText
-    private lateinit var dishQuantity: EditText
     private lateinit var addButton: ImageButton
     private lateinit var dialogButton: Button
     private lateinit var kategorieArr: TextView
 
-    private lateinit var adapter: PosilkiToChooseAdapter
-
     private var selectedDishes: List<Posilki> = emptyList()
+    private lateinit var adapter: PosilkiToChooseAdapter
 
     private lateinit var database: DatabaseReference
     private lateinit var categoryId: String
@@ -164,7 +155,7 @@ class CategoryEditActivity : AppCompatActivity() {
 
 
         builder.setTitle("Wybierz posiłki")
-            .setMessage("Klikni checkbpx'a żeby dodać posiłek")
+            .setMessage("Kliknij checkbox'a żeby dodać posiłek")
             .setView(dialogLayout)
             .setPositiveButton("OK") { dialog, which ->
                 selectedDishes = adapter.getData().filter { it.checked }
