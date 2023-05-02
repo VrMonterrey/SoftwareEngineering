@@ -51,6 +51,7 @@
                 android:inputType="text"
                 android:paddingLeft="15dp"
                 android:textColorHint="@color/grey"
+                android:textColor="@color/white"
                 android:textSize="12dp" />
 
             <Button

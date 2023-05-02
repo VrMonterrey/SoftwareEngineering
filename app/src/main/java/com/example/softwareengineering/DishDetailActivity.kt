@@ -17,6 +17,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.lang.Math.round
+import java.text.DecimalFormat
+import kotlin.math.roundToInt
 
 class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.ProductAdapterDishDetailsListener {
 
@@ -57,6 +60,8 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
     private lateinit var commentRecyclerView: RecyclerView
     private lateinit var commentAdapter: CommentAdapter
     private lateinit var commentList: MutableList<Comment>
+
+    //Average dishes rating
     fun calculateAverageRating(posilek: Posilki): Float {
         val comments = posilek.comments ?: return 0f
 
@@ -66,7 +71,9 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
         }
 
         return if (comments.isNotEmpty()) {
-            sum / comments.size
+            val average = sum / comments.size
+            val roundedAverage = (average * 10).roundToInt() / 10f
+            roundedAverage
         } else {
             0f
         }
@@ -205,6 +212,23 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
                     newCommentRef.setValue(comment).addOnSuccessListener {
                         Toast.makeText(this, "Nowy komentarz dodany pomyślnie", Toast.LENGTH_SHORT).show()
                         edit_text.text.clear()
+
+                        //Update average rating value after adding a comment
+                        val posilekRef = database.child("dishes").child(dishId)
+                        posilekRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                val posilek = snapshot.getValue(Posilki::class.java)
+
+                                if (posilek != null) {
+                                    val averageRating = calculateAverageRating(posilek)
+                                    average.text = averageRating.toString()
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                Log.w(ContentValues.TAG, "loadPosilek:onCancelled", error.toException())
+                            }
+                        })
                     }
                         .addOnFailureListener {
                             Toast.makeText(
