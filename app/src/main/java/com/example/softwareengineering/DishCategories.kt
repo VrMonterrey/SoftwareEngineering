@@ -85,7 +85,7 @@ class DishCategories : AppCompatActivity() {
 
         kategorieArr = findViewById(R.id.kategorie_arr_btn)
         kategorieArr.setOnClickListener(View.OnClickListener {
-            var intent: Intent = Intent(applicationContext, ListOfPosilkiActivity::class.java)
+            var intent: Intent = Intent(applicationContext, ListOfCategoriesActivity::class.java)
             startActivity(intent)
             finish()
         })

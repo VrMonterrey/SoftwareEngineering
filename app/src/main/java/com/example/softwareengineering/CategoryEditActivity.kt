@@ -42,6 +42,7 @@ class CategoryEditActivity : AppCompatActivity() {
         //Dialog window init.
         dialogButton = findViewById(R.id.dialog_btn)
         dialogButton.setOnClickListener{ showCustomDialog() }
+        addButton = findViewById(R.id.submit_btn)
 
         catName = findViewById(R.id.name_edit_text)
         logout = findViewById(R.id.logout_button)
@@ -119,7 +120,6 @@ class CategoryEditActivity : AppCompatActivity() {
             finish()
         })
         }
-    }
 
     private fun showCustomDialog() {
         val builder = AlertDialog.Builder(this)

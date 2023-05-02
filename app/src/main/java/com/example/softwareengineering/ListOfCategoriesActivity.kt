@@ -91,7 +91,7 @@ class ListOfCategoriesActivity : AppCompatActivity(), CategoryAdapter.CategoryAd
         })
 
         goback.setOnClickListener(View.OnClickListener{
-            var intent : Intent = Intent(applicationContext, PosilkiActivity::class.java)
+            var intent : Intent = Intent(applicationContext, DishCategories::class.java)
             startActivity(intent)
             finish()
         })

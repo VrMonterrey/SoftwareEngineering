@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:letterSpacing=".1"
             android:paddingVertical="20dp"
-            android:text="Dodaj kategorię"
+            android:text="Edytuj kategorię"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="19dp"
@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
-                android:text="Dodaj Kategorię"
+                android:text="Edytuj nazwę kategorii"
                 android:textColor="@color/white"
                 android:textSize="13dp" />
 

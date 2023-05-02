@@ -7,4 +7,6 @@ data class ProductCategory(
     val name: String,
     val dishes: List<Posilki>,
     val userId: String? = ""
-    )
+) {
+    constructor() : this("", "", emptyList(), "")
+}
