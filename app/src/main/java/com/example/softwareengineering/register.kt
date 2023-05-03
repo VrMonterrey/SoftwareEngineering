@@ -7,10 +7,13 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.*
+import com.example.softwareengineering.model.Posilki
+import com.example.softwareengineering.model.User
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class register : AppCompatActivity() {
@@ -71,8 +74,13 @@ class register : AppCompatActivity() {
                     if (task.isSuccessful) {
                         val user = auth.currentUser
                         val userId = user?.uid ?: ""
-                        val userRef = database.getReference("users").child(userId)
-                        userRef.child("email").setValue(email)
+                        val database2 = Firebase.database.reference
+                        val newUser = User(
+                            id = userId,
+                            email = email
+                        )
+
+                        database2.child("users").child(userId).setValue(newUser)
 
                         Toast.makeText(
                             this, "Registration successful!",
