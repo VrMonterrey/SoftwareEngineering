@@ -10,6 +10,7 @@ import android.widget.*
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 
 class register : AppCompatActivity() {
@@ -20,6 +21,8 @@ class register : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var progressBar: ProgressBar
     private lateinit var textView: TextView
+
+    private lateinit var database: FirebaseDatabase
 
     public override fun onStart() {
         super.onStart()
@@ -41,6 +44,7 @@ class register : AppCompatActivity() {
         progressBar = findViewById(R.id.progressBar)
         textView = findViewById(R.id.loginNow)
         auth = Firebase.auth
+        database = FirebaseDatabase.getInstance()
 
         textView.setOnClickListener(View.OnClickListener {
             var intent: Intent = Intent(applicationContext, login::class.java)
@@ -65,17 +69,24 @@ class register : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     progressBar.visibility=View.GONE
                     if (task.isSuccessful) {
-                        Toast.makeText(this, "Account created.",
-                            Toast.LENGTH_SHORT).show()
+                        val user = auth.currentUser
+                        val userId = user?.uid ?: ""
+                        val userRef = database.getReference("users").child(userId)
+                        userRef.child("email").setValue(email)
+
+                        Toast.makeText(
+                            this, "Registration successful!",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         var intent : Intent = Intent(applicationContext,login::class.java)
                         startActivity(intent)
                         finish()
                     } else {
-                        // If sign in fails, display a message to the user.
-                        Toast.makeText(this, "Authentication failed.",
-                            Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this, "Registration failed.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-
 
                 }
         })

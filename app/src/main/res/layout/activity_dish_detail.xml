@@ -221,7 +221,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/comments_recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="450dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@+id/comments_list_text_view"
                 android:layout_marginTop="20dp">
