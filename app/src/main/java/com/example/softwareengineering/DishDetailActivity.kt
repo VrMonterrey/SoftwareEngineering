@@ -51,6 +51,8 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
     private lateinit var database2: FirebaseDatabase
     private lateinit var productRef: DatabaseReference
 
+    private lateinit var commentsRecyclerView: RecyclerView
+
     private lateinit var edit_text: EditText
 
     private var dishName: String? = ""
@@ -182,7 +184,7 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
             finish()
         })
 
-
+        //Comment
         val addButton = findViewById<Button>(R.id.submit_btn)
         addButton.setOnClickListener {
 
@@ -241,6 +243,25 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
             }
 
         }
+
+        //Comments list
+        val commentsRef = FirebaseDatabase.getInstance().reference.child("dishes").child(dishId).child("comments")
+        commentsRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val commentList = ArrayList<Comment>()
+                for (snapshot in dataSnapshot.children) {
+                    val comment = snapshot.getValue(Comment::class.java)
+                    comment?.let { commentList.add(it) }
+                }
+                val adapter = CommentAdapter(commentList)
+                commentsRecyclerView = findViewById<RecyclerView>(R.id.comments_recycler_view)
+                commentsRecyclerView.adapter = adapter
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                //Exceptions...
+            }
+        })
     }
 
     override fun onDeleteClick(position: Int) {
