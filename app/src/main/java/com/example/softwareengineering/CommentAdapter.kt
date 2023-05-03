@@ -6,6 +6,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.softwareengineering.model.Comment
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -21,7 +26,7 @@ class CommentAdapter(private val commentList: List<Comment>) : RecyclerView.Adap
 
         holder.commentDescription.text = comment.text
         holder.commentRating.text = comment.ocena.toString()
-        holder.commentUserName.text = comment.userId
+        holder.bindEmail(comment.userId)
 
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         holder.commentDate.text =  dateFormat.format(Date(comment.date))
@@ -36,6 +41,23 @@ class CommentAdapter(private val commentList: List<Comment>) : RecyclerView.Adap
         val commentRating: TextView = itemView.findViewById(R.id.comment_ratings)
         val commentUserName: TextView = itemView.findViewById(R.id.comment_user_name)
         val commentDate: TextView = itemView.findViewById(R.id.comment_date)
+
+        fun bindEmail(userId: String) {
+            val database = Firebase.database.reference
+            database.child("users").child(userId).addListenerForSingleValueEvent(object :
+                ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val email = dataSnapshot.child("email").value as? String
+                    if (email != null) {
+                        commentUserName.text = email
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    //...
+                }
+            })
+        }
     }
 }
 
