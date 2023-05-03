@@ -1,224 +1,246 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_bottom_main_page">
 
-    <RelativeLayout
+
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_marginHorizontal="0dp">
-
-        <RelativeLayout
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginVertical="50dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/dish_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
                 android:letterSpacing=".1"
-                android:paddingVertical="15dp"
+                android:paddingVertical="10dp"
                 android:text="Dish Name"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="19dp"
-                android:textStyle="bold"
-                android:layout_centerHorizontal="true" />
+                android:textStyle="bold" />
 
-            <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="30dp"
-            android:layout_marginTop="70dp"
-            android:layout_marginBottom="20dp">
+            <LinearLayout
+                android:id="@+id/dish_details"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:layout_constraintTop_toBottomOf="@+id/dish_name"
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
 
-            <TextView
-                android:id="@+id/dish_kcal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:letterSpacing=".1"
-                android:paddingVertical="30dp"
-                android:layout_marginLeft="5dp"
-                android:text="kcal"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="15dp"
-                android:textStyle="bold"
-                />
-            <TextView
-                android:id="@+id/dish_proteins"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:letterSpacing=".1"
-                android:paddingVertical="30dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="100dp"
-                android:text="p"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="15dp"
-                android:textStyle="bold" />
-            <TextView
-                android:id="@+id/dish_carbs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:letterSpacing=".1"
-                android:paddingVertical="30dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="50dp"
-                android:text="c"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="15dp"
-                android:textStyle="bold" />
-            <TextView
-                android:id="@+id/dish_fats"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:letterSpacing=".1"
-                android:paddingVertical="30dp"
-                android:layout_alignParentRight="true"
-                android:text="f"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="15dp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/dish_kcal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing=".1"
+                    android:text="kcal"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:layout_weight="3"
+                    android:paddingLeft="10dp"/>
+                <TextView
+                    android:id="@+id/dish_proteins"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing=".1"
+                    android:text="p"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/dish_carbs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing=".1"
+                    android:text="c"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:id="@+id/dish_fats"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing=".1"
+                    android:text="f"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:textAlignment="center"/>
+
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/dish_image"
-                android:layout_width="170dp"
-                android:layout_height="170dp"
-                android:layout_marginTop="70dp"
-                android:background="@color/grey"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="50dp"
+                android:background="@color/grey"
+                app:layout_constraintTop_toBottomOf="@+id/dish_details"/>
+
             <TextView
+                android:id="@+id/list_of_products"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:letterSpacing=".1"
                 android:text="Lista składników:"
                 android:textColor="@color/white"
-                android:layout_marginTop="75dp"
-                android:layout_alignParentRight="true"
                 android:textSize="15dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@+id/dish_image"
+                app:layout_constraintLeft_toLeftOf="parent"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/productRecyclerView"
-                android:layout_width="140dp"
-                android:layout_height="120dp"
-                android:layout_marginTop="110dp"
-                android:layout_alignParentRight="true"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@+id/list_of_products"
+                android:layout_marginTop="10dp">
 
             </androidx.recyclerview.widget.RecyclerView>
 
             <TextView
+                android:id="@+id/comment_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginBottom="350dp"
-                android:layout_alignParentBottom="true"
                 android:text="Napisz komentarz"
                 android:textColor="@color/white"
-                android:textSize="13dp" />
+                android:textSize="14dp"
+                app:layout_constraintTop_toBottomOf="@+id/productRecyclerView"
+                android:layout_marginTop="20dp"/>
 
             <EditText
                 android:id="@+id/name_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_marginBottom="240dp"
                 android:background="@color/dark2"
                 android:hint="bla - bla - bla"
                 android:inputType="text"
                 android:paddingLeft="15dp"
                 android:paddingBottom="55dp"
-                android:layout_alignParentBottom="true"
                 android:textColorHint="@color/grey"
-                android:textSize="12dp" />
+                android:textSize="12dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/comment_textView"/>
+
+            <LinearLayout
+                android:id="@+id/average_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/name_edit_text"
+                android:layout_marginTop="20dp">
 
                 <TextView
-                    android:layout_width="96dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginRight="253dp"
-                    android:layout_marginBottom="189dp"
                     android:text="Średnia:"
                     android:textColor="@color/white"
-                    android:textSize="16dp" />
+                    android:textSize="14dp"
+                    app:layout_constraintTop_toBottomOf="@+id/name_edit_text" />
 
                 <TextView
                     android:id="@+id/average_rate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginRight="219dp"
-                    android:layout_marginBottom="188dp"
                     android:text="0"
                     android:textColor="@color/white"
-                    android:textSize="16dp" />
+                    android:textSize="14dp"
+                    android:layout_marginLeft="20dp"/>
 
-                <TextView
-                android:layout_width="wrap_content"
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ratings_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="190dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="90dp"
-                android:text="Wystaw ocenę"
-                android:textColor="@color/white"
-                android:textSize="16dp" />
-
-            <Spinner
-                android:id="@+id/ratingSpinner"
-                android:layout_width="54dp"
-                android:layout_height="54dp"
-                android:background="@drawable/rounded_edittext"
-                android:entries="@array/ratings"
-                android:padding="14dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="170dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:textColor="@android:color/white"
-                android:textSize="16sp" />
-
-                <Button
-                    android:id="@+id/submit_btn"
+                app:layout_constraintTop_toBottomOf="@+id/average_layout">
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginBottom="100dp"
-                    android:text="OK" />
+                    android:text="Wystaw ocenę"
+                    android:textColor="@color/white"
+                    android:textSize="14dp"
+                    android:layout_weight="3"/>
 
-        </RelativeLayout>
+                <Spinner
+                    android:id="@+id/ratingSpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/rounded_edittext"
+                    android:entries="@array/ratings"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:layout_weight="1"/>
 
-    </RelativeLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/submit_btn"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:text="Dodać"
+                app:layout_constraintTop_toBottomOf="@id/ratings_layout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginTop="20dp"
+                />
+
+            <TextView
+                android:id="@+id/comments_list_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Komentarze"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:layout_weight="3"
+                app:layout_constraintTop_toBottomOf="@id/submit_btn"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginTop="20dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/comments_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@+id/comments_list_text_view"
+                android:layout_marginTop="20dp">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <ImageButton
         android:id="@+id/goback_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="25dp"
-        android:layout_marginLeft="25dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="15dp"
         android:src="@drawable/ic_goback"
-        android:background="#00ffffff"/>
+        android:background="#00ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
-        <TextView
-            android:id="@+id/comments_activity"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="670dp"
-            android:textAlignment="center"
-            android:text="Zobacz komentarze"
-            android:textColor="@color/white"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-</RelativeLayout>
-</RelativeLayout>
