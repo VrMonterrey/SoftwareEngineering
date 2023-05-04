@@ -20,7 +20,7 @@ class register : AppCompatActivity() {
 
     private lateinit var editTextEmail: EditText
     private lateinit var editTextPassword: EditText
-    private lateinit var buttonReg: Button
+    private lateinit var buttonReg: ImageButton
     private lateinit var auth: FirebaseAuth
     private lateinit var progressBar: ProgressBar
     private lateinit var textView: TextView
