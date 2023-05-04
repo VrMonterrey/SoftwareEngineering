@@ -1,6 +1,7 @@
 package com.example.softwareengineering
 
 import ProductAdapterDishDetails
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -38,11 +39,6 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
     private lateinit var carbs: TextView
     private lateinit var fats: TextView
 
-    private lateinit var fullkcal: TextView
-    private lateinit var fullproteins: TextView
-    private lateinit var fullcarbs: TextView
-    private lateinit var fullfats: TextView
-
     private lateinit var rating_spn: Spinner
 
     private lateinit var productAdapter: ProductAdapterDishDetails
@@ -58,6 +54,10 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
     private var dishName: String? = ""
     private var dishCategory: String? = ""
     private var dishQuantity: Int? = 1
+    private lateinit var dishCalories: TextView
+    private lateinit var dishProteins: TextView
+    private lateinit var dishCarbs: TextView
+    private lateinit var dishFats: TextView
 
     private lateinit var commentRecyclerView: RecyclerView
     private lateinit var commentAdapter: CommentAdapter
@@ -81,6 +81,27 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
         }
     }
 
+    @SuppressLint("SetTextI18n")
+    fun calculateAverageMacro(posilek: Posilki) {
+        val products = posilek.products
+
+        var sumCalories: Int = 0
+        var sumProteins: Int = 0
+        var sumCarbs: Int = 0
+        var sumFats: Int = 0
+        products.forEach {
+            sumCalories += it.calories
+            sumProteins += it.protein
+            sumCarbs += it.carbs
+            sumFats += it.fat
+        }
+
+        dishCalories.text = "kcal: $sumCalories"
+        dishProteins.text = "p: $sumProteins"
+        dishCarbs.text = "c: $sumCarbs"
+        dishFats.text = "f: $sumFats"
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,10 +114,10 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
         carbs = findViewById(R.id.dish_carbs)
         fats = findViewById(R.id.dish_fats)
 
-//        fullkcal = findViewById(R.id.full_kcal)
-//        fullproteins = findViewById(R.id.full_proteins)
-//        fullcarbs = findViewById(R.id.full_carbs)
-//        fullfats = findViewById(R.id.full_fats)
+        dishCalories = findViewById(R.id.dish_kcal)
+        dishProteins = findViewById(R.id.dish_proteins)
+        dishCarbs = findViewById(R.id.dish_carbs)
+        dishFats = findViewById(R.id.dish_fats)
 
         // Initialize Firebase database
         val database = Firebase.database.reference
@@ -126,6 +147,25 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
                 Log.w(ContentValues.TAG, "loadDish:onCancelled", error.toException())
             }
         })
+
+        //Initialise
+
+        val posilekRef = database.child("dishes").child(dishId)
+        posilekRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val posilek = snapshot.getValue(Posilki::class.java)
+
+                if (posilek != null) {
+                    calculateAverageMacro(posilek)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.w(ContentValues.TAG, "loadPosilek:onCancelled", error.toException())
+            }
+        })
+
+
 
         //List of "składniki"
         productRecyclerView = findViewById(R.id.productRecyclerView)
