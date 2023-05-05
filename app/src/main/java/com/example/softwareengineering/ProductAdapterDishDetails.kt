@@ -1,3 +1,4 @@
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,14 +31,15 @@ class ProductAdapterDishDetails(
         this.onDeleteClickListener = listener
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val currentItem = productList[position]
 
         holder.nameTextView.text = currentItem.name
-        holder.caloriesTextView.text = currentItem.calories.toString()
-        holder.proteinsTextView.text = currentItem.protein.toString()
-        holder.carbsTextView.text = currentItem.carbs.toString()
-        holder.fatsTextView.text = currentItem.fat.toString()
+        holder.caloriesTextView.text = "Calories: ${currentItem.calories}"
+        holder.proteinsTextView.text = "Proteins: ${currentItem.protein}"
+        holder.carbsTextView.text = "Carbs: ${currentItem.carbs}"
+        holder.fatsTextView.text = "Fats: ${currentItem.fat}"
 
     }
 
