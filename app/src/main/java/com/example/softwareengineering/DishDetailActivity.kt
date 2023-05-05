@@ -225,7 +225,7 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
         })
 
         //Comment
-        val addButton = findViewById<Button>(R.id.submit_btn)
+        val addButton = findViewById<ImageButton>(R.id.submit_btn)
         addButton.setOnClickListener {
 
             edit_text = findViewById<EditText>(R.id.name_edit_text)
