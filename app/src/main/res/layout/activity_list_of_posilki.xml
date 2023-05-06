@@ -1,55 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_bottom_main_page">
-
-    <RelativeLayout
+    android:background="@drawable/gradient_green_main">
+    <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="200dp"
-        android:background="@drawable/rounded_background">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="120dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/rounded_green"
+        android:padding="15dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14dp"
-            android:textColor="@color/white"
-            android:layout_marginLeft="30dp"
-            android:text="Nazwa posiłku"
-            android:layout_marginTop="25dp"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/dishRecyclerView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="330dp"
-            android:padding="16dp"
-            android:layout_marginTop="50dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:layout_height="match_parent"
+            >
 
-    </RelativeLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/dishRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+
+
+        </RelativeLayout>
+
+    </ScrollView>
 
     <ImageButton
-        android:id="@+id/goback_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="175dp"
-        android:layout_marginLeft="17dp"
-        android:src="@drawable/ic_goback"
-        android:background="#00ffffff"/>
+        android:id="@+id/add_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_add"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="100dp"/>
 
     <RelativeLayout
         android:id="@+id/menu_panel"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp">
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageButton
             android:id="@+id/home_button"
@@ -123,4 +122,4 @@
             android:textSize="11sp" />
     </RelativeLayout>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

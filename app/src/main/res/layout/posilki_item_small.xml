@@ -11,10 +11,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#4EBAA4"
+        android:background="#7ACFBE"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
->
+        >
 
         <ImageView
             android:id="@+id/image_holder"

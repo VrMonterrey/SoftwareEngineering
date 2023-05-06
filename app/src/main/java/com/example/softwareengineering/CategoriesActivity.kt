@@ -59,7 +59,7 @@ class CategoriesActivity : AppCompatActivity() {
         })
 
         posilki_btn.setOnClickListener(View.OnClickListener{
-            var intent : Intent = Intent(applicationContext,PosilkiActivity::class.java)
+            var intent : Intent = Intent(applicationContext,ListOfPosilkiActivity::class.java)
             startActivity(intent)
             finish()
         })

@@ -35,12 +35,13 @@ class PosilkiActivity : AppCompatActivity() {
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
+    private lateinit var goback: ImageButton
+
     private lateinit var dishName: EditText
     private lateinit var dishCategory: EditText
     private lateinit var dishQuantity: EditText
     private lateinit var addButton: ImageButton
     private lateinit var dialogButton: Button
-    private lateinit var posilkiArr: TextView
 
     private lateinit var adapter: SkladnikiToChooseAdapter
 
@@ -63,6 +64,7 @@ class PosilkiActivity : AppCompatActivity() {
         logout = findViewById(R.id.logout_button)
         home = findViewById(R.id.home_button)
         categories = findViewById(R.id.categories_btn)
+        goback = findViewById(R.id.goback_btn)
 
         addButton = findViewById(R.id.submit_btn)
 
@@ -72,12 +74,12 @@ class PosilkiActivity : AppCompatActivity() {
         imageView = findViewById<ImageView>(R.id.image_view)
         chooseImageButton = findViewById<Button>(R.id.choose_image_button)
 
-        val storageRef = FirebaseStorage.getInstance().getReference("images")
+        val storageRef = FirebaseStorage.getInstance().reference.child("images")
 
         getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             if (uri != null) {
                 imageView.setImageURI(uri)
-                val imageRef = storageRef.child(uri.lastPathSegment!!)
+                val imageRef = storageRef.child(uri.lastPathSegment!!.substringAfterLast("/"))
                 val uploadTask = contentResolver?.openInputStream(uri)?.readBytes()?.let { imageRef.putBytes(it) }
                 uploadTask?.addOnSuccessListener {
                     imageRef.downloadUrl.addOnSuccessListener { uri ->
@@ -112,8 +114,7 @@ class PosilkiActivity : AppCompatActivity() {
             finish()
         })
 
-        posilkiArr = findViewById(R.id.posilki_arr_btn)
-        posilkiArr.setOnClickListener(View.OnClickListener {
+        goback.setOnClickListener(View.OnClickListener {
             var intent: Intent = Intent(applicationContext, ListOfPosilkiActivity::class.java)
             startActivity(intent)
             finish()
@@ -198,6 +199,10 @@ class PosilkiActivity : AppCompatActivity() {
                     dishCategory.text.clear()
                     dishQuantity.text.clear()
                     imageView.setImageBitmap(null)
+
+                    var intent: Intent = Intent(applicationContext, ListOfPosilkiActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 }
                     .addOnFailureListener {
                         Toast.makeText(
