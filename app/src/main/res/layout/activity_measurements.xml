@@ -126,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
                 android:layout_marginTop="320dp"
-                android:text="Obwód talii"
+                android:text="Obwód klatki pierściwej"
                 android:textColor="@color/white"
                 android:textSize="13dp" />
 

@@ -23,6 +23,7 @@ class CategoriesActivity : AppCompatActivity() {
     private lateinit var measurements_btn: ImageButton
     private lateinit var tips_btn: ImageButton
     private lateinit var category_btn: ImageButton
+    private lateinit var favourite_btn: ImageButton
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +41,7 @@ class CategoriesActivity : AppCompatActivity() {
         dishcat_btn = findViewById(R.id.dishcat_btn)
         measurements_btn = findViewById(R.id.measurements_btn)
         tips_btn = findViewById(R.id.tips_btn)
+        favourite_btn = findViewById(R.id.favourite_btn)
         category_btn = findViewById(R.id.categoty_btn)
 
         home.setOnClickListener(View.OnClickListener{
@@ -86,6 +88,26 @@ class CategoriesActivity : AppCompatActivity() {
         })
         measurements_btn.setOnClickListener(View.OnClickListener{
             var intent : Intent = Intent(applicationContext,MeasurementsActivity::class.java)
+            startActivity(intent)
+            finish()
+        })
+        chart_btn.setOnClickListener(View.OnClickListener{
+            var intent : Intent = Intent(applicationContext,ChartActivity::class.java)
+            startActivity(intent)
+            finish()
+        })
+        tips_btn.setOnClickListener(View.OnClickListener{
+            var intent : Intent = Intent(applicationContext,TipsActivity::class.java)
+            startActivity(intent)
+            finish()
+        })
+        favourite_btn.setOnClickListener(View.OnClickListener{
+            var intent : Intent = Intent(applicationContext,FavouriteActivity::class.java)
+            startActivity(intent)
+            finish()
+        })
+        dishcat_btn.setOnClickListener(View.OnClickListener{
+            var intent : Intent = Intent(applicationContext,DishCatActivity::class.java)
             startActivity(intent)
             finish()
         })

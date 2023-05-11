@@ -186,12 +186,12 @@ android:background="@drawable/gradient_bottom_main_page">
             android:background="@drawable/gradient_categories"
             >
             <ImageButton
-                android:id="@+id/share_btn"
+                android:id="@+id/measurements_btn"
                 android:layout_width="76dp"
                 android:layout_height="76dp"
                 android:layout_marginHorizontal="32dp"
                 android:layout_marginTop="21dp"
-                android:background="@drawable/ic_share"
+                android:background="@drawable/ic_measurements"
 
                 />
             <TextView
@@ -199,7 +199,7 @@ android:background="@drawable/gradient_bottom_main_page">
                 android:layout_height="30dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="15dp"
-                android:text="Udostępnij"
+                android:text="Pomiary ciała"
                 android:textAlignment="center"
                 android:textSize="16dp"
                 android:textColor="@color/white"
@@ -276,12 +276,12 @@ android:background="@drawable/gradient_bottom_main_page">
             android:background="@drawable/gradient_categories"
             >
             <ImageButton
-                android:id="@+id/measurements_btn"
+                android:id="@+id/share_btn"
                 android:layout_width="76dp"
                 android:layout_height="76dp"
                 android:layout_marginHorizontal="32dp"
                 android:layout_marginTop="21dp"
-                android:background="@drawable/ic_measurements"
+                android:background="@drawable/ic_share"
 
                 />
             <TextView
@@ -289,7 +289,7 @@ android:background="@drawable/gradient_bottom_main_page">
                 android:layout_height="30dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="15dp"
-                android:text="Pomiary ciała"
+                android:text="Udostępnij"
                 android:textAlignment="center"
                 android:textSize="16dp"
                 android:textColor="@color/white"
