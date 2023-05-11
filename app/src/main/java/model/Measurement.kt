@@ -12,5 +12,5 @@ data class Measurement(
     val thigh: Int = 0,
     val calves: Int = 0,
     val date: Long = System.currentTimeMillis(),
-
+    val userId: String = "",
 )

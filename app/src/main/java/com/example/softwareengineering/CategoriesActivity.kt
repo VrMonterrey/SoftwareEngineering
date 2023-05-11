@@ -18,7 +18,12 @@ class CategoriesActivity : AppCompatActivity() {
     private lateinit var posilki_btn: ImageButton
     private lateinit var share_btn: ImageButton
     private lateinit var water_btn: ImageButton
+    private lateinit var chart_btn: ImageButton
+    private lateinit var dishcat_btn: ImageButton
+    private lateinit var measurements_btn: ImageButton
+    private lateinit var tips_btn: ImageButton
     private lateinit var category_btn: ImageButton
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +36,10 @@ class CategoriesActivity : AppCompatActivity() {
         posilki_btn = findViewById(R.id.posilki_btn)
         share_btn = findViewById(R.id.share_btn)
         water_btn = findViewById(R.id.water_btn)
+        chart_btn = findViewById(R.id.chart_btn)
+        dishcat_btn = findViewById(R.id.dishcat_btn)
+        measurements_btn = findViewById(R.id.measurements_btn)
+        tips_btn = findViewById(R.id.tips_btn)
         category_btn = findViewById(R.id.categoty_btn)
 
         home.setOnClickListener(View.OnClickListener{
@@ -72,6 +81,11 @@ class CategoriesActivity : AppCompatActivity() {
 
         category_btn.setOnClickListener(View.OnClickListener{
             var intent : Intent = Intent(applicationContext,DishCategories::class.java)
+            startActivity(intent)
+            finish()
+        })
+        measurements_btn.setOnClickListener(View.OnClickListener{
+            var intent : Intent = Intent(applicationContext,MeasurementsActivity::class.java)
             startActivity(intent)
             finish()
         })
