@@ -96,13 +96,14 @@
             android:layout_alignParentLeft="true"
             android:background="@drawable/gradient_categories"
             >
+
             <ImageButton
                 android:id="@+id/categoty_btn"
-                android:layout_width="76dp"
-                android:layout_height="76dp"
+                android:layout_width="68dp"
+                android:layout_height="85dp"
                 android:layout_marginHorizontal="32dp"
                 android:layout_marginTop="21dp"
-                android:background="@drawable/category"
+                android:background="@drawable/ic_sets"
 
                 />
             <TextView
@@ -110,7 +111,7 @@
                 android:layout_height="30dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="15dp"
-                android:text="Kategorie"
+                android:text="Zestawy"
                 android:textAlignment="center"
                 android:textSize="16dp"
                 android:textColor="@color/white"

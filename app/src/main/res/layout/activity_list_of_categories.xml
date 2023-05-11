@@ -20,7 +20,7 @@
             android:textSize="14dp"
             android:textColor="@color/white"
             android:layout_marginLeft="30dp"
-            android:text="Nazwa kategorii"
+            android:text="Nazwa zestawu"
             android:layout_marginTop="25dp"/>
 
         <androidx.recyclerview.widget.RecyclerView

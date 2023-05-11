@@ -53,10 +53,10 @@ class CategoryEditActivity : AppCompatActivity() {
         database = Firebase.database.reference
 
         // Get dish ID from intent
-        categoryId = intent.getStringExtra("kategoria") ?: ""
+        categoryId = intent.getStringExtra("zestaw") ?: ""
 
         // Retrieve dish data from Firebase database
-        database.child("categories").child(categoryId).addListenerForSingleValueEvent(object : ValueEventListener {
+        database.child("sets").child(categoryId).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 // Fill fields with dish data
                 val cat = snapshot.getValue(ProductCategory::class.java)
@@ -74,20 +74,25 @@ class CategoryEditActivity : AppCompatActivity() {
         addButton.setOnClickListener {
             val name = catName.text.toString()
 
+            val idList = mutableListOf<String?>()
+
+            for (obj in selectedDishes) {
+                idList.add(obj.id)}
+
             val cat = ProductCategory(
                 id = categoryId,
                 name = name,
-                dishes = selectedDishes,
+                dishes = idList,
                 userId = currentUserId
             )
 
-            database.child("categories").child(categoryId).setValue(cat)
+            database.child("sets").child(categoryId).setValue(cat)
                 .addOnSuccessListener {
-                    Toast.makeText(this, "Category updated successfully", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Set updated successfully", Toast.LENGTH_SHORT).show()
                     finish()
                 }
                 .addOnFailureListener {
-                    Toast.makeText(this, "Failed to update category", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Failed to update set", Toast.LENGTH_SHORT).show()
                 }
         }
 
@@ -159,7 +164,7 @@ class CategoryEditActivity : AppCompatActivity() {
             .setView(dialogLayout)
             .setPositiveButton("OK") { dialog, which ->
                 selectedDishes = adapter.getData().filter { it.checked }
-                Log.d(TAG, "Selected products: $selectedDishes")
+                Log.d(TAG, "Selected dishes: $selectedDishes")
             }
             .setNegativeButton("Cancel") { dialog, which ->
 

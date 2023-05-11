@@ -3,7 +3,6 @@ package com.example.softwareengineering
 import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,14 +10,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.softwareengineering.adapter.PosilkiToChooseAdapter
-import com.example.softwareengineering.adapter.SkladnikiToChooseAdapter
 import com.example.softwareengineering.model.Posilki
 import com.example.softwareengineering.model.ProductCategory
-import com.example.softwareengineering.model.Skladnik
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -26,7 +22,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 
 class DishCategories : AppCompatActivity() {
     private lateinit var logout: ImageButton
@@ -147,22 +142,27 @@ class DishCategories : AppCompatActivity() {
             val currentUser = FirebaseAuth.getInstance().currentUser
             val currentUserId = currentUser?.uid
 
+            val idList = mutableListOf<String?>()
+
+            for (obj in selectedDishes) {
+                idList.add(obj.id)
+            }
             val cat = ProductCategory(
-                id = database.child("categories").push().key,
+                id = database.child("sets").push().key,
                 name = name,
-                dishes = selectedDishes,
+                dishes = idList,
                 userId = currentUserId
             )
 
             if (cat.id != null) {
-                database.child("categories").child(cat.id!!).setValue(cat).addOnSuccessListener {
-                    Toast.makeText(this, "Nowa kategoria dodana pomyślnie", Toast.LENGTH_SHORT).show()
+                database.child("sets").child(cat.id!!).setValue(cat).addOnSuccessListener {
+                    Toast.makeText(this, "Nowy zestaw dodany pomyślnie", Toast.LENGTH_SHORT).show()
                     categoryName.text.clear()
                 }
                     .addOnFailureListener {
                         Toast.makeText(
                             this,
-                            "Błąd podczas dodawania kategorii: ${it.message}",
+                            "Błąd podczas dodawania zestawu: ${it.message}",
                             Toast.LENGTH_SHORT
                         ).show()
                     }

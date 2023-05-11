@@ -37,7 +37,7 @@ class ListOfCategoriesActivity : AppCompatActivity(), CategoryAdapter.CategoryAd
         catRecyclerView.adapter = catAdapter
 
         database = FirebaseDatabase.getInstance()
-        catRef = database.getReference("categories")
+        catRef = database.getReference("sets")
 
         catList = mutableListOf()
 
@@ -97,7 +97,7 @@ class ListOfCategoriesActivity : AppCompatActivity(), CategoryAdapter.CategoryAd
             override fun onDeleteClick(position: Int) {
                 val cat = catList[position]
                 cat.id?.let {
-                    val catRef = database.getReference("categories/$it")
+                    val catRef = database.getReference("sets/$it")
                     catRef.removeValue()
                 }
             }
@@ -108,14 +108,14 @@ class ListOfCategoriesActivity : AppCompatActivity(), CategoryAdapter.CategoryAd
     override fun onDeleteClick(position: Int) {
         val cat = catList[position]
         cat.id?.let {
-            val catRef = database.getReference("categories/$it")
+            val catRef = database.getReference("sets/$it")
             catRef.removeValue().addOnSuccessListener {
-                Toast.makeText(this, "Kategoria została pomyślnie usunięty", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Zestaw został pomyślnie usunięty", Toast.LENGTH_SHORT).show()
             }
                 .addOnFailureListener {
                     Toast.makeText(
                         this,
-                        "Błąd podczas usuwania kategorii: ${it.message}",
+                        "Błąd podczas usuwania zestawu: ${it.message}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -126,7 +126,7 @@ class ListOfCategoriesActivity : AppCompatActivity(), CategoryAdapter.CategoryAd
         val cat = catList[position]
 
         val intent = Intent(this, CategoryEditActivity::class.java)
-        intent.putExtra("kategoria", cat.id)
+        intent.putExtra("zestaw", cat.id)
         startActivity(intent)
     }
 
@@ -138,7 +138,7 @@ class ListOfCategoriesActivity : AppCompatActivity(), CategoryAdapter.CategoryAd
         val cat = catList[position]
 
         val intent = Intent(this, DishDetailActivity::class.java)
-        intent.putExtra("kategoria", cat.id)
+        intent.putExtra("zestaw", cat.id)
         startActivity(intent)
     }
 
