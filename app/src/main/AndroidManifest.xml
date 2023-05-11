@@ -21,6 +21,12 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".MeasurementAdapter"
+            android:exported="false" />
+        <activity
+            android:name=".EditMeasurementActivity"
+            android:exported="false" />
+        <activity
             android:name=".FavouriteActivity"
             android:exported="false" />
         <activity
