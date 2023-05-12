@@ -10,5 +10,6 @@ data class Posilki(
 
     val comments: Map<String, Comment>? = null,
     val userId: String? = "",
+    val liked: MutableList<String?> = mutableListOf(),
     var checked: Boolean = false
 )
