@@ -79,33 +79,36 @@ class EditMeasurementActivity : AppCompatActivity() {
 
         val addButton = findViewById<ImageButton>(R.id.submit_btn)
         addButton.setOnClickListener {
+            val Height = height.text.toString().toIntOrNull()
+            val Weight = weight.text.toString().toIntOrNull()
+            val Shoulder = shoulder.text.toString().toIntOrNull()
+            val Arm = arm.text.toString().toIntOrNull()
+            val Chest = chest.text.toString().toIntOrNull()
+            val Waist = waist.text.toString().toIntOrNull()
+            val Hips = hips.text.toString().toIntOrNull()
+            val Thigh = thigh.text.toString().toIntOrNull()
+            val Calves = calves.text.toString().toIntOrNull()
 
-            val Height = height.text.toString().toInt()
-            val Weight = weight.text.toString().toInt()
-            val Shoulder = shoulder.text.toString().toInt()
-            val Arm = arm.text.toString().toInt()
-            val Chest = chest.text.toString().toInt()
-            val Waist = waist.text.toString().toInt()
-            val Hips = hips.text.toString().toInt()
-            val Thigh = thigh.text.toString().toInt()
-            val Calves = calves.text.toString().toInt()
-
-            if (Height.toString().isBlank()) {
-                Toast.makeText(this, "Please fill out all fields", Toast.LENGTH_SHORT).show()
+            if (Height == null || Weight == null || Shoulder == null || Arm == null || Chest == null ||
+                Waist == null || Hips == null || Thigh == null || Calves == null
+            ) {
+                Toast.makeText(this, "Please fill out all fields with valid values", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             val measurement = Measurement(measId, Height, Weight, Shoulder, Arm, Chest, Waist, Hips, Thigh, Calves)
-            measRef.child(measId).setValue(measurement).addOnSuccessListener {
-                Toast.makeText(this, "Measurement updated successfully", Toast.LENGTH_SHORT).show()
-                finish()
-            }.addOnFailureListener {
-                Toast.makeText(
-                    this,
-                    "Error updating measurement: ${it.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+            measRef.child(measId).setValue(measurement)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Measurement updated successfully", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(
+                        this,
+                        "Error updating measurement: ${it.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
         }
 
         logout = findViewById(R.id.logout_button)

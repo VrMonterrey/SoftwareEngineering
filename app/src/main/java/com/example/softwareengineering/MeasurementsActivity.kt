@@ -38,7 +38,6 @@ class MeasurementsActivity : AppCompatActivity() {
 
         val addButton = findViewById<ImageButton>(R.id.submit_btn)
         addButton.setOnClickListener {
-
             height = findViewById<EditText>(R.id.height)
             weight = findViewById<EditText>(R.id.weight)
             shoulder = findViewById<EditText>(R.id.shoulder)
@@ -49,54 +48,53 @@ class MeasurementsActivity : AppCompatActivity() {
             thigh = findViewById<EditText>(R.id.thigh)
             calves = findViewById<EditText>(R.id.calves)
 
+            val Height = height.text.toString().toIntOrNull()
+            val Weight = weight.text.toString().toIntOrNull()
+            val Shoulder = shoulder.text.toString().toIntOrNull()
+            val Arm = arm.text.toString().toIntOrNull()
+            val Chest = chest.text.toString().toIntOrNull()
+            val Waist = waist.text.toString().toIntOrNull()
+            val Hips = hips.text.toString().toIntOrNull()
+            val Thigh = thigh.text.toString().toIntOrNull()
+            val Calves = calves.text.toString().toIntOrNull()
 
+            if (Height != null && Weight != null && Shoulder != null && Arm != null && Chest != null &&
+                Waist != null && Hips != null && Thigh != null && Calves != null
+            ) {
+                val currentUser = FirebaseAuth.getInstance().currentUser
+                val currentUserId = currentUser?.uid
 
-            val Height = height.text.toString().toInt()
-            val Weight = weight.text.toString().toInt()
-            val Shoulder = shoulder.text.toString().toInt()
-            val Arm = arm.text.toString().toInt()
-            val Chest = chest.text.toString().toInt()
-            val Waist = waist.text.toString().toInt()
-            val Hips = hips.text.toString().toInt()
-            val Thigh = thigh.text.toString().toInt()
-            val Calves = calves.text.toString().toInt()
+                val database = Firebase.database.reference
+                val meas = currentUserId?.let { userId ->
+                    Measurement(
+                        id = database.child("measurements").push().key,
+                        height = Height,
+                        weight = Weight,
+                        shoulder = Shoulder,
+                        arm = Arm,
+                        chest = Chest,
+                        waist = Waist,
+                        hips = Hips,
+                        thigh = Thigh,
+                        calves = Calves,
+                        userId = userId
+                    )
+                }
 
-
-            val currentUser = FirebaseAuth.getInstance().currentUser
-            val currentUserId = currentUser?.uid
-
-            val database = Firebase.database.reference
-            val meas = currentUserId?.let { it1 ->
-                Measurement(
-                    id = database.child("measurements").push().key,
-                    height = Height,
-                    weight = Weight,
-                    shoulder = Shoulder,
-                    arm = Arm,
-                    chest = Chest,
-                    waist = Waist,
-                    hips = Hips,
-                    thigh = Thigh,
-                    calves = Calves,
-                    userId = it1
-                )
-            }
-
-
-            if (meas != null) {
-                if (meas.id != null) {
-                    database.child("measurements").child(meas.id!!).setValue(meas).addOnSuccessListener {
-                        Toast.makeText(this, "Nowy pomiar dodany pomyślnie", Toast.LENGTH_SHORT).show()
-                        height.text.clear()
-                        weight.text.clear()
-                        shoulder.text.clear()
-                        arm.text.clear()
-                        chest.text.clear()
-                        waist.text.clear()
-                        hips.text.clear()
-                        thigh.text.clear()
-                        calves.text.clear()
-                    }
+                if (meas != null && meas.id != null) {
+                    database.child("measurements").child(meas.id!!).setValue(meas)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "Nowy pomiar dodany pomyślnie", Toast.LENGTH_SHORT).show()
+                            height.text.clear()
+                            weight.text.clear()
+                            shoulder.text.clear()
+                            arm.text.clear()
+                            chest.text.clear()
+                            waist.text.clear()
+                            hips.text.clear()
+                            thigh.text.clear()
+                            calves.text.clear()
+                        }
                         .addOnFailureListener {
                             Toast.makeText(
                                 this,
@@ -105,8 +103,9 @@ class MeasurementsActivity : AppCompatActivity() {
                             ).show()
                         }
                 }
+            } else {
+                Toast.makeText(this, "Please enter valid values for all fields", Toast.LENGTH_SHORT).show()
             }
-
         }
 
         logout = findViewById(R.id.logout_button)

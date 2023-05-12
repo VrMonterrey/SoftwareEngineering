@@ -46,10 +46,14 @@ class ListOfMeasurementsActivity : AppCompatActivity(), MeasurementAdapter.Measu
             override fun onDataChange(snapshot: DataSnapshot) {
                 measList.clear()
                 val meases = mutableListOf<Measurement>()
+                val currentUserID = FirebaseAuth.getInstance().currentUser?.uid
                 for (measSnapshot in snapshot.children) {
                     val meas = measSnapshot.getValue(Measurement::class.java)
                     meas?.let {
-                        meases.add(it)
+                        // Check if the measurement belongs to the current user
+                        if (it.userId == currentUserID) {
+                            meases.add(it)
+                        }
                     }
                 }
                 measList.addAll(meases)
@@ -59,7 +63,6 @@ class ListOfMeasurementsActivity : AppCompatActivity(), MeasurementAdapter.Measu
             override fun onCancelled(error: DatabaseError) {
                 Log.w(TAG, "Failed to read value.", error.toException())
             }
-
         })
 
         logout = findViewById(R.id.logout_button)

@@ -105,25 +105,31 @@ class EditDishActivity : AppCompatActivity() {
         addButton.setOnClickListener {
             val name = dishName.text.toString()
             val category = dishCategory.text.toString()
-            val quantity = dishQuantity.text.toString().toInt()
+            val quantityString = dishQuantity.text.toString()
 
-            val dish = Posilki(
-                id = dishId,
-                name = name,
-                category = category,
-                quantity = quantity,
-                products = selectedProducts,
-                photoUrl = photoUrl
-            )
+            if (name.isNotEmpty() && category.isNotEmpty() && quantityString.isNotEmpty()) {
+                val quantity = quantityString.toInt()
 
-            database.child("dishes").child(dishId).setValue(dish)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Dish updated successfully", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this, "Failed to update dish", Toast.LENGTH_SHORT).show()
-                }
+                val dish = Posilki(
+                    id = dishId,
+                    name = name,
+                    category = category,
+                    quantity = quantity,
+                    products = selectedProducts,
+                    photoUrl = photoUrl
+                )
+
+                database.child("dishes").child(dishId).setValue(dish)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Dish updated successfully", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(this, "Failed to update dish", Toast.LENGTH_SHORT).show()
+                    }
+            } else {
+                Toast.makeText(this, "Please fill in all the required fields", Toast.LENGTH_SHORT).show()
+            }
         }
 
         //Menu navigation

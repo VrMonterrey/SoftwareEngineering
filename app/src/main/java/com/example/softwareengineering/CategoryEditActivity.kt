@@ -74,26 +74,31 @@ class CategoryEditActivity : AppCompatActivity() {
         addButton.setOnClickListener {
             val name = catName.text.toString()
 
-            val idList = mutableListOf<String?>()
+            if (name.isNotEmpty()) {
+                val idList = mutableListOf<String?>()
 
-            for (obj in selectedDishes) {
-                idList.add(obj.id)}
-
-            val cat = ProductCategory(
-                id = categoryId,
-                name = name,
-                dishes = idList,
-                userId = currentUserId
-            )
-
-            database.child("sets").child(categoryId).setValue(cat)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Set updated successfully", Toast.LENGTH_SHORT).show()
-                    finish()
+                for (obj in selectedDishes) {
+                    idList.add(obj.id)
                 }
-                .addOnFailureListener {
-                    Toast.makeText(this, "Failed to update set", Toast.LENGTH_SHORT).show()
-                }
+
+                val cat = ProductCategory(
+                    id = categoryId,
+                    name = name,
+                    dishes = idList,
+                    userId = currentUserId
+                )
+
+                database.child("sets").child(categoryId).setValue(cat)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Set updated successfully", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(this, "Failed to update set", Toast.LENGTH_SHORT).show()
+                    }
+            } else {
+                Toast.makeText(this, "Please enter a name for the set", Toast.LENGTH_SHORT).show()
+            }
         }
 
         //Menu navigation

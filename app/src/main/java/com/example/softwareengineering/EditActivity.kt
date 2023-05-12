@@ -67,27 +67,29 @@ class EditActivity : AppCompatActivity() {
         addButton.setOnClickListener {
 
             val name = nameOfProduct.text.toString()
-            val calories = caloriesEditText.text.toString().toInt()
-            val protein = proteinsEditText.text.toString().toInt()
-            val carbs = carbsEditText.text.toString().toInt()
-            val fat = fatsEditText.text.toString().toInt()
+            val calories = caloriesEditText.text.toString().toIntOrNull()
+            val protein = proteinsEditText.text.toString().toIntOrNull()
+            val carbs = carbsEditText.text.toString().toIntOrNull()
+            val fat = fatsEditText.text.toString().toIntOrNull()
 
-            if (name.isBlank()) {
-                Toast.makeText(this, "Please fill out all fields", Toast.LENGTH_SHORT).show()
+            if (name.isBlank() || calories == null || protein == null || carbs == null || fat == null) {
+                Toast.makeText(this, "Wszystkie pola muszą być wypełnione poprawnie", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            val product = Skladnik(skladnikId, name, calories, protein, carbs, fat,)
-            productRef.child(skladnikId).setValue(product).addOnSuccessListener {
-                Toast.makeText(this, "Product updated successfully", Toast.LENGTH_SHORT).show()
-                finish()
-            }.addOnFailureListener {
-                Toast.makeText(
-                    this,
-                    "Error updating product: ${it.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+            val product = Skladnik(skladnikId, name, calories, protein, carbs, fat)
+            productRef.child(skladnikId).setValue(product)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Product updated successfully", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(
+                        this,
+                        "Error updating product: ${it.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
         }
 
         logout = findViewById(R.id.logout_button)

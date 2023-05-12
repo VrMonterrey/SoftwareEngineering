@@ -134,38 +134,39 @@ class DishCategories : AppCompatActivity() {
 
         addButton.setOnClickListener {
             categoryName = findViewById<EditText>(R.id.name_edit_text)
-
             val name = categoryName.text.toString()
 
-            val database = Firebase.database.reference
+            if (name.isNotEmpty()) {
+                val database = Firebase.database.reference
+                val currentUser = FirebaseAuth.getInstance().currentUser
+                val currentUserId = currentUser?.uid
+                val idList = mutableListOf<String?>()
 
-            val currentUser = FirebaseAuth.getInstance().currentUser
-            val currentUserId = currentUser?.uid
-
-            val idList = mutableListOf<String?>()
-
-            for (obj in selectedDishes) {
-                idList.add(obj.id)
-            }
-            val cat = ProductCategory(
-                id = database.child("sets").push().key,
-                name = name,
-                dishes = idList,
-                userId = currentUserId
-            )
-
-            if (cat.id != null) {
-                database.child("sets").child(cat.id!!).setValue(cat).addOnSuccessListener {
-                    Toast.makeText(this, "Nowy zestaw dodany pomyślnie", Toast.LENGTH_SHORT).show()
-                    categoryName.text.clear()
+                for (obj in selectedDishes) {
+                    idList.add(obj.id)
                 }
-                    .addOnFailureListener {
-                        Toast.makeText(
-                            this,
-                            "Błąd podczas dodawania zestawu: ${it.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                val cat = ProductCategory(
+                    id = database.child("sets").push().key,
+                    name = name,
+                    dishes = idList,
+                    userId = currentUserId
+                )
+
+                if (cat.id != null) {
+                    database.child("sets").child(cat.id!!).setValue(cat).addOnSuccessListener {
+                        Toast.makeText(this, "Nowy zestaw dodany pomyślnie", Toast.LENGTH_SHORT).show()
+                        categoryName.text.clear()
                     }
+                        .addOnFailureListener {
+                            Toast.makeText(
+                                this,
+                                "Błąd podczas dodawania zestawu: ${it.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                }
+            } else {
+                Toast.makeText(this, "Please enter a name for the category", Toast.LENGTH_SHORT).show()
             }
         }
     }

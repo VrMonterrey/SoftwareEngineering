@@ -174,10 +174,14 @@ class PosilkiActivity : AppCompatActivity() {
 
             val name = dishName.text.toString()
             val category = dishCategory.text.toString()
-            val quantity = dishQuantity.text.toString().toInt()
+            val quantity = dishQuantity.text.toString().toIntOrNull()
+
+            if (name.isBlank() || category.isBlank() || quantity == null || selectedProducts.isEmpty()) {
+                Toast.makeText(this, "Wszystkie pola muszą być wypełnione poprawnie", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
             val database = Firebase.database.reference
-
             val currentUser = FirebaseAuth.getInstance().currentUser
             val currentUserId = currentUser?.uid
 
@@ -193,17 +197,18 @@ class PosilkiActivity : AppCompatActivity() {
             )
 
             if (dish.id != null) {
-                database.child("dishes").child(dish.id!!).setValue(dish).addOnSuccessListener {
-                    Toast.makeText(this, "Nowy posiłek dodany pomyślnie", Toast.LENGTH_SHORT).show()
-                    dishName.text.clear()
-                    dishCategory.text.clear()
-                    dishQuantity.text.clear()
-                    imageView.setImageBitmap(null)
+                database.child("dishes").child(dish.id!!).setValue(dish)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Nowy posiłek dodany pomyślnie", Toast.LENGTH_SHORT).show()
+                        dishName.text.clear()
+                        dishCategory.text.clear()
+                        dishQuantity.text.clear()
+                        imageView.setImageBitmap(null)
 
-                    var intent: Intent = Intent(applicationContext, ListOfPosilkiActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
+                        var intent: Intent = Intent(applicationContext, ListOfPosilkiActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
                     .addOnFailureListener {
                         Toast.makeText(
                             this,
