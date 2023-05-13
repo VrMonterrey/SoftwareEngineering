@@ -80,7 +80,7 @@ class DishCatActivity : AppCompatActivity(), DishCatAdapter.DishCatAdapterListen
     override fun onCatClick(position: Int) {
         val cat = catList[position]
         val intent = Intent(this, DishCatDetailsActivity::class.java)
-        intent.putExtra("zestaw", cat.id)
+        intent.putExtra("kategoria", cat.id)
         startActivity(intent)
     }
 

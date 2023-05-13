@@ -186,54 +186,60 @@ class PosilkiActivity : AppCompatActivity() {
             val currentUser = FirebaseAuth.getInstance().currentUser
             val currentUserId = currentUser?.uid
 
+            var categoryId: String
             val categoryRef = database.child("categories").child(category)
             categoryRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    if (!dataSnapshot.exists()) {
-                        val categoryId = categoryRef.push().key
-                        if (categoryId != null) {
-                            val dishCategory = DishCategory(id = categoryId, name = category)
-                            categoryRef.setValue(dishCategory)
-                        }
+                    val dishCat: DishCategory
+
+                    if (dataSnapshot.exists()) {
+                        // Category already exists, retrieve the ID
+                        categoryId = dataSnapshot.key!!
+                        dishCat = dataSnapshot.getValue(DishCategory::class.java)!!
+                    } else {
+                        // Category does not exist, create a new one
+                        categoryId = categoryRef.push().key!!
+                        dishCat = DishCategory(id = categoryId, name = category)
+                        categoryRef.setValue(dishCat)
+                    }
+                    val dish = Posilki(
+                        id = database.child("dishes").push().key,
+                        name = name,
+                        category = categoryId,
+                        quantity = quantity,
+                        products = selectedProducts,
+                        photoUrl = photoUrl,
+                        comments = null,
+                        userId = currentUserId
+                    )
+                    if (dish.id != null) {
+                        database.child("dishes").child(dish.id!!).setValue(dish)
+                            .addOnSuccessListener {
+                                Toast.makeText(applicationContext, "Nowy posiłek dodany pomyślnie", Toast.LENGTH_SHORT).show()
+                                dishName.text.clear()
+                                dishCategory.text.clear()
+                                dishQuantity.text.clear()
+                                imageView.setImageBitmap(null)
+
+                                var intent: Intent = Intent(applicationContext, ListOfPosilkiActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Błąd podczas dodawania posiłka: ${it.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                     }
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
-                    Log.w(TAG, "createDishCategory:onCancelled", databaseError.toException())
+                    // Handle the error case
+                    println("Error retrieving category: ${databaseError.message}")
                 }
             })
-            val dish = Posilki(
-                id = database.child("dishes").push().key,
-                name = name,
-                category = category,
-                quantity = quantity,
-                products = selectedProducts,
-                photoUrl = photoUrl,
-                comments = null,
-                userId = currentUserId
-            )
-
-            if (dish.id != null) {
-                database.child("dishes").child(dish.id!!).setValue(dish)
-                    .addOnSuccessListener {
-                        Toast.makeText(this, "Nowy posiłek dodany pomyślnie", Toast.LENGTH_SHORT).show()
-                        dishName.text.clear()
-                        dishCategory.text.clear()
-                        dishQuantity.text.clear()
-                        imageView.setImageBitmap(null)
-
-                        var intent: Intent = Intent(applicationContext, ListOfPosilkiActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(
-                            this,
-                            "Błąd podczas dodawania posiłka: ${it.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-            }
         }
     }
 }

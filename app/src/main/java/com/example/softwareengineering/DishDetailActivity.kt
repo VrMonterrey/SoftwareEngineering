@@ -257,6 +257,8 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
         goback.setOnClickListener(View.OnClickListener{
             if (intent.getStringExtra("sourceActivity") == "ListOfPosilkiActivity") {
                 intent = Intent(applicationContext, ListOfPosilkiActivity::class.java)
+            } else if(intent.getStringExtra("sourceActivity") == "DishCatDetails"){
+                intent = Intent(applicationContext, DishCatDetailsActivity::class.java)
             } else {
                 intent = Intent(applicationContext, FavouriteActivity::class.java)
             }
