@@ -150,6 +150,7 @@ class ListOfPosilkiActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapter
 
         val intent = Intent(this, DishDetailActivity::class.java)
         intent.putExtra("posilek", comment.id)
+        intent.putExtra("sourceActivity", "ListOfPosilkiActivity")
         startActivity(intent)
     }
 

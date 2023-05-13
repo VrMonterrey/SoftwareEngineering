@@ -62,6 +62,7 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
     private lateinit var commentRecyclerView: RecyclerView
     private lateinit var commentAdapter: CommentAdapter
     private lateinit var commentList: MutableList<Comment>
+    private lateinit var currentUserId: String
 
     //Average dishes rating
     fun calculateAverageRating(posilek: Posilki): Float {
@@ -130,6 +131,41 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
         database.child("dishes").child(dishId).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val dish = snapshot.getValue(Posilki::class.java)
+                currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                if (dish != null) {
+                    // Check if the user has liked the dish
+                    val isLiked = dish.isLikedByUser(currentUserId)
+
+                    // Toggle the heart icons based on liking
+                    val likeButton = findViewById<ImageView>(R.id.like_btn)
+                    if (isLiked) {
+                        likeButton.setImageResource(R.drawable.ic_red_heart)
+                    } else {
+                        likeButton.setImageResource(R.drawable.ic_empty_heart)
+                    }
+
+                    // Set an OnClickListener to toggle the like status when the heart icon is clicked
+                    likeButton.setOnClickListener {
+                        if (isLiked) {
+                            // User already liked the dish, so remove their ID from the liked list
+                            dish.liked.remove(currentUserId)
+                        } else {
+                            // User hasn't liked the dish, so add their ID to the liked list
+                            dish.liked.add(currentUserId)
+                        }
+
+                        // Update the heart icon based on the new liking status
+                        if (dish.isLikedByUser(currentUserId)) {
+                            likeButton.setImageResource(R.drawable.ic_red_heart)
+                        } else {
+                            likeButton.setImageResource(R.drawable.ic_empty_heart)
+                        }
+
+                        // Update the dish's liking status in the database
+                        val dishRef = database.child("dishes").child(dishId)
+                        dishRef.setValue(dish)
+                    }
+                }
                 nameField.text = dish?.name
                 dishName = dish?.name
                 dishCategory = dish?.category
@@ -219,7 +255,11 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
 
         //Menu navigation
         goback.setOnClickListener(View.OnClickListener{
-            var intent : Intent = Intent(applicationContext, ListOfPosilkiActivity::class.java)
+            if (intent.getStringExtra("sourceActivity") == "ListOfPosilkiActivity") {
+                intent = Intent(applicationContext, ListOfPosilkiActivity::class.java)
+            } else {
+                intent = Intent(applicationContext, FavouriteActivity::class.java)
+            }
             startActivity(intent)
             finish()
         })

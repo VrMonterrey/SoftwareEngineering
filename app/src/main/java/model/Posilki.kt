@@ -12,4 +12,8 @@ data class Posilki(
     val userId: String? = "",
     val liked: MutableList<String?> = mutableListOf(),
     var checked: Boolean = false
-)
+){
+    fun isLikedByUser(userId: String): Boolean {
+        return liked.contains(userId)
+    }
+}
