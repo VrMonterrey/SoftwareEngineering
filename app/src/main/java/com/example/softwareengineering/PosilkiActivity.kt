@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.softwareengineering.adapter.SkladnikiToChooseAdapter
+import com.example.softwareengineering.model.DishCategory
 import com.example.softwareengineering.model.Posilki
 import com.google.firebase.auth.FirebaseAuth
 import com.example.softwareengineering.model.Skladnik
@@ -185,6 +186,22 @@ class PosilkiActivity : AppCompatActivity() {
             val currentUser = FirebaseAuth.getInstance().currentUser
             val currentUserId = currentUser?.uid
 
+            val categoryRef = database.child("categories").child(category)
+            categoryRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (!dataSnapshot.exists()) {
+                        val categoryId = categoryRef.push().key
+                        if (categoryId != null) {
+                            val dishCategory = DishCategory(id = categoryId, name = category)
+                            categoryRef.setValue(dishCategory)
+                        }
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.w(TAG, "createDishCategory:onCancelled", databaseError.toException())
+                }
+            })
             val dish = Posilki(
                 id = database.child("dishes").push().key,
                 name = name,
