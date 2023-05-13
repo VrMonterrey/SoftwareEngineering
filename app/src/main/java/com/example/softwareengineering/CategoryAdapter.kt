@@ -38,7 +38,9 @@ class CategoryAdapter(
         val currentItem = catList[position]
 
         holder.bind(currentItem)
-
+        holder.itemView.setOnClickListener {
+            listener.onCatClick(position)
+        }
         val currentUser = FirebaseAuth.getInstance().currentUser
         val currentUserId = currentUser?.uid
         val isCreatedByCurrentUser = currentItem.userId == currentUserId

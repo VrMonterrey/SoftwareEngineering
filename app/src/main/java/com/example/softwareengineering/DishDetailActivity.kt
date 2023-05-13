@@ -259,7 +259,9 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
                 intent = Intent(applicationContext, ListOfPosilkiActivity::class.java)
             } else if(intent.getStringExtra("sourceActivity") == "DishCatDetails"){
                 intent = Intent(applicationContext, DishCatDetailsActivity::class.java)
-            } else {
+            } else if(intent.getStringExtra("sourceActivity") == "SetDetail"){
+                intent = Intent(applicationContext, SetDetailActivity::class.java)
+            }else {
                 intent = Intent(applicationContext, FavouriteActivity::class.java)
             }
             startActivity(intent)

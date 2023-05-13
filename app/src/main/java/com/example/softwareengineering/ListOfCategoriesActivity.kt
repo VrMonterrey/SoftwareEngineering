@@ -133,7 +133,7 @@ class ListOfCategoriesActivity : AppCompatActivity(), CategoryAdapter.CategoryAd
     override fun onCatClick(position: Int) {
         val cat = catList[position]
 
-        val intent = Intent(this, DishDetailActivity::class.java)
+        val intent = Intent(this, SetDetailActivity::class.java)
         intent.putExtra("zestaw", cat.id)
         startActivity(intent)
     }

@@ -20,16 +20,6 @@
 
     </RelativeLayout>
 
-    <ImageButton
-        android:id="@+id/goback_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="175dp"
-        android:layout_marginLeft="17dp"
-        android:src="@drawable/ic_goback"
-        android:background="#00ffffff"/>
 
     <RelativeLayout
         android:id="@+id/menu_panel"
