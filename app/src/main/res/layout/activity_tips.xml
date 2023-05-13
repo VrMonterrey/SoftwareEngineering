@@ -14,7 +14,7 @@
         android:layout_marginBottom="200dp"
         android:background="@drawable/rounded_background">
                 <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/productRecyclerView"
+            android:id="@+id/tipRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="330dp"
             android:layout_marginTop="50dp"

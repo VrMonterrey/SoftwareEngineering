@@ -1,6 +1,7 @@
 package com.example.softwareengineering
 
 import ProductAdapter
+import TipsAdapter
 import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -11,47 +12,48 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.softwareengineering.model.Skladnik
+import com.example.softwareengineering.model.Tip
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
-class TipsActivity : AppCompatActivity(), ProductAdapter.ProductAdapterListener {
+class TipsActivity : AppCompatActivity(), TipsAdapter.TipAdapterListener {
 
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
     private lateinit var goback: ImageButton
     private lateinit var remove: ImageButton
-    private lateinit var productAdapter: ProductAdapter
-    private lateinit var productList: MutableList<Skladnik>
-    private lateinit var productRecyclerView: RecyclerView
+    private lateinit var tipsAdapter: TipsAdapter
+    private lateinit var tipList: MutableList<Tip>
+    private lateinit var tipRecyclerView: RecyclerView
     private lateinit var database: FirebaseDatabase
-    private lateinit var productRef: DatabaseReference
+    private lateinit var tipRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_list_of_skladniki)
+        setContentView(R.layout.activity_tips)
 
-        productRecyclerView = findViewById(R.id.productRecyclerView)
-        productAdapter = ProductAdapter(mutableListOf(), this)
-        productRecyclerView.adapter = productAdapter
+        tipRecyclerView = findViewById(R.id.tipRecyclerView)
+        tipsAdapter = TipsAdapter(mutableListOf(), this)
+        tipRecyclerView.adapter = tipsAdapter
 
         database = FirebaseDatabase.getInstance()
-        productRef = database.getReference("products")
+        tipRef = database.getReference("tips")
 
-        productList = mutableListOf()
+        tipList = mutableListOf()
 
-        productRef.addValueEventListener(object : ValueEventListener {
+        tipRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                productList.clear()
-                val products = mutableListOf<Skladnik>()
-                for (productSnapshot in snapshot.children) {
-                    val product = productSnapshot.getValue(Skladnik::class.java)
-                    product?.let {
-                        products.add(it)
+                tipList.clear()
+                val tips = mutableListOf<Tip>()
+                for (tipSnapshot in snapshot.children) {
+                    val tip = tipSnapshot.getValue(Tip::class.java)
+                    tip?.let {
+                        tips.add(it)
                     }
                 }
-                productList.addAll(products)
-                productAdapter.updateData(products)
+                tipList.addAll(tips)
+                tipsAdapter.updateData(tips)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -90,12 +92,12 @@ class TipsActivity : AppCompatActivity(), ProductAdapter.ProductAdapterListener 
             finish()
         })
 
-        productAdapter.setOnDeleteClickListener(object : ProductAdapter.OnDeleteClickListener {
+        tipsAdapter.setOnDeleteClickListener(object : TipsAdapter.OnDeleteClickListener {
             override fun onDeleteClick(position: Int) {
-                val product = productList[position]
-                product.id?.let {
-                    val productRef = database.getReference("products/$it")
-                    productRef.removeValue()
+                val tip = tipList[position]
+                tip.id?.let {
+                    val tipRef = database.getReference("tips/$it")
+                    tipRef.removeValue()
                 }
             }
         })
@@ -103,16 +105,16 @@ class TipsActivity : AppCompatActivity(), ProductAdapter.ProductAdapterListener 
     }
 
     override fun onDeleteClick(position: Int) {
-        val product = productList[position]
-        product.id?.let {
-            val productRef = database.getReference("products/$it")
-            productRef.removeValue().addOnSuccessListener {
-                Toast.makeText(this, "Składnik został pomyślnie usunięty", Toast.LENGTH_SHORT).show()
+        val tip = tipList[position]
+        tip.id?.let {
+            val tipRef = database.getReference("tips/$it")
+            tipRef.removeValue().addOnSuccessListener {
+                Toast.makeText(this, "Podpowiedź została pomyślnie usunięta", Toast.LENGTH_SHORT).show()
             }
                 .addOnFailureListener {
                     Toast.makeText(
                         this,
-                        "Błąd podczas usuwania składnika: ${it.message}",
+                        "Błąd podczas usuwania podpowiedzi: ${it.message}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -120,10 +122,10 @@ class TipsActivity : AppCompatActivity(), ProductAdapter.ProductAdapterListener 
     }
 
     override fun onEditClick(position: Int) {
-        val product = productList[position]
+        val tip = tipList[position]
 
-        val intent = Intent(this, EditActivity::class.java)
-        intent.putExtra("skladnik", product.id)
+        val intent = Intent(this, EditTipActivity::class.java)
+        intent.putExtra("podpowiedz", tip.id)
         startActivity(intent)
     }
 
