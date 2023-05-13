@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.softwareengineering.R
 import com.example.softwareengineering.model.Posilki
 import com.example.softwareengineering.model.ProductCategory
+import com.google.firebase.auth.FirebaseAuth
 
 class CategoryAdapter(
     private var catList: MutableList<ProductCategory>,
@@ -36,8 +37,24 @@ class CategoryAdapter(
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val currentItem = catList[position]
 
-        holder.nameTextView.text = currentItem.name
+        holder.bind(currentItem)
 
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val currentUserId = currentUser?.uid
+        val isCreatedByCurrentUser = currentItem.userId == currentUserId
+
+        // Set visibility and clickability of edit and delete buttons based on the creator
+        if (isCreatedByCurrentUser) {
+            holder.deleteButton.visibility = View.VISIBLE
+            holder.deleteButton.isEnabled = true
+            holder.editButton.visibility = View.VISIBLE
+            holder.editButton.isEnabled = true
+        } else {
+            holder.deleteButton.visibility = View.INVISIBLE
+            holder.deleteButton.isEnabled = false
+            holder.editButton.visibility = View.INVISIBLE
+            holder.editButton.isEnabled = false
+        }
     }
 
     override fun getItemCount() = catList.size
@@ -51,7 +68,7 @@ class CategoryAdapter(
     inner class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nameTextView: TextView = itemView.findViewById(R.id.category_name)
         val deleteButton: AppCompatImageView = itemView.findViewById(R.id.remove_btn)
-        val editBotton: AppCompatImageView = itemView.findViewById(R.id.edit_btn)
+        val editButton: AppCompatImageView = itemView.findViewById(R.id.edit_btn)
 
         private var currentCat: ProductCategory? = null
 
@@ -62,7 +79,7 @@ class CategoryAdapter(
                     listener.onDeleteClick(position)
                 }
             }
-            editBotton.setOnClickListener {
+            editButton.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     listener.onEditClick(position)

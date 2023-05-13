@@ -43,6 +43,9 @@ class SkladnikiActivity : AppCompatActivity() {
             val carbs = carbsEditText.text.toString().toIntOrNull()
             val fats = fatsEditText.text.toString().toIntOrNull()
 
+            val currentUser = FirebaseAuth.getInstance().currentUser
+            val currentUserId = currentUser?.uid
+
             if (name.isNotEmpty() && calories != null && proteins != null && carbs != null && fats != null) {
                 val database = Firebase.database.reference
                 val product = Skladnik(
@@ -51,7 +54,8 @@ class SkladnikiActivity : AppCompatActivity() {
                     calories = calories,
                     protein = proteins,
                     carbs = carbs,
-                    fat = fats
+                    fat = fats,
+                    userId = currentUserId
                 )
 
                 if (product.id != null) {

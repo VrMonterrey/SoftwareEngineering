@@ -77,7 +77,9 @@ class EditActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val product = Skladnik(skladnikId, name, calories, protein, carbs, fat)
+            val currentUser = FirebaseAuth.getInstance().currentUser
+            val currentUserId = currentUser?.uid
+            val product = Skladnik(skladnikId, name, calories, protein, carbs, fat,currentUserId)
             productRef.child(skladnikId).setValue(product)
                 .addOnSuccessListener {
                     Toast.makeText(this, "Product updated successfully", Toast.LENGTH_SHORT).show()
