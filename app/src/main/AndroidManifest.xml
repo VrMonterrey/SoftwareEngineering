@@ -21,6 +21,12 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".DishCatDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DishCatAdapter"
+            android:exported="false" />
+        <activity
             android:name=".CreateTipActivity"
             android:exported="false" />
         <activity

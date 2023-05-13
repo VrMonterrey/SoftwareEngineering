@@ -130,10 +130,6 @@ class ListOfCategoriesActivity : AppCompatActivity(), CategoryAdapter.CategoryAd
         startActivity(intent)
     }
 
-    override fun onCommentClick(position: Int) {
-        TODO("Not yet implemented")
-    }
-
     override fun onCatClick(position: Int) {
         val cat = catList[position]
 

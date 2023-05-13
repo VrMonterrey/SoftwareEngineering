@@ -99,7 +99,6 @@ class CategoryAdapter(
     interface CategoryAdapterListener {
         fun onDeleteClick(position: Int)
         fun onEditClick(position: Int)
-        fun onCommentClick(position: Int)
         fun onCatClick(position: Int)
     }
 }

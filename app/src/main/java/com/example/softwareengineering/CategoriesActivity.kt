@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
-import android.widget.RelativeLayout
-import com.example.softwareengineering.model.Posilki
 import com.google.firebase.auth.FirebaseAuth
 
 class CategoriesActivity : AppCompatActivity() {
@@ -107,7 +105,7 @@ class CategoriesActivity : AppCompatActivity() {
             finish()
         })
         dishcat_btn.setOnClickListener(View.OnClickListener{
-            var intent : Intent = Intent(applicationContext,DishCatActivity::class.java)
+            var intent : Intent = Intent(applicationContext, DishCatActivity::class.java)
             startActivity(intent)
             finish()
         })
