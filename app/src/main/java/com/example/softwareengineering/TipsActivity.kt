@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.softwareengineering.model.Skladnik
@@ -21,13 +22,14 @@ class TipsActivity : AppCompatActivity(), TipsAdapter.TipAdapterListener {
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
-    private lateinit var goback: ImageButton
     private lateinit var remove: ImageButton
     private lateinit var tipsAdapter: TipsAdapter
     private lateinit var tipList: MutableList<Tip>
     private lateinit var tipRecyclerView: RecyclerView
     private lateinit var database: FirebaseDatabase
     private lateinit var tipRef: DatabaseReference
+    private lateinit var createTip: TextView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +67,7 @@ class TipsActivity : AppCompatActivity(), TipsAdapter.TipAdapterListener {
         logout = findViewById(R.id.logout_button)
         home = findViewById(R.id.home_button)
         categories = findViewById(R.id.categories_btn)
-        goback = findViewById(R.id.goback_btn)
+        createTip = findViewById(R.id.create_tip)
 
         home.setOnClickListener(View.OnClickListener{
             var intent : Intent = Intent(applicationContext, MainActivity::class.java)
@@ -86,8 +88,8 @@ class TipsActivity : AppCompatActivity(), TipsAdapter.TipAdapterListener {
             finish()
         })
 
-        goback.setOnClickListener(View.OnClickListener{
-            var intent : Intent = Intent(applicationContext, SkladnikiActivity::class.java)
+        createTip.setOnClickListener(View.OnClickListener {
+            var intent: Intent = Intent(applicationContext, CreateTipActivity::class.java)
             startActivity(intent)
             finish()
         })

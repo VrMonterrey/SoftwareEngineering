@@ -10,34 +10,97 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:layout_marginBottom="200dp"
         android:background="@drawable/rounded_background">
-                <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/tipRecyclerView"
+
+        <TextView
+            android:id="@+id/header_title"
             android:layout_width="match_parent"
-            android:layout_height="330dp"
-            android:layout_marginTop="50dp"
-            android:padding="16dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+            android:layout_height="wrap_content"
+            android:letterSpacing=".1"
+            android:paddingVertical="20dp"
+            android:text="Dodaj podpowiedź"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="19dp"
+            android:textStyle="bold" />
 
-        </androidx.recyclerview.widget.RecyclerView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="70dp"
+            android:layout_marginBottom="20dp">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:text="Temat podpowiedzi"
+                android:textColor="@color/white"
+                android:textSize="13dp" />
+
+            <EditText
+                android:id="@+id/tip_topic"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="25dp"
+                android:background="@color/dark2"
+                android:hint="Wpisz temat podpowiedzi"
+                android:inputType="text"
+                android:paddingLeft="15dp"
+                android:textColorHint="@color/grey"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginTop="80dp"
+                android:text="Zawartość"
+                android:textColor="@color/white"
+                android:textSize="13dp" />
+
+            <EditText
+                android:id="@+id/tip_text"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/dark2"
+                android:hint="Moim zdaniem..."
+                android:inputType="text"
+                android:paddingLeft="15dp"
+                android:paddingBottom="55dp"
+                android:textColorHint="@color/grey"
+                android:layout_marginTop="105dp"
+                android:textSize="12dp" />
+
+
+        </RelativeLayout>
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/create_tip"
-        android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/submit_btn"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="170dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/ic_checkmark"
+        android:background="#00ffffff"/>
+    <ImageButton
+        android:id="@+id/goback_btn"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="Dodaj własną podpowiedź"
-        android:textSize="14dp"
-        android:textColor="@color/grey"
-        android:textAlignment="center"
-        android:layout_marginBottom="165dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="175dp"
+        android:layout_marginLeft="17dp"
+        android:src="@drawable/ic_goback"
+        android:background="#00ffffff"/>
+
 
     <RelativeLayout
         android:id="@+id/menu_panel"

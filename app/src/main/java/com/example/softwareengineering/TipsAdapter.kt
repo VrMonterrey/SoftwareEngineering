@@ -42,8 +42,9 @@ class TipsAdapter(
     override fun onBindViewHolder(holder: TipViewHolder, position: Int) {
         val currentItem = tipList[position]
 
+        holder.tipTopic.text = currentItem.topic
         holder.tipDescription.text = currentItem.text
-        holder.bindEmail(currentItem.userId)
+        currentItem.userId?.let { holder.bindEmail(it) }
 
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         holder.tipDate.text =  dateFormat.format(Date(currentItem.date))
@@ -74,6 +75,7 @@ class TipsAdapter(
 
     inner class TipViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tipDescription: TextView = itemView.findViewById(R.id.tip_description)
+        val tipTopic: TextView = itemView.findViewById(R.id.tip_topic)
         val tipUserName: TextView = itemView.findViewById(R.id.tip_user_name)
         val tipDate: TextView = itemView.findViewById(R.id.tip_date)
         val deleteButton: AppCompatImageView = itemView.findViewById(R.id.remove_btn)
