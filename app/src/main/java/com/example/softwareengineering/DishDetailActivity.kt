@@ -2,6 +2,8 @@ package com.example.softwareengineering
 
 import ProductAdapterDishDetails
 import android.annotation.SuppressLint
+import android.app.TimePickerDialog
+import android.content.Context
 import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +14,7 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.softwareengineering.model.Comment
+import com.example.softwareengineering.model.DailyNutrition
 import com.example.softwareengineering.model.Posilki
 import com.example.softwareengineering.model.Skladnik
 import com.google.firebase.auth.FirebaseAuth
@@ -20,6 +23,8 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.lang.Math.round
 import java.text.DecimalFormat
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.ProductAdapterDishDetailsListener {
@@ -40,6 +45,7 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
     private lateinit var fats: TextView
 
     private lateinit var rating_spn: Spinner
+    private lateinit var clock: ImageView
 
     private lateinit var productAdapter: ProductAdapterDishDetails
     private lateinit var productList: MutableList<Skladnik>
@@ -122,16 +128,56 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
 
         // Initialize Firebase database
         val database = Firebase.database.reference
-
+        currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         // Get dish ID from intent
         val dishId = intent.getStringExtra("posilek") ?: ""
         var averageRating : Float? = 0f
+
+        val context: Context = this
+        val clockImageView: ImageView = findViewById(R.id.clock_btn)
+
+        // Set a click listener on the clock ImageView
+        clockImageView.setOnClickListener {
+            val currentTime = Calendar.getInstance()
+            val currentHour = currentTime.get(Calendar.HOUR_OF_DAY)
+            val currentMinute = currentTime.get(Calendar.MINUTE)
+
+            val timePickerDialog = TimePickerDialog(context, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+                val timeToEat = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute)
+                val database = FirebaseDatabase.getInstance()
+                val dailyNutritionRef = database.getReference("scheduled")
+
+                // Generate a unique key for the new dailyNutrition entry
+                val newDailyNutritionKey = dailyNutritionRef.push().key
+
+                val dailyNutrition = DailyNutrition(
+                    id = newDailyNutritionKey,
+                    time = timeToEat,
+                    userId = currentUserId,
+                    posilekId = dishId
+                )
+                if (newDailyNutritionKey != null) {
+                    dailyNutritionRef.child(newDailyNutritionKey).setValue(dailyNutrition)
+                        .addOnSuccessListener {
+                            Toast.makeText(applicationContext, "Posiłek dodany do listy na dzień pomyślnie", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(
+                                applicationContext,
+                                "Błąd podczas dodawania posiłka: ${it.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                }
+            }, currentHour, currentMinute, false)
+
+            timePickerDialog.show()
+        }
 
         //Reading dish
         database.child("dishes").child(dishId).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val dish = snapshot.getValue(Posilki::class.java)
-                currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
                 if (dish != null) {
                     // Check if the user has liked the dish
                     val isLiked = dish.isLikedByUser(currentUserId)
@@ -275,9 +321,6 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
             edit_text = findViewById<EditText>(R.id.name_edit_text)
 
             val text = edit_text.text.toString()
-
-            val currentUser = FirebaseAuth.getInstance().currentUser
-            val currentUserId = currentUser?.uid
 
             val database = Firebase.database.reference
             val commentId = database.child("dishes").child(dishId).child("comments").push().key
