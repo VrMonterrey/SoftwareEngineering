@@ -98,52 +98,32 @@ class ListOfPosilkiActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapter
             finish()
         })
 
-//        goback.setOnClickListener(View.OnClickListener{
-//            var intent : Intent = Intent(applicationContext, PosilkiActivity::class.java)
-//            startActivity(intent)
-//            finish()
-//        })
-
-//        dishAdapter.setOnDeleteClickListener(object : com.example.softwareengineering.PosilkiAdapter.OnDeleteClickListener {
-//            override fun onDeleteClick(position: Int) {
-//                val dish = dishList[position]
-//                dish.id?.let {
-//                    val dishRef = database.getReference("dishes/$it")
-//                    dishRef.removeValue()
-//                }
-//            }
-//        })
-
     }
 
-//    override fun onDeleteClick(position: Int) {
-//        val dish = dishList[position]
-//        dish.id?.let {
-//            val dishRef = database.getReference("dishes/$it")
-//            dishRef.removeValue().addOnSuccessListener {
-//                Toast.makeText(this, "Posiłek został pomyślnie usunięty", Toast.LENGTH_SHORT).show()
-//            }
-//                .addOnFailureListener {
-//                    Toast.makeText(
-//                        this,
-//                        "Błąd podczas usuwania posiłku: ${it.message}",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-//        }
-//    }
-//
-//    override fun onEditClick(position: Int) {
-//        val dish = dishList[position]
-//
-//        val intent = Intent(this, EditDishActivity::class.java)
-//        intent.putExtra("posilek", dish.id)
-//        startActivity(intent)
-//    }
-//
-//    override fun onCommentClick(position: Int) {
-//        TODO("Not yet implemented")
-//    }
+    override fun onDeleteClick(position: Int) {
+        val dish = dishList[position]
+        dish.id?.let {
+            val dishRef = database.getReference("dishes/$it")
+            dishRef.removeValue().addOnSuccessListener {
+                Toast.makeText(this, "Posiłek został pomyślnie usunięty", Toast.LENGTH_SHORT).show()
+            }
+                .addOnFailureListener {
+                    Toast.makeText(
+                        this,
+                        "Błąd podczas usuwania posiłku: ${it.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+        }
+    }
+
+    override fun onEditClick(position: Int) {
+        val dish = dishList[position]
+
+        val intent = Intent(this, EditDishActivity::class.java)
+        intent.putExtra("posilek", dish.id)
+        startActivity(intent)
+    }
 
     override fun onDishClick(position: Int) {
         val comment = dishList[position]

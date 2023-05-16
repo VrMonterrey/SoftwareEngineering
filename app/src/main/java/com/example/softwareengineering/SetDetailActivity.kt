@@ -127,4 +127,12 @@ class SetDetailActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapterList
         startActivity(intent)
     }
 
+    override fun onDeleteClick(position: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onEditClick(position: Int) {
+        TODO("Not yet implemented")
+    }
+
 }
