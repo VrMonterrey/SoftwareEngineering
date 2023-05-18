@@ -7,6 +7,9 @@
     <string name="click_to_login">Click to login</string>
     <string name="click_to_register">Click to register</string>
     <string name="logout">Log out</string>
+    <string name="search_tint">Wpisz nazwę składnika</string>
+    <string name="product_name_title">Nazwa składnika</string>
+    <string name="macros_abbr">kal / b / w / t</string>
     <string-array name="menu_options">
         <item>Strona główna</item>
         <item>Składniki</item>
