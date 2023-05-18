@@ -23,7 +23,7 @@ class ListOfSkladnikiActivity : AppCompatActivity(), ProductAdapter.ProductAdapt
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
     private lateinit var goback: ImageButton
-    private lateinit var remove: ImageButton
+    private lateinit var verticalMenu: ImageButton
     private lateinit var searchEditText: EditText
     private lateinit var productAdapter: ProductAdapter
     private lateinit var productList: MutableList<Skladnik>
@@ -80,6 +80,7 @@ class ListOfSkladnikiActivity : AppCompatActivity(), ProductAdapter.ProductAdapt
         home = findViewById(R.id.home_button)
         categories = findViewById(R.id.categories_btn)
         goback = findViewById(R.id.goback_btn)
+        verticalMenu = findViewById(R.id.vertical_menu)
 
         home.setOnClickListener(View.OnClickListener{
             var intent : Intent = Intent(applicationContext, MainActivity::class.java)
@@ -101,6 +102,12 @@ class ListOfSkladnikiActivity : AppCompatActivity(), ProductAdapter.ProductAdapt
         })
 
         goback.setOnClickListener(View.OnClickListener{
+            var intent : Intent = Intent(applicationContext, CategoriesActivity::class.java)
+            startActivity(intent)
+            finish()
+        })
+
+        verticalMenu.setOnClickListener(View.OnClickListener{
             var intent : Intent = Intent(applicationContext, SkladnikiActivity::class.java)
             startActivity(intent)
             finish()

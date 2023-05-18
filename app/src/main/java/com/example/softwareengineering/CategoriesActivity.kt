@@ -62,7 +62,7 @@ class CategoriesActivity : AppCompatActivity() {
         })
 
         skladniki.setOnClickListener(View.OnClickListener{
-            var intent : Intent = Intent(applicationContext,SkladnikiActivity::class.java)
+            var intent : Intent = Intent(applicationContext,ListOfSkladnikiActivity::class.java)
             startActivity(intent)
             finish()
         })

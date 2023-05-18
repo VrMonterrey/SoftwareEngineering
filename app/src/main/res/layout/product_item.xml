@@ -4,7 +4,8 @@
     android:layout_height="100dp"
     android:orientation="horizontal"
     android:padding="16dp"
-    android:background="@color/white10"
+    android:background="#A0327D68"
+    android:elevation="5dp"
     android:layout_marginTop="10dp">
 
 
