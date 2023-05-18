@@ -70,6 +70,10 @@ class SkladnikiActivity : AppCompatActivity() {
                             proteinsEditText.text.clear()
                             carbsEditText.text.clear()
                             fatsEditText.text.clear()
+
+                            var intent: Intent = Intent(applicationContext, ListOfSkladnikiActivity::class.java)
+                            startActivity(intent)
+                            finish()
                         }
                         .addOnFailureListener {
                             Toast.makeText(
