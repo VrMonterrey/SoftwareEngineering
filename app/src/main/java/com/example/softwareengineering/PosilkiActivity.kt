@@ -19,12 +19,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.softwareengineering.adapter.SkladnikiToChooseAdapter
 import com.example.softwareengineering.model.DishCategory
 import com.example.softwareengineering.model.Posilki
+import com.example.softwareengineering.model.ProductCategory
 import com.google.firebase.auth.FirebaseAuth
 import com.example.softwareengineering.model.Skladnik
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -39,7 +37,6 @@ class PosilkiActivity : AppCompatActivity() {
     private lateinit var goback: ImageButton
 
     private lateinit var dishName: EditText
-    private lateinit var dishCategory: EditText
     private lateinit var dishQuantity: EditText
     private lateinit var addButton: ImageButton
     private lateinit var dialogButton: Button
@@ -53,6 +50,13 @@ class PosilkiActivity : AppCompatActivity() {
     private var photoUrl: String = ""
 
     private lateinit var getContent: ActivityResultLauncher<String>
+
+    private lateinit var kategoriaText: TextView
+    private lateinit var categorySpinner: Spinner
+    private lateinit var categoryList: MutableList<ProductCategory>
+    private var selectedCategory: String = ""
+
+    private lateinit var databaseReference: DatabaseReference
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,6 +74,53 @@ class PosilkiActivity : AppCompatActivity() {
         addButton = findViewById(R.id.submit_btn)
 
         val database = Firebase.database.reference
+
+        //Choose category
+        kategoriaText = findViewById(R.id.kategoriaText)
+        categorySpinner = findViewById(R.id.categorySpinner)
+
+        databaseReference = FirebaseDatabase.getInstance().reference.child("categories")
+        categoryList = mutableListOf()
+
+        val categoriesorSpinner: MutableList<String> = mutableListOf()
+
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                categoryList.clear()
+
+                for (categorySnapshot in snapshot.children) {
+                    val category = categorySnapshot.getValue(ProductCategory::class.java)
+                    category?.let {
+                        categoryList.add(it)
+                    }
+                }
+
+                for (category in categoryList) {
+                    categoriesorSpinner.add(category.name)
+                }
+
+                val adapter = ArrayAdapter(this@PosilkiActivity, R.layout.spinner_item_layout, categoriesorSpinner)
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                categorySpinner.adapter = adapter
+
+                kategoriaText.text = "Kategoria"
+
+                categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        selectedCategory = categoriesorSpinner[position]
+                        kategoriaText.text = selectedCategory
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                        // Ничего не делаем
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Обработка ошибки
+            }
+        })
 
         //Choose image from gallery
         imageView = findViewById<ImageView>(R.id.image_view)
@@ -170,11 +221,10 @@ class PosilkiActivity : AppCompatActivity() {
 
         addButton.setOnClickListener {
             dishName = findViewById<EditText>(R.id.name_edit_text)
-            dishCategory = findViewById<EditText>(R.id.category_edit_text)
             dishQuantity = findViewById<EditText>(R.id.ilosc_edit_text)
 
             val name = dishName.text.toString()
-            val category = dishCategory.text.toString()
+            val category = selectedCategory
             val quantity = dishQuantity.text.toString().toIntOrNull()
 
             if (name.isBlank() || category.isBlank() || quantity == null || selectedProducts.isEmpty()) {
@@ -217,7 +267,6 @@ class PosilkiActivity : AppCompatActivity() {
                             .addOnSuccessListener {
                                 Toast.makeText(applicationContext, "Nowy posiłek dodany pomyślnie", Toast.LENGTH_SHORT).show()
                                 dishName.text.clear()
-                                dishCategory.text.clear()
                                 dishQuantity.text.clear()
                                 imageView.setImageBitmap(null)
 

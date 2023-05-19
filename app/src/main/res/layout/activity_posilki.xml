@@ -49,30 +49,50 @@
                 android:background="@color/dark2"
                 android:hint="Wpisz nazwę posiłku"
                 android:inputType="text"
+                android:textColor="@color/white"
                 android:paddingLeft="15dp"
                 android:textColorHint="@color/grey"
                 android:textSize="12dp" />
+
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginHorizontal="5dp"-->
+<!--                android:layout_marginTop="80dp"-->
+<!--                android:text="Kategoria"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="13dp" />-->
+
+<!--            <EditText-->
+<!--                android:id="@+id/category_edit_text"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:layout_marginTop="105dp"-->
+<!--                android:background="@color/dark2"-->
+<!--                android:hint="Wpisz kategorię"-->
+<!--                android:inputType="text"-->
+<!--                android:paddingLeft="15dp"-->
+<!--                android:textColorHint="@color/grey"-->
+<!--                android:textSize="12dp" />-->
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginTop="80dp"
+                android:id="@+id/kategoriaText"
+                android:layout_width="90dp"
+                android:layout_height="35dp"
                 android:text="Kategoria"
+                android:layout_marginTop="70dp"
+                android:background="@drawable/rounded_background_submit"
                 android:textColor="@color/white"
-                android:textSize="13dp" />
+                android:gravity="center"
+                android:textAllCaps="false"
+                android:textSize="11sp"/>
 
-            <EditText
-                android:id="@+id/category_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="105dp"
-                android:background="@color/dark2"
-                android:hint="Wpisz kategorię"
-                android:inputType="text"
-                android:paddingLeft="15dp"
-                android:textColorHint="@color/grey"
-                android:textSize="12dp" />
+            <Spinner
+                android:id="@+id/categorySpinner"
+                android:layout_width="90dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="120dp"
+                android:background="@color/greyLighter"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -92,6 +112,7 @@
                 android:hint="Wpisz ilość posiłku"
                 android:inputType="number"
                 android:paddingLeft="15dp"
+                android:textColor="@color/white"
                 android:textColorHint="@color/grey"
                 android:textSize="12dp" />
 
