@@ -51,7 +51,7 @@ class PosilkiActivity : AppCompatActivity() {
 
     private lateinit var getContent: ActivityResultLauncher<String>
 
-    private lateinit var kategoriaText: TextView
+//    private lateinit var kategoriaText: TextView
     private lateinit var categorySpinner: Spinner
     private lateinit var categoryList: MutableList<ProductCategory>
     private var selectedCategory: String = ""
@@ -76,7 +76,7 @@ class PosilkiActivity : AppCompatActivity() {
         val database = Firebase.database.reference
 
         //Choose category
-        kategoriaText = findViewById(R.id.kategoriaText)
+//        kategoriaText = findViewById(R.id.kategoriaText)
         categorySpinner = findViewById(R.id.categorySpinner)
 
         databaseReference = FirebaseDatabase.getInstance().reference.child("categories")
@@ -100,25 +100,24 @@ class PosilkiActivity : AppCompatActivity() {
                 }
 
                 val adapter = ArrayAdapter(this@PosilkiActivity, R.layout.spinner_item_layout, categoriesorSpinner)
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 categorySpinner.adapter = adapter
 
-                kategoriaText.text = "Kategoria"
+//                kategoriaText.text = "Kategoria"
 
                 categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                         selectedCategory = categoriesorSpinner[position]
-                        kategoriaText.text = selectedCategory
+//                        kategoriaText.text = selectedCategory
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {
-                        // Ничего не делаем
+
                     }
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Обработка ошибки
+
             }
         })
 
