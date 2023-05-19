@@ -34,7 +34,6 @@ class PosilkiActivity : AppCompatActivity() {
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
-    private lateinit var goback: ImageButton
 
     private lateinit var dishName: EditText
     private lateinit var dishQuantity: EditText
@@ -69,7 +68,6 @@ class PosilkiActivity : AppCompatActivity() {
         logout = findViewById(R.id.logout_button)
         home = findViewById(R.id.home_button)
         categories = findViewById(R.id.categories_btn)
-        goback = findViewById(R.id.goback_btn)
 
         addButton = findViewById(R.id.submit_btn)
 
@@ -165,11 +163,6 @@ class PosilkiActivity : AppCompatActivity() {
             finish()
         })
 
-        goback.setOnClickListener(View.OnClickListener {
-            var intent: Intent = Intent(applicationContext, ListOfPosilkiActivity::class.java)
-            startActivity(intent)
-            finish()
-        })
     }
 
     private fun showCustomDialog() {
