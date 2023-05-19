@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
-import androidx.activity.result.ActivityResultLauncher
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.softwareengineering.adapter.PosilkiToChooseAdapter
@@ -36,11 +35,6 @@ class DishCategories : AppCompatActivity() {
 
     private var selectedDishes: List<Posilki> = emptyList()
 
-    private lateinit var chooseImageButton: Button
-
-    private lateinit var getContent: ActivityResultLauncher<String>
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dish_categories)
@@ -53,10 +47,6 @@ class DishCategories : AppCompatActivity() {
         categories = findViewById(R.id.categories_btn)
 
         addButton = findViewById(R.id.submit_btn)
-
-        val database = Firebase.database.reference
-
-
 
         //Menu navigation
         home.setOnClickListener(View.OnClickListener {
@@ -116,17 +106,23 @@ class DishCategories : AppCompatActivity() {
             }
         }
 
+        val dishesIds = mutableListOf<String?>()
+
+        for (dish in dishes) {
+            dishesIds.add(dish.id)
+        }
+
         recyclerView.adapter = adapter
 
 
         builder.setTitle("Wybierz posiłki")
-            .setMessage("Kliknij checkbox'a żeby dodać posilek \nNazwa | kalorie | białko | weglewodany | tłuszcz")
+            .setMessage("Nazwa \nKalorie | Białko | Weglewodany | Tłuszcz")
             .setView(dialogLayout)
-            .setPositiveButton("OK") { dialog, which ->
+            .setPositiveButton("OK") { _, _ ->
                 selectedDishes = adapter.getData().filter { it.checked }
                 Log.d(ContentValues.TAG, "Selected dishes: $selectedDishes")
             }
-            .setNegativeButton("Cancel") { dialog, which ->
+            .setNegativeButton("Cancel") { _, _ ->
 
             }
             .create()
@@ -148,7 +144,7 @@ class DishCategories : AppCompatActivity() {
                 val cat = ProductCategory(
                     id = database.child("sets").push().key,
                     name = name,
-                    dishes = idList,
+                    dishesIds = dishesIds,
                     userId = currentUserId
                 )
 
