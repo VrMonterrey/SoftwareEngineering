@@ -6,6 +6,7 @@
     android:ellipsize="marquee"
     android:padding="12dp"
     android:textStyle="bold"
-    android:textColor="@color/black"
+    android:background="#91B7B0"
+    android:textColor="@color/white"
     android:singleLine="true" />
 
