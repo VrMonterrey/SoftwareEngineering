@@ -98,6 +98,7 @@ class DishCategories : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         val dishes = mutableListOf<Posilki>()
+
         adapter = PosilkiToChooseAdapter(dishes) { dish ->
             if (dish.checked) {
                 dishes.add(dish)
@@ -106,14 +107,7 @@ class DishCategories : AppCompatActivity() {
             }
         }
 
-        val dishesIds = mutableListOf<String?>()
-
-        for (dish in dishes) {
-            dishesIds.add(dish.id)
-        }
-
         recyclerView.adapter = adapter
-
 
         builder.setTitle("Wybierz posiłki")
             .setMessage("Nazwa \nKalorie | Białko | Weglewodany | Tłuszcz")
@@ -136,10 +130,10 @@ class DishCategories : AppCompatActivity() {
                 val database = Firebase.database.reference
                 val currentUser = FirebaseAuth.getInstance().currentUser
                 val currentUserId = currentUser?.uid
-                val idList = mutableListOf<String?>()
+                val dishesIds = mutableListOf<String?>()
 
                 for (obj in selectedDishes) {
-                    idList.add(obj.id)
+                    dishesIds.add(obj.id)
                 }
                 val cat = ProductCategory(
                     id = database.child("sets").push().key,

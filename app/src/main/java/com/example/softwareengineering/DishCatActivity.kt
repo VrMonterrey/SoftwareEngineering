@@ -5,7 +5,9 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.softwareengineering.model.DishCategory
@@ -22,6 +24,7 @@ class DishCatActivity : AppCompatActivity(), DishCatAdapter.DishCatAdapterListen
     private lateinit var catRecyclerView: RecyclerView
     private lateinit var database: FirebaseDatabase
     private lateinit var catRef: DatabaseReference
+    private lateinit var kategorieArr: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +61,13 @@ class DishCatActivity : AppCompatActivity(), DishCatAdapter.DishCatAdapterListen
         logout = findViewById(R.id.logout_button)
         home = findViewById(R.id.home_button)
         categories = findViewById(R.id.categories_btn)
+        kategorieArr = findViewById(R.id.kategorie_arr_btn)
+
+        kategorieArr.setOnClickListener(View.OnClickListener {
+            var intent: Intent = Intent(applicationContext, CreateCategoryActivity::class.java)
+            startActivity(intent)
+            finish()
+        })
 
         home.setOnClickListener {
             startActivity(Intent(applicationContext, MainActivity::class.java))

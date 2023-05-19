@@ -10,35 +10,71 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:layout_marginBottom="200dp"
         android:background="@drawable/rounded_background">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14dp"
-            android:textColor="@color/white"
-            android:layout_marginLeft="30dp"
-            android:text="Nazwa kategorii"
-            android:layout_marginTop="25dp"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/catRecyclerView"
+            android:id="@+id/header_title"
             android:layout_width="match_parent"
-            android:layout_height="330dp"
-            android:padding="16dp"
-            android:layout_marginTop="50dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:layout_height="wrap_content"
+            android:letterSpacing=".1"
+            android:paddingVertical="20dp"
+            android:text="Utworz kategorie"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="19dp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="70dp"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:text="Nazwę kategorii"
+                android:textColor="@color/white"
+                android:textSize="13dp" />
+
+            <EditText
+                android:id="@+id/name_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="25dp"
+                android:background="@color/dark2"
+                android:hint="Desert..."
+                android:inputType="text"
+                android:paddingLeft="15dp"
+                android:textColorHint="@color/grey"
+                android:textColor="@color/white"
+                android:textSize="12dp" />
+
+        </RelativeLayout>
 
     </RelativeLayout>
+
+    <ImageButton
+        android:id="@+id/submit_btn"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="170dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/ic_checkmark"
+        android:background="#00ffffff"/>
 
     <TextView
         android:id="@+id/kategorie_arr_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="Utworzyć nową kategorię"
+        android:text="Spojrzeć na listę kategorii"
         android:textSize="14dp"
         android:textColor="@color/grey"
         android:textAlignment="center"
