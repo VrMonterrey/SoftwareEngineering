@@ -1,23 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/gradient_green_main">
-
-    <TextView
-        android:id="@+id/header"
-        android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="84dp"
-        android:shadowColor="@color/black"
-
-        android:text="Postępy dietetyczne"
-        android:textAllCaps="true"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/user"
@@ -30,7 +16,22 @@
         android:text="TextView"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="11sp" />
+        android:textSize="11sp"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="70dp"
+        android:shadowColor="@color/black"
+        android:text="Postępy dietetyczne"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/user"/>
 
     <RelativeLayout
         android:id="@+id/rounded_wrapper"
@@ -41,7 +42,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="170dp"
         android:elevation="20dp"
-        android:alpha=".95">
+        android:alpha=".95"
+        app:layout_constraintTop_toBottomOf="@id/header">
     </RelativeLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -188,5 +190,5 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
