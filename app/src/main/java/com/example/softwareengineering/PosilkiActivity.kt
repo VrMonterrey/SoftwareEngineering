@@ -199,7 +199,7 @@ class PosilkiActivity : AppCompatActivity() {
 
 
         builder.setTitle("Wybierz składniki")
-            .setMessage("Kliknij checkbox'a żeby dodać składnik \nNazwa | kalorii | białko | weglewodany | tłuszcz")
+            .setMessage("Nazwa \nKalorie | Białko | Weglewodany | Tłuszcz")
             .setView(dialogLayout)
             .setPositiveButton("OK") { dialog, which ->
                 selectedProducts = adapter.getData().filter { it.checked }
