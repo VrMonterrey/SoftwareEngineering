@@ -201,16 +201,36 @@
                     android:textSize="14dp"
                     android:layout_weight="3"/>
 
+                <RelativeLayout
+                    android:id="@+id/spinner_wrapper"
+                    android:layout_width="70dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/spinner_bg"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/name_edit_text"
+                    app:layout_constraintLeft_toLeftOf="parent">
                 <Spinner
                     android:id="@+id/ratingSpinner"
-                    android:layout_width="60dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="60dp"
-                    android:background="@drawable/rating"
-                    android:entries="@array/ratings"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp"
-                    />
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_centerVertical="true"
+                    android:layout_marginVertical="1dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="35dp"
+                    android:spinnerMode="dropdown" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_dropdown" />
+                </RelativeLayout>>
 
             </LinearLayout>
 

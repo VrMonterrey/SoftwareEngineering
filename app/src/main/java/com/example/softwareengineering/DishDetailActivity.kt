@@ -282,7 +282,7 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
         //Rating
         val ratings = arrayOf(1, 2, 3, 4, 5)
         var selectedItem = 1
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, ratings)
+        val adapter = ArrayAdapter(this@DishDetailActivity, R.layout.spinner_item_layout, ratings)
         rating_spn = findViewById(R.id.ratingSpinner)
         rating_spn.adapter = adapter
 

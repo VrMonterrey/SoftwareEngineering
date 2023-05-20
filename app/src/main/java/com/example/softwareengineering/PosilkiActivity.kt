@@ -34,6 +34,7 @@ class PosilkiActivity : AppCompatActivity() {
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
+    private lateinit var posilkiarr: TextView
 
     private lateinit var dishName: EditText
     private lateinit var dishQuantity: EditText
@@ -68,6 +69,7 @@ class PosilkiActivity : AppCompatActivity() {
         logout = findViewById(R.id.logout_button)
         home = findViewById(R.id.home_button)
         categories = findViewById(R.id.categories_btn)
+        posilkiarr = findViewById(R.id.posilki_arr_btn)
 
         addButton = findViewById(R.id.submit_btn)
 
@@ -159,6 +161,13 @@ class PosilkiActivity : AppCompatActivity() {
         logout.setOnClickListener(View.OnClickListener {
             FirebaseAuth.getInstance().signOut()
             var intent: Intent = Intent(applicationContext, login::class.java)
+            startActivity(intent)
+            finish()
+        })
+
+        posilkiarr.setOnClickListener(View.OnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            var intent: Intent = Intent(applicationContext, ListOfPosilkiActivity::class.java)
             startActivity(intent)
             finish()
         })
