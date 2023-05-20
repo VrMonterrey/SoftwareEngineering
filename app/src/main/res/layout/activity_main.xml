@@ -27,6 +27,7 @@
         android:layout_marginTop="70dp"
         android:shadowColor="@color/black"
         android:text="Postępy dietetyczne"
+        android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
