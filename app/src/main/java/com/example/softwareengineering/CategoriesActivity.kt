@@ -3,8 +3,14 @@ package com.example.softwareengineering
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
 import android.view.View
 import android.widget.ImageButton
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 
 class CategoriesActivity : AppCompatActivity() {
@@ -27,6 +33,20 @@ class CategoriesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_categories)
+
+        val textView = findViewById<TextView>(R.id.textview)
+
+        val text = "Woda (wkrótce...)"
+        val spannableString = SpannableString(text)
+        spannableString.setSpan(
+            RelativeSizeSpan(0.5f),
+            text.indexOf("(wkrótce...)"),
+            text.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        textView.text = spannableString
+
 
         logout = findViewById(R.id.logout_button)
         home = findViewById(R.id.home_button)

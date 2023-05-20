@@ -219,8 +219,12 @@ class PosilkiActivity : AppCompatActivity() {
             val category = selectedCategory
             val quantity = dishQuantity.text.toString().toIntOrNull()
 
-            if (name.isBlank() || category.isBlank() || quantity == null || selectedProducts.isEmpty() || photoUrl.isBlank()) {
+            if (name.isBlank() || category.isBlank() || quantity == null || selectedProducts.isEmpty()) {
                 Toast.makeText(this, "Wszystkie pola muszą być wypełnione poprawnie", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (photoUrl.isBlank()) {
+                Toast.makeText(this, "Pobieram zdjęcie...", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
