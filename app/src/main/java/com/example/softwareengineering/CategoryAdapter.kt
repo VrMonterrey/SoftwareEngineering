@@ -99,10 +99,10 @@ class CategoryAdapter(
                 }
             }
             deleteNonActiveButton.setOnClickListener {
-                Toast.makeText(itemView.context, "Tylko autorzy składników mogą usuwać lub edytować składniki", Toast.LENGTH_SHORT).show();
+                Toast.makeText(itemView.context, "Tylko autorzy zestawów mogą je usuwać lub edytować", Toast.LENGTH_SHORT).show();
             }
             editNonActiveButton.setOnClickListener {
-                Toast.makeText(itemView.context, "Tylko autorzy składników mogą usuwać lub edytować składniki", Toast.LENGTH_SHORT).show();
+                Toast.makeText(itemView.context, "Tylko autorzy zestawów mogą je usuwać lub edytować", Toast.LENGTH_SHORT).show();
             }
 
         }

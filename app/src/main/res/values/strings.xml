@@ -14,7 +14,7 @@
     <string name="logout_menu_title">Logout</string>
     <string name="profile_menu_title">Profile</string>
     <string name="categories_menu_title">Categories</string>
-    <string name="list_sets_label">Nazwa zestawa</string>
+    <string name="list_sets_label">Nazwa zestawu</string>
     <string-array name="menu_options">
         <item>Strona główna</item>
         <item>Składniki</item>
