@@ -19,8 +19,6 @@ class ListOfCategoriesActivity : AppCompatActivity(), CategoryAdapter.CategoryAd
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
-    private lateinit var goback: ImageButton
-    private lateinit var remove: ImageButton
     private lateinit var catAdapter: CategoryAdapter
     private lateinit var catList: MutableList<ProductCategory>
     private lateinit var catRecyclerView: RecyclerView
@@ -64,7 +62,6 @@ class ListOfCategoriesActivity : AppCompatActivity(), CategoryAdapter.CategoryAd
         logout = findViewById(R.id.logout_button)
         home = findViewById(R.id.home_button)
         categories = findViewById(R.id.categories_btn)
-        goback = findViewById(R.id.goback_btn)
 
 
 
@@ -83,12 +80,6 @@ class ListOfCategoriesActivity : AppCompatActivity(), CategoryAdapter.CategoryAd
         logout.setOnClickListener(View.OnClickListener{
             FirebaseAuth.getInstance().signOut()
             var intent : Intent = Intent(applicationContext, login::class.java)
-            startActivity(intent)
-            finish()
-        })
-
-        goback.setOnClickListener(View.OnClickListener{
-            var intent : Intent = Intent(applicationContext, DishCategories::class.java)
             startActivity(intent)
             finish()
         })
