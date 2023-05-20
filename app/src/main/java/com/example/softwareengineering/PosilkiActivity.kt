@@ -219,7 +219,7 @@ class PosilkiActivity : AppCompatActivity() {
             val category = selectedCategory
             val quantity = dishQuantity.text.toString().toIntOrNull()
 
-            if (name.isBlank() || category.isBlank() || quantity == null || selectedProducts.isEmpty()) {
+            if (name.isBlank() || category.isBlank() || quantity == null || selectedProducts.isEmpty() || photoUrl.isBlank()) {
                 Toast.makeText(this, "Wszystkie pola muszą być wypełnione poprawnie", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -228,57 +228,60 @@ class PosilkiActivity : AppCompatActivity() {
             val currentUser = FirebaseAuth.getInstance().currentUser
             val currentUserId = currentUser?.uid
 
-            var categoryId: String
-            val categoryRef = database.child("categories").child(category)
-            categoryRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            val categoriesRef = database.child("categories")
+            val query = categoriesRef.orderByChild("name").equalTo(category)
+
+            query.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val dishCat: DishCategory
-
                     if (dataSnapshot.exists()) {
-                        // Category already exists, retrieve the ID
-                        categoryId = dataSnapshot.key!!
-                        dishCat = dataSnapshot.getValue(DishCategory::class.java)!!
-                    } else {
-                        // Category does not exist, create a new one
-                        categoryId = categoryRef.push().key!!
-                        dishCat = DishCategory(id = categoryId, name = category)
-                        categoryRef.setValue(dishCat)
-                    }
-                    val dish = Posilki(
-                        id = database.child("dishes").push().key,
-                        name = name,
-                        category = categoryId,
-                        quantity = quantity,
-                        products = selectedProducts,
-                        photoUrl = photoUrl,
-                        comments = null,
-                        userId = currentUserId
-                    )
-                    if (dish.id != null) {
-                        database.child("dishes").child(dish.id!!).setValue(dish)
-                            .addOnSuccessListener {
-                                Toast.makeText(applicationContext, "Nowy posiłek dodany pomyślnie", Toast.LENGTH_SHORT).show()
-                                dishName.text.clear()
-                                dishQuantity.text.clear()
-                                imageView.setImageBitmap(null)
+                        // Category found, retrieve the ID
+                        val categorySnapshot = dataSnapshot.children.first()
+                        val categoryId = categorySnapshot.key
 
-                                var intent: Intent = Intent(applicationContext, ListOfPosilkiActivity::class.java)
-                                startActivity(intent)
-                                finish()
+                        val dish = categoryId?.let { it1 ->
+                            Posilki(
+                                id = database.child("dishes").push().key,
+                                name = name,
+                                category = it1,
+                                quantity = quantity,
+                                products = selectedProducts,
+                                photoUrl = photoUrl,
+                                comments = null,
+                                userId = currentUserId
+                            )
+                        }
+
+                        if (dish != null) {
+                            if (dish.id != null) {
+                                database.child("dishes").child(dish.id!!).setValue(dish)
+                                    .addOnSuccessListener {
+                                        Toast.makeText(applicationContext, "Nowy posiłek dodany pomyślnie", Toast.LENGTH_SHORT).show()
+                                        dishName.text.clear()
+                                        dishQuantity.text.clear()
+                                        imageView.setImageBitmap(null)
+
+                                        val intent = Intent(applicationContext, ListOfPosilkiActivity::class.java)
+                                        startActivity(intent)
+                                        finish()
+                                    }
+                                    .addOnFailureListener {
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "Błąd podczas dodawania posiłka: ${it.message}",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
                             }
-                            .addOnFailureListener {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "Błąd podczas dodawania posiłka: ${it.message}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                        }
+                    } else {
+                        // Category not found
+                        Toast.makeText(applicationContext, "Category not found", Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
                     // Handle the error case
-                    println("Error retrieving category: ${databaseError.message}")
+                    Log.e(TAG, "Error retrieving category: ${databaseError.message}")
                 }
             })
         }

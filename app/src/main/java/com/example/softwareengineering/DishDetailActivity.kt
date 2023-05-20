@@ -255,7 +255,7 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
         productRecyclerView.adapter = productAdapter
 
         database2 = FirebaseDatabase.getInstance()
-        productRef = database2.getReference("products")
+        productRef = FirebaseDatabase.getInstance().getReference("dishes").child(dishId).child("products")
 
         productList = mutableListOf()
 
