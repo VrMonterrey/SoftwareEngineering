@@ -40,6 +40,15 @@
     <string name="categories_navigation_button_alt">Categories navigation button</string>
     <string name="profile_navigation_button_alt">Profile navigation button</string>
     <string name="log_out_navigation_button_alt">Log out Navigation Button</string>
+    <string name="sign_in_title">Sign in</string>
+    <string name="email_label">Email</string>
+    <string name="example_ex_com">example@ex.com.</string>
+    <string name="password_label">Password</string>
+    <string name="password_hint">qwerty123</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="create_new_one">Create new one</string>
+    <string name="sign_up_title">Sign up</string>
+    <string name="already_have_an_account">Already have an account?</string>
     <string-array name="menu_options">
         <item>Strona główna</item>
         <item>Składniki</item>
