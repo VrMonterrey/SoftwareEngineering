@@ -22,6 +22,8 @@ class FavouriteActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapterList
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
+    private lateinit var profile: ImageButton
+
     private lateinit var add : ImageButton
 
     private lateinit var dishAdapter: PosilkiAdapter
@@ -75,6 +77,8 @@ class FavouriteActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapterList
         logout = findViewById(R.id.logout_button)
         home = findViewById(R.id.home_button)
         categories = findViewById(R.id.categories_btn)
+        profile = findViewById(R.id.profile_button)
+
         add = findViewById(R.id.add_button)
         add.visibility = View.INVISIBLE
 
@@ -93,6 +97,13 @@ class FavouriteActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapterList
         logout.setOnClickListener(View.OnClickListener{
             FirebaseAuth.getInstance().signOut()
             var intent : Intent = Intent(applicationContext, login::class.java)
+            startActivity(intent)
+            finish()
+        })
+
+        profile.setOnClickListener(View.OnClickListener{
+            FirebaseAuth.getInstance().signOut()
+            var intent : Intent = Intent(applicationContext,ProfileActivity::class.java)
             startActivity(intent)
             finish()
         })

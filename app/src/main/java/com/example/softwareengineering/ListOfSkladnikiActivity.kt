@@ -22,6 +22,8 @@ class ListOfSkladnikiActivity : AppCompatActivity(), ProductAdapter.ProductAdapt
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
+    private lateinit var profile: ImageButton
+
     private lateinit var goback: ImageButton
     private lateinit var verticalMenu: ImageButton
     private lateinit var searchEditText: EditText
@@ -79,6 +81,8 @@ class ListOfSkladnikiActivity : AppCompatActivity(), ProductAdapter.ProductAdapt
         logout = findViewById(R.id.logout_button)
         home = findViewById(R.id.home_button)
         categories = findViewById(R.id.categories_btn)
+        profile = findViewById(R.id.profile_button)
+
         goback = findViewById(R.id.goback_btn)
         verticalMenu = findViewById(R.id.vertical_menu)
 
@@ -97,6 +101,13 @@ class ListOfSkladnikiActivity : AppCompatActivity(), ProductAdapter.ProductAdapt
         logout.setOnClickListener(View.OnClickListener{
             FirebaseAuth.getInstance().signOut()
             var intent : Intent = Intent(applicationContext, login::class.java)
+            startActivity(intent)
+            finish()
+        })
+
+        profile.setOnClickListener(View.OnClickListener{
+            FirebaseAuth.getInstance().signOut()
+            var intent : Intent = Intent(applicationContext,ProfileActivity::class.java)
             startActivity(intent)
             finish()
         })

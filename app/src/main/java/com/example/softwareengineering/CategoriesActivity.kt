@@ -17,7 +17,9 @@ class CategoriesActivity : AppCompatActivity() {
 
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
+    private lateinit var profile: ImageButton
     private lateinit var categories: ImageButton
+
     private lateinit var skladniki: ImageButton
     private lateinit var posilki_btn: ImageButton
     private lateinit var share_btn: ImageButton
@@ -51,6 +53,8 @@ class CategoriesActivity : AppCompatActivity() {
         logout = findViewById(R.id.logout_button)
         home = findViewById(R.id.home_button)
         categories = findViewById(R.id.categories_btn)
+        profile = findViewById(R.id.profile_button)
+
         skladniki = findViewById(R.id.skladniki_btn)
         posilki_btn = findViewById(R.id.posilki_btn)
         share_btn = findViewById(R.id.share_btn)
@@ -77,6 +81,13 @@ class CategoriesActivity : AppCompatActivity() {
         logout.setOnClickListener(View.OnClickListener{
             FirebaseAuth.getInstance().signOut()
             var intent : Intent = Intent(applicationContext,login::class.java)
+            startActivity(intent)
+            finish()
+        })
+
+        profile.setOnClickListener(View.OnClickListener{
+            FirebaseAuth.getInstance().signOut()
+            var intent : Intent = Intent(applicationContext,ProfileActivity::class.java)
             startActivity(intent)
             finish()
         })

@@ -26,6 +26,8 @@ class DishCategories : AppCompatActivity() {
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
+    private lateinit var profile: ImageButton
+
     private lateinit var categoryName: EditText
     private lateinit var addButton: ImageButton
     private lateinit var dialogButton: Button
@@ -45,6 +47,7 @@ class DishCategories : AppCompatActivity() {
         logout = findViewById(R.id.logout_button)
         home = findViewById(R.id.home_button)
         categories = findViewById(R.id.categories_btn)
+        profile = findViewById(R.id.profile_button)
 
         addButton = findViewById(R.id.submit_btn)
 
@@ -64,6 +67,13 @@ class DishCategories : AppCompatActivity() {
         logout.setOnClickListener(View.OnClickListener {
             FirebaseAuth.getInstance().signOut()
             var intent: Intent = Intent(applicationContext, login::class.java)
+            startActivity(intent)
+            finish()
+        })
+
+        profile.setOnClickListener(View.OnClickListener{
+            FirebaseAuth.getInstance().signOut()
+            var intent : Intent = Intent(applicationContext,ProfileActivity::class.java)
             startActivity(intent)
             finish()
         })
