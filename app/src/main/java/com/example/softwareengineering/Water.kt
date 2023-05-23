@@ -80,7 +80,6 @@ class Water : AppCompatActivity() {
         })
 
 //        profile.setOnClickListener(View.OnClickListener{
-//            FirebaseAuth.getInstance().signOut()
 //            var intent : Intent = Intent(applicationContext,ProfileActivity::class.java)
 //            startActivity(intent)
 //            finish()

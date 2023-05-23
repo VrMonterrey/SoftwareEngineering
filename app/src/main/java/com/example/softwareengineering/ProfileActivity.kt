@@ -20,6 +20,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
+    private lateinit var profile: ImageButton
 
     private lateinit var editTextFirstName: EditText
     private lateinit var editTextLastName: EditText
@@ -62,7 +63,7 @@ class ProfileActivity : AppCompatActivity() {
             }
         })
 
-        val genderOptions = arrayOf("Męska", "Żeńska")
+        val genderOptions = arrayOf("Męska", "Żeńska", "Nie wybrana")
         val genderAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, genderOptions)
         genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerGender.adapter = genderAdapter
@@ -77,6 +78,7 @@ class ProfileActivity : AppCompatActivity() {
         logout = findViewById(R.id.logout_button)
         home = findViewById(R.id.home_button)
         categories = findViewById(R.id.categories_btn)
+        profile = findViewById(R.id.profile_button)
 
         home.setOnClickListener(View.OnClickListener{
             var intent : Intent = Intent(applicationContext, MainActivity::class.java)
@@ -90,6 +92,12 @@ class ProfileActivity : AppCompatActivity() {
             finish()
         })
 
+        profile.setOnClickListener(View.OnClickListener{
+            var intent : Intent = Intent(applicationContext,ProfileActivity::class.java)
+            startActivity(intent)
+            finish()
+        })
+
         logout.setOnClickListener(View.OnClickListener{
             FirebaseAuth.getInstance().signOut()
             var intent : Intent = Intent(applicationContext, login::class.java)
@@ -99,15 +107,23 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun getGenderIndex(gender: String): Int {
-        return if (gender == "Żeńska ") 1 else 0
+        if(gender == "Żeńska"){
+            return 1
+        } else if(gender == "Męska"){
+            return 0
+        } else {
+            return 2
+        }
     }
 
     private fun saveProfile() {
-        val userId = FirebaseAuth.getInstance().currentUser
-        if (userId == null) {
-            Toast.makeText(this, "Ошибка: пользователь не найден", Toast.LENGTH_SHORT).show()
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            Toast.makeText(this, "Błąd: nie znaleziono użytkownika", Toast.LENGTH_SHORT).show()
             return
         }
+
+        val userId = user.uid
 
         val firstName = editTextFirstName.text.toString()
         val lastName = editTextLastName.text.toString()
@@ -115,7 +131,7 @@ class ProfileActivity : AppCompatActivity() {
         val gender = spinnerGender.selectedItem.toString()
         val notificationsEnabled = switchNotifications.isChecked
 
-        val userRef = FirebaseDatabase.getInstance().reference.child("users").child(userId.toString())
+        val userRef = FirebaseDatabase.getInstance().reference.child("users").child(userId)
         userRef.child("firstName").setValue(firstName)
         userRef.child("lastName").setValue(lastName)
         userRef.child("email").setValue(email)
@@ -124,5 +140,6 @@ class ProfileActivity : AppCompatActivity() {
 
         Toast.makeText(this, "Profil został zapisany", Toast.LENGTH_SHORT).show()
     }
+
 
 }

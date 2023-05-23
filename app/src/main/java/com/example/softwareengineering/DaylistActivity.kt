@@ -42,7 +42,6 @@ class DaylistActivity : AppCompatActivity() {
         })
 
 //        profile.setOnClickListener(View.OnClickListener {
-//            FirebaseAuth.getInstance().signOut()
 //            var intent: Intent = Intent(applicationContext, Profile::class.java)
 //            startActivity(intent)
 //            finish()
