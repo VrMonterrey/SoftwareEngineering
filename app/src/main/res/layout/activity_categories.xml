@@ -243,12 +243,12 @@
                 android:background="@drawable/gradient_categories"
                 >
                 <ImageButton
-                    android:id="@+id/chart_btn"
+                    android:id="@+id/daily_btn"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_marginHorizontal="37dp"
                     android:layout_marginTop="23dp"
-                    android:background="@drawable/ic_chart"
+                    android:background="@drawable/ic_daily"
 
                     />
                 <TextView
@@ -256,7 +256,7 @@
                     android:layout_height="30dp"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="15dp"
-                    android:text="Wykresy"
+                    android:text="Lista na dzień"
                     android:textAlignment="center"
                     android:textSize="16dp"
                     android:textColor="@color/white"

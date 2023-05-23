@@ -57,7 +57,7 @@
             android:name=".TipsActivity"
             android:exported="false" />
         <activity
-            android:name=".ChartActivity"
+            android:name=".DaylistActivity"
             android:exported="false" />
         <activity
             android:name=".ListOfMeasurementsActivity"

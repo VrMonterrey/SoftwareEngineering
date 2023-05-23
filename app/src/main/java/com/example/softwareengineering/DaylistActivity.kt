@@ -6,13 +6,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
 import com.google.firebase.auth.FirebaseAuth
-class ChartActivity : AppCompatActivity() {
+class DaylistActivity : AppCompatActivity() {
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_chart)
+        setContentView(R.layout.activity_daylist)
 
 
         logout = findViewById(R.id.logout_button)

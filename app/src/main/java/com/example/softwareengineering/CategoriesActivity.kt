@@ -22,7 +22,7 @@ class CategoriesActivity : AppCompatActivity() {
     private lateinit var posilki_btn: ImageButton
     private lateinit var share_btn: ImageButton
     private lateinit var water_btn: ImageButton
-    private lateinit var chart_btn: ImageButton
+    private lateinit var daily_btn: ImageButton
     private lateinit var dishcat_btn: ImageButton
     private lateinit var measurements_btn: ImageButton
     private lateinit var tips_btn: ImageButton
@@ -55,7 +55,7 @@ class CategoriesActivity : AppCompatActivity() {
         posilki_btn = findViewById(R.id.posilki_btn)
         share_btn = findViewById(R.id.share_btn)
         water_btn = findViewById(R.id.water_btn)
-        chart_btn = findViewById(R.id.chart_btn)
+        daily_btn = findViewById(R.id.daily_btn)
         dishcat_btn = findViewById(R.id.dishcat_btn)
         measurements_btn = findViewById(R.id.measurements_btn)
         tips_btn = findViewById(R.id.tips_btn)
@@ -109,8 +109,8 @@ class CategoriesActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         })
-        chart_btn.setOnClickListener(View.OnClickListener{
-            var intent : Intent = Intent(applicationContext,ChartActivity::class.java)
+        daily_btn.setOnClickListener(View.OnClickListener{
+            var intent : Intent = Intent(applicationContext,DaylistActivity::class.java)
             startActivity(intent)
             finish()
         })
