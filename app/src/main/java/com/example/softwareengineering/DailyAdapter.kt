@@ -1,5 +1,6 @@
 package com.example.softwareengineering
 
+import NotificationUtils
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.util.Log
@@ -22,7 +23,8 @@ import com.google.firebase.database.ValueEventListener
 
 class DailyAdapter(
     private var posilkiList: MutableList<DailyNutrition>,
-    private val listener: PosilkiAdapterListener
+    private val listener: PosilkiAdapterListener,
+    private val notificationUtils: NotificationUtils
 ) : RecyclerView.Adapter<DailyAdapter.PosilkiViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PosilkiViewHolder {
@@ -32,6 +34,8 @@ class DailyAdapter(
 
     override fun onBindViewHolder(holder: PosilkiViewHolder, position: Int) {
         val currentItem = posilkiList[position]
+        // Call the scheduleNotification method of yourClass
+        notificationUtils.scheduleNotification(holder.itemView.context, currentItem)
 
         val database = FirebaseDatabase.getInstance()
         val posilkiRef = database.getReference("dishes")
@@ -90,14 +94,14 @@ class DailyAdapter(
                 }
             }
 
-            overlayLayout.findViewById<ImageView>(R.id.edit_btn).setOnClickListener {
+            overlayLayout.findViewById<ImageView>(R.id.success_btn).setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    listener.onEditClick(position)
+                    listener.onSuccessClick(position)
                 }
             }
 
-            overlayLayout.findViewById<ImageView>(R.id.remove_btn).setOnClickListener {
+            overlayLayout.findViewById<ImageView>(R.id.delete_btn).setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     listener.onDeleteClick(position)
@@ -117,6 +121,6 @@ class DailyAdapter(
     interface PosilkiAdapterListener {
         fun onDishClick(position: Int)
         fun onDeleteClick(position: Int)
-        fun onEditClick(position: Int)
+        fun onSuccessClick(position: Int)
     }
 }

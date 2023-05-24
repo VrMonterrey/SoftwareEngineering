@@ -1,5 +1,6 @@
 package com.example.softwareengineering
 
+import NotificationUtils
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -13,9 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.softwareengineering.model.DailyNutrition
+import com.example.softwareengineering.model.Eaten
 import com.example.softwareengineering.model.Posilki
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 
 class DaylistActivity : AppCompatActivity(), DailyAdapter.PosilkiAdapterListener {
@@ -38,7 +42,8 @@ class DaylistActivity : AppCompatActivity(), DailyAdapter.PosilkiAdapterListener
         setContentView(R.layout.activity_daylist)
 
         dishRecyclerView = findViewById(R.id.dishRecyclerView)
-        dishAdapter = DailyAdapter(mutableListOf(), this)
+        val notificationUtils = NotificationUtils()
+        dishAdapter = DailyAdapter(mutableListOf(), this, notificationUtils)
 
         dishRecyclerView.setHasFixedSize(true)
         dishRecyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
@@ -65,6 +70,7 @@ class DaylistActivity : AppCompatActivity(), DailyAdapter.PosilkiAdapterListener
 
                 }
 
+                posilki.sortBy { it.time }
                 dishList.addAll(posilki)
                 dishAdapter.updateData(posilki)
             }
@@ -115,7 +121,7 @@ class DaylistActivity : AppCompatActivity(), DailyAdapter.PosilkiAdapterListener
         dish.id?.let {
             val dishRef = database.getReference("scheduled/$it")
             dishRef.removeValue().addOnSuccessListener {
-                Toast.makeText(this, "Posiłek został pomyślnie usunięty z listy na dzień", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Posiłek usunięty z listy na dzień", Toast.LENGTH_SHORT).show()
             }
                 .addOnFailureListener {
                     Toast.makeText(
@@ -127,12 +133,31 @@ class DaylistActivity : AppCompatActivity(), DailyAdapter.PosilkiAdapterListener
         }
     }
 
-    override fun onEditClick(position: Int) {
+    override fun onSuccessClick(position: Int) {
         val daily = dishList[position]
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+        val database = Firebase.database.reference
+        // Create a new instance of the Eaten data class
+        val eaten = Eaten(
+            id = database.child("eaten").push().key,
+            date = System.currentTimeMillis(),
+            userId = currentUserId.orEmpty(),
+            posilekId = daily.posilekId
+        )
 
-        val intent = Intent(this, EditDishActivity::class.java)
-        intent.putExtra("posilek", daily.posilekId)
-        startActivity(intent)
+        if (eaten.id != null) {
+            database.child("eaten").child(eaten.id!!).setValue(eaten)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Posiłek spożyty", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(
+                        this,
+                        "Błąd podczas dodawania posiłku do spożytych: ${it.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+        }
     }
 
     override fun onDishClick(position: Int) {

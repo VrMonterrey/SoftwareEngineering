@@ -16,12 +16,12 @@
         android:layout_gravity="center"
         />
 
-<!--    <NumberPicker-->
-<!--        android:id="@+id/numberPicker"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="20dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:layout_marginRight="10dp"/>-->
+    <NumberPicker
+        android:id="@+id/numberPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="10dp"/>
     <TextView
         android:id="@+id/kalorii_edit_text"
         android:layout_width="wrap_content"
