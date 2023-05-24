@@ -63,10 +63,13 @@ class ProfileActivity : AppCompatActivity() {
             }
         })
 
-        val genderOptions = arrayOf("Męska", "Żeńska", "Nie wybrana")
-        val genderAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, genderOptions)
-        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerGender.adapter = genderAdapter
+        val genderSpinner: MutableList<String> = mutableListOf()
+        genderSpinner.add("Męska")
+        genderSpinner.add("Żeńska")
+        genderSpinner.add("Nie wybrana")
+
+        val adapter = ArrayAdapter(this@ProfileActivity, R.layout.spinner_item_layout, genderSpinner)
+        spinnerGender.adapter = adapter
 
         //On submit btn click
         val buttonSave: ImageButton = findViewById(R.id.buttonSave)

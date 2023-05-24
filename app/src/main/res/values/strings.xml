@@ -63,6 +63,7 @@
     <string name="edit_avatar_profile_button_alt">Edit Avatar Profile Button</string>
     <string name="time_to_consume">Time to consume</string>
     <string name="product_name">Product Name</string>
+    <string name="dropdown_icon_alt">Dropdown Icon</string>
     <string-array name="menu_options">
         <item>Strona główna</item>
         <item>Składniki</item>
