@@ -1,11 +1,19 @@
 package com.example.softwareengineering
 
+import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SwitchCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -14,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -26,7 +35,13 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var editTextLastName: EditText
     private lateinit var editTextEmail: EditText
     private lateinit var spinnerGender: Spinner
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private lateinit var switchNotifications: Switch
+    private lateinit var avatarImage: ImageView
+    private lateinit var editImage: ImageView
+
+    private lateinit var getContent: ActivityResultLauncher<String>
+    private var photoUrl: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +53,7 @@ class ProfileActivity : AppCompatActivity() {
         editTextEmail = findViewById(R.id.editTextEmail)
         spinnerGender = findViewById(R.id.spinnerGender)
         switchNotifications = findViewById(R.id.switchNotifications)
+        avatarImage = findViewById(R.id.avatar_profile)
 
         val currentUser = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         val database = Firebase.database.reference
@@ -55,6 +71,9 @@ class ProfileActivity : AppCompatActivity() {
                     editTextEmail.setText(email)
                     spinnerGender.setSelection(getGenderIndex(gender?: "Nie wybrana"))
                     switchNotifications.isChecked = notificationsEnabled?: true
+                    Glide.with(applicationContext)
+                        .load(dataSnapshot.child("photoUrl").value).apply(RequestOptions.circleCropTransform())
+                        .into(avatarImage)
                 }
             }
 
@@ -62,6 +81,44 @@ class ProfileActivity : AppCompatActivity() {
                 //...
             }
         })
+
+        //Edit image
+        editImage = findViewById<ImageView>(R.id.edit_avatar_btn)
+
+        val storageRef = FirebaseStorage.getInstance().reference.child("images")
+
+        getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            if (uri != null) {
+                Glide.with(applicationContext)
+                    .load(uri).apply(RequestOptions.circleCropTransform())
+                    .into(avatarImage)
+//                avatarImage.setImageURI(uri)
+                val imageRef = storageRef.child(uri.lastPathSegment!!.substringAfterLast("/"))
+                val uploadTask = contentResolver?.openInputStream(uri)?.readBytes()?.let { imageRef.putBytes(it) }
+                uploadTask?.addOnSuccessListener {
+                    imageRef.downloadUrl.addOnSuccessListener { uri ->
+                        photoUrl = uri.toString()
+                        Log.d(ContentValues.TAG, "Image URL: $photoUrl")
+
+                        val user = FirebaseAuth.getInstance().currentUser
+                        if (user == null) {
+                            Toast.makeText(this, "Błąd: nie znaleziono użytkownika", Toast.LENGTH_SHORT).show()
+                        }
+
+                        val userId = user?.uid
+
+                        val userRef = FirebaseDatabase.getInstance().reference.child("users").child(userId?: "")
+                        userRef.child("photoUrl").setValue(photoUrl)
+
+                        Toast.makeText(this, "Profil został zapisany", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
+        editImage.setOnClickListener {
+            getContent.launch("image/*")
+        }
 
         val genderSpinner: MutableList<String> = mutableListOf()
         genderSpinner.add("Męska")
