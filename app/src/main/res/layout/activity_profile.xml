@@ -323,9 +323,6 @@
                 android:textSize="11sp"
                 android:textStyle="bold"
                 android:textAlignment="center"
-                android:paddingVertical="1dp"
-                android:paddingHorizontal="7dp"
-                android:background="@drawable/menu_active_element_background"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBottom_toBottomOf="@id/categories_btn"
                 app:layout_constraintLeft_toLeftOf="parent" />
@@ -357,6 +354,9 @@
                 android:textColor="@color/white"
                 android:textSize="11sp"
                 android:textStyle="bold"
+                android:paddingVertical="1dp"
+                android:paddingHorizontal="7dp"
+                android:background="@drawable/menu_active_element_background"
                 app:layout_constraintTop_toBottomOf="@+id/profile_button"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"/>
