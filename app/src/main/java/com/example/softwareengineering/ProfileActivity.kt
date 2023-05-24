@@ -26,7 +26,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var editTextLastName: EditText
     private lateinit var editTextEmail: EditText
     private lateinit var spinnerGender: Spinner
-    private lateinit var switchNotifications: SwitchMaterial
+    private lateinit var switchNotifications: Switch
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
