@@ -17,11 +17,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.softwareengineering.adapter.SkladnikiToChooseAdapter
-import com.example.softwareengineering.model.DishCategory
-import com.example.softwareengineering.model.Posilki
-import com.example.softwareengineering.model.ProductCategory
+import com.example.softwareengineering.model.*
 import com.google.firebase.auth.FirebaseAuth
-import com.example.softwareengineering.model.Skladnik
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -44,6 +41,7 @@ class PosilkiActivity : AppCompatActivity() {
     private lateinit var adapter: SkladnikiToChooseAdapter
 
     private var selectedProducts: List<Skladnik> = emptyList()
+    private var amounts: Map<String?, Int> = mutableMapOf()
 
     private lateinit var imageView: ImageView
     private lateinit var chooseImageButton: Button
@@ -73,7 +71,6 @@ class PosilkiActivity : AppCompatActivity() {
 
         addButton = findViewById(R.id.submit_btn)
 
-        val database = Firebase.database.reference
 
         //Choose category
 //        kategoriaText = findViewById(R.id.kategoriaText)
@@ -179,8 +176,8 @@ class PosilkiActivity : AppCompatActivity() {
         val dialogLayout = LayoutInflater.from(this).inflate(R.layout.dialog_layout, null)
         val recyclerView = dialogLayout.findViewById<RecyclerView>(R.id.ingredients_rv)
 
-        val database = FirebaseDatabase.getInstance()
-        val productsRef = database.getReference("products")
+        val database = Firebase.database.reference
+        val productsRef = database.child("products")
         val productsListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val products = dataSnapshot.children.mapNotNull { it.getValue(Skladnik::class.java) }
@@ -194,15 +191,17 @@ class PosilkiActivity : AppCompatActivity() {
         productsRef.addValueEventListener(productsListener)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
-
+        var dishId = database.child("dishes").push().key
         val products = mutableListOf<Skladnik>()
-        adapter = SkladnikiToChooseAdapter(products) { product ->
-            if (product.checked) {
-                products.add(product)
-            } else {
-                products.remove(product)
+        adapter = dishId?.let {
+            SkladnikiToChooseAdapter(products, it) { product ->
+                if (product.checked) {
+                    products.add(product)
+                } else {
+                    products.remove(product)
+                }
             }
-        }
+        }!!
 
         recyclerView.adapter = adapter
 
@@ -212,6 +211,7 @@ class PosilkiActivity : AppCompatActivity() {
             .setView(dialogLayout)
             .setPositiveButton("OK") { dialog, which ->
                 selectedProducts = adapter.getData().filter { it.checked }
+                amounts = adapter.getAmountMap()
                 Log.d(TAG, "Selected products: $selectedProducts")
             }
             .setNegativeButton("Cancel") { dialog, which ->
@@ -228,7 +228,7 @@ class PosilkiActivity : AppCompatActivity() {
             val category = selectedCategory
             val quantity = dishQuantity.text.toString().toIntOrNull()
 
-            if (name.isBlank() || category.isBlank() || quantity == null || selectedProducts.isEmpty()) {
+            if (name.isBlank() || category.isBlank() || quantity == null || amounts.isEmpty()) {
                 Toast.makeText(this, "Wszystkie pola muszą być wypełnione poprawnie", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -237,7 +237,7 @@ class PosilkiActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val database = Firebase.database.reference
+
             val currentUser = FirebaseAuth.getInstance().currentUser
             val currentUserId = currentUser?.uid
 
@@ -251,9 +251,24 @@ class PosilkiActivity : AppCompatActivity() {
                         val categorySnapshot = dataSnapshot.children.first()
                         val categoryId = categorySnapshot.key
 
+
+                        val collectionRef = database.child("composition")
+
+                        for ((skladnikId, amount) in amounts) {
+                            val skladPosilku = skladnikId?.let { it1 ->
+                                SkladPosilku(
+                                    posilkiId = dishId,
+                                    skladnikId = it1,
+                                    amount = amount
+                                )
+                            }
+
+                            collectionRef.push().setValue(skladPosilku)
+                        }
+
                         val dish = categoryId?.let { it1 ->
                             Posilki(
-                                id = database.child("dishes").push().key,
+                                id = dishId,
                                 name = name,
                                 category = it1,
                                 quantity = quantity,

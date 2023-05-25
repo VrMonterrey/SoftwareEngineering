@@ -191,7 +191,7 @@ class EditDishActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         val products = mutableListOf<Skladnik>()
-        adapter = SkladnikiToChooseAdapter(products) { product ->
+        adapter = SkladnikiToChooseAdapter(products, dishId) { product ->
             if (product.checked) {
                 products.add(product)
             } else {
