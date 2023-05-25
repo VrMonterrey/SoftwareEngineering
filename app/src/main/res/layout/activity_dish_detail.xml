@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -21,7 +22,8 @@
             android:layout_margin="19dp"
             android:background="@color/transparent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/go_back_button_alt" />
 
         <TextView
             android:id="@+id/dish_name"
@@ -72,18 +74,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:letterSpacing=".1"
-                    android:text="kcal"
+                    android:text="@string/kcal"
                     android:textColor="@color/white"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     android:layout_weight="3"
-                    android:paddingLeft="10dp"/>
+                    android:paddingStart="10dp"
+                    tools:ignore="RtlSymmetry" />
                 <TextView
                     android:id="@+id/dish_proteins"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:letterSpacing=".1"
-                    android:text="p"
+                    android:text="@string/p"
                     android:textColor="@color/white"
                     android:textSize="13sp"
                     android:textStyle="bold"
@@ -94,7 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:letterSpacing=".1"
-                    android:text="c"
+                    android:text="@string/c"
                     android:textColor="@color/white"
                     android:textSize="13sp"
                     android:textStyle="bold"
@@ -105,7 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:letterSpacing=".1"
-                    android:text="f"
+                    android:text="@string/f"
                     android:textColor="@color/white"
                     android:textSize="13sp"
                     android:textStyle="bold"
@@ -120,17 +123,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="50dp"
                 android:background="@color/grey"
-                app:layout_constraintTop_toBottomOf="@+id/dish_details"/>
+                app:layout_constraintTop_toBottomOf="@+id/dish_details"
+                android:contentDescription="@string/dish_image_alt" />
 
             <TextView
                 android:id="@+id/list_of_products"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:letterSpacing=".1"
-                android:text="Lista składników:"
-                android:textColor="@color/white"
-                android:textSize="15dp"
+                android:letterSpacing=".03"
                 android:textStyle="bold"
+                android:text="@string/lista_skladnikow_label"
+                android:textColor="@color/white"
+                android:textSize="15sp"
                 android:layout_marginTop="20dp"
                 app:layout_constraintTop_toBottomOf="@+id/dish_image"
                 app:layout_constraintLeft_toLeftOf="parent"/>
@@ -149,9 +153,9 @@
                 android:id="@+id/comment_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Napisz komentarz"
+                android:text="@string/napisz_komentarz_label"
                 android:textColor="@color/white"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 app:layout_constraintTop_toBottomOf="@+id/productRecyclerView"
                 android:layout_marginTop="20dp"/>
 
@@ -160,15 +164,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext"
-                android:hint="Moim zdaniem..."
+                android:hint="@string/moim_zdaniem_placeholder"
                 android:inputType="textMultiLine"
                 android:paddingHorizontal="15dp"
                 android:paddingBottom="55dp"
                 android:paddingTop="10dp"
                 android:textColorHint="#397C70"
-                android:textSize="12dp"
+                android:textSize="12sp"
                 android:layout_marginTop="10dp"
-                app:layout_constraintTop_toBottomOf="@id/comment_textView"/>
+                app:layout_constraintTop_toBottomOf="@id/comment_textView"
+                android:autofillHints="comment"
+                tools:ignore="labelFor"/>
 
             <LinearLayout
                 android:id="@+id/average_layout"
@@ -180,19 +186,19 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Średnia:"
                     android:src="@drawable/ic_star"
                     android:textColor="@color/yellow"
                     android:textStyle="bold"
-                    android:textSize="14dp"
-                    android:layout_marginLeft="5dp"
-                    app:layout_constraintTop_toBottomOf="@+id/name_edit_text" />
+                    android:textSize="14sp"
+                    android:layout_marginStart="5dp"
+                    app:layout_constraintTop_toBottomOf="@+id/name_edit_text"
+                    android:contentDescription="@string/average_rating_alt" />
 
                 <TextView
                     android:id="@+id/average_rate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
+                    android:text="@string/rating_value"
                     android:textColor="@color/yellow"
                     android:textStyle="bold"
                     android:textSize="18sp"
@@ -203,14 +209,16 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginStart="15dp"
-                    app:layout_constraintTop_toBottomOf="@+id/name_edit_text" />
+                    app:layout_constraintTop_toBottomOf="@+id/name_edit_text"
+                    android:contentDescription="@string/like_button" />
                 <ImageView
                     android:id="@+id/clock_btn"
                     android:layout_width="30dp"
                     android:src="@drawable/ic_clock"
                     android:layout_height="30dp"
                     android:layout_marginStart="15dp"
-                    app:layout_constraintTop_toBottomOf="@+id/name_edit_text" />
+                    app:layout_constraintTop_toBottomOf="@+id/name_edit_text"
+                    android:contentDescription="@string/clock_button_alt" />
 
             </LinearLayout>
 
@@ -220,43 +228,43 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/average_layout">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Wystaw ocenę"
+                    android:text="@string/wystaw_ocene_label"
                     android:textColor="@color/white"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:layout_weight="3"/>
 
                 <RelativeLayout
                     android:id="@+id/spinner_wrapper"
                     android:layout_width="70dp"
-                    android:layout_height="45dp"
+                    android:layout_height="47dp"
                     android:background="@drawable/spinner_bg"
                     android:orientation="horizontal"
                     app:layout_constraintTop_toBottomOf="@id/name_edit_text"
                     app:layout_constraintLeft_toLeftOf="parent">
                 <Spinner
                     android:id="@+id/ratingSpinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="60dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:background="@android:color/transparent"
                     android:gravity="center"
+                    android:layout_marginHorizontal="2dp"
                     android:layout_gravity="center"
                     android:layout_centerVertical="true"
-                    android:layout_marginVertical="1dp"
-                    android:layout_marginLeft="1dp"
-                    android:layout_marginRight="35dp"
-                    android:spinnerMode="dropdown" />
+                    android:layout_marginVertical="2dp"
+                    android:spinnerMode="dropdown"/>
 
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_dropdown" />
-                </RelativeLayout>>
+                    android:src="@drawable/ic_dropdown"
+                    android:contentDescription="@string/rating_dropdown_alt" />
+                </RelativeLayout>
 
             </LinearLayout>
 
@@ -264,22 +272,21 @@
                 android:id="@+id/submit_btn"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
-                android:text="Dodać"
                 android:src="@drawable/ic_submit"
                 android:background="@drawable/rounded_background_submit"
                 app:layout_constraintTop_toBottomOf="@id/ratings_layout"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginTop="20dp"
-                />
+                android:contentDescription="@string/send_comment_button_alt" />
 
             <TextView
                 android:id="@+id/comments_list_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Komentarze"
+                android:text="@string/komentarze_label"
                 android:textColor="@color/white"
-                android:textSize="16dp"
+                android:textSize="14sp"
                 android:layout_weight="3"
                 app:layout_constraintTop_toBottomOf="@id/submit_btn"
                 app:layout_constraintLeft_toLeftOf="parent"

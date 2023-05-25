@@ -5,17 +5,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
+        android:id="@+id/comment_user_image"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:background="@drawable/avatar_green"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_profile_img_white"
+        android:padding="2dp"
+        android:contentDescription="@string/profile_image_alt" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/edittext">
         <RelativeLayout
             android:id="@+id/comments_top_layout"

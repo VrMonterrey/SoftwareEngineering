@@ -92,7 +92,7 @@ class ProfileActivity : AppCompatActivity() {
                 Glide.with(applicationContext)
                     .load(uri).apply(RequestOptions.circleCropTransform())
                     .into(avatarImage)
-//                avatarImage.setImageURI(uri)
+
                 val imageRef = storageRef.child(uri.lastPathSegment!!.substringAfterLast("/"))
                 val uploadTask = contentResolver?.openInputStream(uri)?.readBytes()?.let { imageRef.putBytes(it) }
                 uploadTask?.addOnSuccessListener {
