@@ -21,7 +21,7 @@ class ListOfMeasurementsActivity : AppCompatActivity(), MeasurementAdapter.Measu
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
-//    private lateinit var profile: ImageButton
+    private lateinit var profile: ImageButton
 
     private lateinit var goback: ImageButton
     private lateinit var remove: ImageButton
@@ -70,9 +70,9 @@ class ListOfMeasurementsActivity : AppCompatActivity(), MeasurementAdapter.Measu
         logout = findViewById(R.id.logout_button)
         home = findViewById(R.id.home_button)
         categories = findViewById(R.id.categories_btn)
-//        profile = findViewById(R.id.profile_button)
+        profile = findViewById(R.id.profile_button)
 
-        goback = findViewById(R.id.goback_btn)
+        //goback = findViewById(R.id.goback_btn)
 
         home.setOnClickListener(View.OnClickListener{
             var intent : Intent = Intent(applicationContext, MainActivity::class.java)
@@ -93,17 +93,17 @@ class ListOfMeasurementsActivity : AppCompatActivity(), MeasurementAdapter.Measu
             finish()
         })
 
-//        profile.setOnClickListener(View.OnClickListener{
-//            var intent : Intent = Intent(applicationContext,ProfileActivity::class.java)
-//            startActivity(intent)
-//            finish()
-//        })
-
-        goback.setOnClickListener(View.OnClickListener{
-            var intent : Intent = Intent(applicationContext, MeasurementsActivity::class.java)
+        profile.setOnClickListener(View.OnClickListener{
+            var intent : Intent = Intent(applicationContext,ProfileActivity::class.java)
             startActivity(intent)
             finish()
         })
+
+//        goback.setOnClickListener(View.OnClickListener{
+//            var intent : Intent = Intent(applicationContext, MeasurementsActivity::class.java)
+//            startActivity(intent)
+//            finish()
+//        })
 
         measAdapter.setOnDeleteClickListener(object : MeasurementAdapter.OnDeleteClickListener {
             override fun onDeleteClick(position: Int) {
