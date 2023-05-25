@@ -37,10 +37,10 @@ class SkladnikiActivity : AppCompatActivity() {
             fatsEditText = findViewById<EditText>(R.id.tł_edit_text)
 
             val name = nameOfProduct.text.toString()
-            val calories = caloriesEditText.text.toString().toIntOrNull()
-            val proteins = proteinsEditText.text.toString().toIntOrNull()
-            val carbs = carbsEditText.text.toString().toIntOrNull()
-            val fats = fatsEditText.text.toString().toIntOrNull()
+            val calories = caloriesEditText.text.toString().toDoubleOrNull()
+            val proteins = proteinsEditText.text.toString().toDoubleOrNull()
+            val carbs = carbsEditText.text.toString().toDoubleOrNull()
+            val fats = fatsEditText.text.toString().toDoubleOrNull()
 
             val currentUser = FirebaseAuth.getInstance().currentUser
             val currentUserId = currentUser?.uid

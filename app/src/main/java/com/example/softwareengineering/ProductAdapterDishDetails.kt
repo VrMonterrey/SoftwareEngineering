@@ -11,43 +11,36 @@ import com.example.softwareengineering.model.Skladnik
 
 class ProductAdapterDishDetails(
     private var productList: MutableList<Skladnik>,
+    private var skladnikAmounts: MutableList<Int>,
     private val listener: ProductAdapterDishDetailsListener
-) :
-    RecyclerView.Adapter<ProductAdapterDishDetails.ProductViewHolder>() {
+) : RecyclerView.Adapter<ProductAdapterDishDetails.ProductViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val itemView =
-            LayoutInflater.from(parent.context).inflate(R.layout.dish_details_products_item, parent, false)
+        val itemView = LayoutInflater.from(parent.context)
+            .inflate(R.layout.dish_details_products_item, parent, false)
         return ProductViewHolder(itemView)
-    }
-
-    interface OnDeleteClickListener {
-        fun onDeleteClick(position: Int)
-    }
-
-    private var onDeleteClickListener: OnDeleteClickListener? = null
-
-    fun setOnDeleteClickListener(listener: OnDeleteClickListener) {
-        this.onDeleteClickListener = listener
     }
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val currentItem = productList[position]
+        val currentAmount = skladnikAmounts[position]
 
         holder.nameTextView.text = currentItem.name
         holder.caloriesTextView.text = "Calories: ${currentItem.calories}"
         holder.proteinsTextView.text = "Proteins: ${currentItem.protein}"
         holder.carbsTextView.text = "Carbs: ${currentItem.carbs}"
         holder.fatsTextView.text = "Fats: ${currentItem.fat}"
-
+        holder.amountTextView.text = "Amount: $currentAmount grams"
     }
 
-    override fun getItemCount() = productList.size
+    override fun getItemCount(): Int = productList.size
 
-    fun updateData(newProducts: MutableList<Skladnik>) {
+    fun updateData(newProducts: MutableList<Skladnik>, newAmounts: MutableList<Int>) {
         productList.clear()
-        productList = newProducts
+        skladnikAmounts.clear()
+        productList.addAll(newProducts)
+        skladnikAmounts.addAll(newAmounts)
         notifyDataSetChanged()
     }
 
@@ -57,6 +50,7 @@ class ProductAdapterDishDetails(
         val proteinsTextView: TextView = itemView.findViewById(R.id.product_e_proteins)
         val carbsTextView: TextView = itemView.findViewById(R.id.product_e_carbs)
         val fatsTextView: TextView = itemView.findViewById(R.id.product_e_fats)
+        val amountTextView: TextView = itemView.findViewById(R.id.product_amount)
     }
 
     interface ProductAdapterDishDetailsListener {

@@ -107,6 +107,7 @@
 
             </RelativeLayout>
 
+
             <TextView
                 android:id="@+id/ilosc_label"
                 android:layout_width="wrap_content"
@@ -144,6 +145,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/ilosc_label"
                 app:layout_constraintLeft_toLeftOf="parent"/>
 
+
             <Button
                 android:id="@+id/dialog_btn"
                 android:layout_width="100dp"
@@ -151,9 +153,15 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="20dp"
+
+                android:text="Wybierz składniki"
+                android:textSize="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/spinner_wrapper"
+
                 android:text="@string/wybierz_skladniki_btn"
                 android:textSize="11sp"
                 app:layout_constraintTop_toBottomOf="@+id/ilosc_edit_text"
+
                 app:layout_constraintLeft_toLeftOf="parent"
                 />
 
@@ -177,8 +185,12 @@
                 android:layout_marginTop="23dp"
                 android:background="@color/grey"
                 app:layout_constraintRight_toRightOf="parent"
+
+                app:layout_constraintTop_toBottomOf="@+id/spinner_wrapper"/>
+
                 app:layout_constraintTop_toBottomOf="@id/ilosc_edit_text"
                 android:contentDescription="@string/image_of_posilek_alt" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
