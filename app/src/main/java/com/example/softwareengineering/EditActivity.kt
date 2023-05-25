@@ -67,10 +67,10 @@ class EditActivity : AppCompatActivity() {
         addButton.setOnClickListener {
 
             val name = nameOfProduct.text.toString()
-            val calories = caloriesEditText.text.toString().toIntOrNull()
-            val protein = proteinsEditText.text.toString().toIntOrNull()
-            val carbs = carbsEditText.text.toString().toIntOrNull()
-            val fat = fatsEditText.text.toString().toIntOrNull()
+            val calories = caloriesEditText.text.toString().toDoubleOrNull()
+            val protein = proteinsEditText.text.toString().toDoubleOrNull()
+            val carbs = carbsEditText.text.toString().toDoubleOrNull()
+            val fat = fatsEditText.text.toString().toDoubleOrNull()
 
             if (name.isBlank() || calories == null || protein == null || carbs == null || fat == null) {
                 Toast.makeText(this, "Wszystkie pola muszą być wypełnione poprawnie", Toast.LENGTH_SHORT).show()

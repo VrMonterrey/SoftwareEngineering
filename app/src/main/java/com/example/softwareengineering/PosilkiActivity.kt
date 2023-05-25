@@ -1,5 +1,6 @@
 package com.example.softwareengineering
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.ContentValues.TAG
@@ -34,13 +35,11 @@ class PosilkiActivity : AppCompatActivity() {
     private lateinit var posilkiarr: TextView
 
     private lateinit var dishName: EditText
-    private lateinit var dishQuantity: EditText
     private lateinit var addButton: ImageButton
     private lateinit var dialogButton: Button
 
     private lateinit var adapter: SkladnikiToChooseAdapter
 
-    private var selectedProducts: List<Skladnik> = emptyList()
     private var amounts: Map<String?, Int> = mutableMapOf()
 
     private lateinit var imageView: ImageView
@@ -57,6 +56,7 @@ class PosilkiActivity : AppCompatActivity() {
     private lateinit var databaseReference: DatabaseReference
 
 
+    @SuppressLint("Recycle")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_posilki)
@@ -210,9 +210,7 @@ class PosilkiActivity : AppCompatActivity() {
             .setMessage("Nazwa \nKalorie | Białko | Weglewodany | Tłuszcz")
             .setView(dialogLayout)
             .setPositiveButton("OK") { dialog, which ->
-                selectedProducts = adapter.getData().filter { it.checked }
                 amounts = adapter.getAmountMap()
-                Log.d(TAG, "Selected products: $selectedProducts")
             }
             .setNegativeButton("Cancel") { dialog, which ->
 
@@ -222,13 +220,11 @@ class PosilkiActivity : AppCompatActivity() {
 
         addButton.setOnClickListener {
             dishName = findViewById<EditText>(R.id.name_edit_text)
-            dishQuantity = findViewById<EditText>(R.id.ilosc_edit_text)
 
             val name = dishName.text.toString()
             val category = selectedCategory
-            val quantity = dishQuantity.text.toString().toIntOrNull()
 
-            if (name.isBlank() || category.isBlank() || quantity == null || amounts.isEmpty()) {
+            if (name.isBlank() || category.isBlank() || amounts.isEmpty()) {
                 Toast.makeText(this, "Wszystkie pola muszą być wypełnione poprawnie", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -271,8 +267,6 @@ class PosilkiActivity : AppCompatActivity() {
                                 id = dishId,
                                 name = name,
                                 category = it1,
-                                quantity = quantity,
-                                products = selectedProducts,
                                 photoUrl = photoUrl,
                                 comments = null,
                                 userId = currentUserId
@@ -285,7 +279,6 @@ class PosilkiActivity : AppCompatActivity() {
                                     .addOnSuccessListener {
                                         Toast.makeText(applicationContext, "Nowy posiłek dodany pomyślnie", Toast.LENGTH_SHORT).show()
                                         dishName.text.clear()
-                                        dishQuantity.text.clear()
                                         imageView.setImageBitmap(null)
 
                                         val intent = Intent(applicationContext, ListOfPosilkiActivity::class.java)

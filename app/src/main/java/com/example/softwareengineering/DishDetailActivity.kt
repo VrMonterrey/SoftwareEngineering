@@ -13,10 +13,7 @@ import android.view.View
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.softwareengineering.model.Comment
-import com.example.softwareengineering.model.DailyNutrition
-import com.example.softwareengineering.model.Posilki
-import com.example.softwareengineering.model.Skladnik
+import com.example.softwareengineering.model.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
@@ -37,7 +34,6 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
     private lateinit var nameField: TextView
     private lateinit var average: TextView
     private lateinit var categoryField: TextView
-    private lateinit var quantityField: TextView
     private lateinit var dishImage: ImageView
     private lateinit var kcal: TextView
     private lateinit var proteins: TextView
@@ -59,7 +55,6 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
 
     private var dishName: String? = ""
     private var dishCategory: String? = ""
-    private var dishQuantity: Int? = 1
     private lateinit var dishCalories: TextView
     private lateinit var dishProteins: TextView
     private lateinit var dishCarbs: TextView
@@ -88,25 +83,69 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
         }
     }
 
+
+
     @SuppressLint("SetTextI18n")
     fun calculateAverageMacro(posilek: Posilki) {
-        val products = posilek.products
+        val posilkiId = posilek.id
+        val databaseReference = FirebaseDatabase.getInstance().reference.child("composition")
 
-        var sumCalories: Int = 0
-        var sumProteins: Int = 0
-        var sumCarbs: Int = 0
-        var sumFats: Int = 0
-        products.forEach {
-            sumCalories += it.calories
-            sumProteins += it.protein
-            sumCarbs += it.carbs
-            sumFats += it.fat
-        }
+        var sumCalories: Double = 0.0
+        var sumProteins: Double = 0.0
+        var sumCarbs: Double = 0.0
+        var sumFats: Double = 0.0
 
-        dishCalories.text = "kcal: $sumCalories"
-        dishProteins.text = "p: $sumProteins"
-        dishCarbs.text = "c: $sumCarbs"
-        dishFats.text = "f: $sumFats"
+        val skladnikIds: MutableList<String> = mutableListOf()
+
+        databaseReference.orderByChild("posilkiId").equalTo(posilkiId).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (skladPosilkiSnapshot in snapshot.children) {
+                    val skladPosilki = skladPosilkiSnapshot.getValue(SkladPosilku::class.java)
+                    skladPosilki?.let {
+                        val skladnikId = it.skladnikId
+                        val amountInGrams = it.amount
+
+                        skladnikIds.add(skladnikId)
+
+                        val skladnikReference = FirebaseDatabase.getInstance().reference.child("products").child(skladnikId)
+                        skladnikReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(skladnikSnapshot: DataSnapshot) {
+                                val skladnik = skladnikSnapshot.getValue(Skladnik::class.java)
+                                skladnik?.let { skladnik ->
+                                    val skladnikCaloriesPer100g = skladnik.calories
+                                    val skladnikProteinsPer100g = skladnik.protein
+                                    val skladnikCarbsPer100g = skladnik.carbs
+                                    val skladnikFatsPer100g = skladnik.fat
+
+                                    val skladnikCalories: Double = (skladnikCaloriesPer100g * amountInGrams) / 100
+                                    val skladnikProteins: Double = (skladnikProteinsPer100g * amountInGrams) / 100
+                                    val skladnikCarbs: Double = (skladnikCarbsPer100g * amountInGrams) / 100
+                                    val skladnikFats: Double = (skladnikFatsPer100g * amountInGrams) / 100
+
+                                    sumCalories += skladnikCalories
+                                    sumProteins += skladnikProteins
+                                    sumCarbs += skladnikCarbs
+                                    sumFats += skladnikFats
+                                }
+
+                                dishCalories.text = "kcal: $sumCalories"
+                                dishProteins.text = "p: $sumProteins"
+                                dishCarbs.text = "c: $sumCarbs"
+                                dishFats.text = "f: $sumFats"
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                // Handle error
+                            }
+                        })
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle error
+            }
+        })
     }
 
 
@@ -215,7 +254,6 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
                 nameField.text = dish?.name
                 dishName = dish?.name
                 dishCategory = dish?.category
-                dishQuantity = dish?.quantity
                 Glide.with(applicationContext)
                     .load(dish?.photoUrl)
                     .into(dishImage)

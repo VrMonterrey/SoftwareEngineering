@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.softwareengineering.adapter.SkladnikiToChooseAdapter
 import com.example.softwareengineering.model.Posilki
+import com.example.softwareengineering.model.ProductCategory
 import com.example.softwareengineering.model.Skladnik
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -29,13 +30,11 @@ class EditDishActivity : AppCompatActivity() {
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
     private lateinit var dishName: EditText
-    private lateinit var dishCategory: EditText
-    private lateinit var dishQuantity: EditText
+    private lateinit var categorySpinner: Spinner
     private lateinit var addButton: ImageButton
     private lateinit var dialogButton: Button
     private lateinit var posilkiArr: TextView
 
-    private var selectedProducts: List<Skladnik> = emptyList()
     private lateinit var adapter: SkladnikiToChooseAdapter
 
     private lateinit var imageView: ImageView
@@ -45,6 +44,9 @@ class EditDishActivity : AppCompatActivity() {
 
     private lateinit var database: DatabaseReference
     private lateinit var dishId: String
+    private lateinit var databaseReference: DatabaseReference
+    private lateinit var categoryList: MutableList<ProductCategory>
+    private var selectedCategory: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,8 +58,7 @@ class EditDishActivity : AppCompatActivity() {
 
         // Initialize views
         dishName = findViewById(R.id.name_edit_text)
-        dishCategory = findViewById(R.id.kategorie_edit_text)
-        dishQuantity = findViewById(R.id.ilosc_edit_text)
+        categorySpinner = findViewById(R.id.categorySpinner)
         addButton = findViewById(R.id.submit_btn)
 
         // Init. nav. buttons
@@ -80,6 +81,48 @@ class EditDishActivity : AppCompatActivity() {
         // Initialize Firebase database
         database = Firebase.database.reference
 
+
+        databaseReference = FirebaseDatabase.getInstance().reference.child("categories")
+        categoryList = mutableListOf()
+
+        val categoriesorSpinner: MutableList<String> = mutableListOf()
+
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                categoryList.clear()
+
+                for (categorySnapshot in snapshot.children) {
+                    val category = categorySnapshot.getValue(ProductCategory::class.java)
+                    category?.let {
+                        categoryList.add(it)
+                    }
+                }
+
+                for (category in categoryList) {
+                    categoriesorSpinner.add(category.name)
+                }
+
+                val adapter = ArrayAdapter(this@EditDishActivity, R.layout.spinner_item_layout, categoriesorSpinner)
+                categorySpinner.adapter = adapter
+
+
+                categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        selectedCategory = categoriesorSpinner[position]
+//                        kategoriaText.text = selectedCategory
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
+
         // Get dish ID from intent
         dishId = intent.getStringExtra("posilek") ?: ""
 
@@ -89,8 +132,10 @@ class EditDishActivity : AppCompatActivity() {
                 // Fill fields with dish data
                 val dish = snapshot.getValue(Posilki::class.java)
                 dishName.setText(dish?.name)
-                dishCategory.setText(dish?.category)
-                dishQuantity.setText(dish?.quantity.toString())
+                val selectedCategoryIndex = categoriesorSpinner.indexOf(dish?.category)
+                if (selectedCategoryIndex != -1) {
+                    categorySpinner.setSelection(selectedCategoryIndex)
+                }
                 Glide.with(applicationContext)
                     .load(dish?.photoUrl)
                     .into(imageView)
@@ -104,18 +149,14 @@ class EditDishActivity : AppCompatActivity() {
         // Save edited dish to Firebase database
         addButton.setOnClickListener {
             val name = dishName.text.toString()
-            val category = dishCategory.text.toString()
-            val quantityString = dishQuantity.text.toString()
+            val category = selectedCategory
 
-            if (name.isNotEmpty() && category.isNotEmpty() && quantityString.isNotEmpty()) {
-                val quantity = quantityString.toInt()
+            if (name.isNotEmpty() && category.isNotEmpty()) {
 
                 val dish = Posilki(
                     id = dishId,
                     name = name,
                     category = category,
-                    quantity = quantity,
-                    products = selectedProducts,
                     photoUrl = photoUrl
                 )
 
@@ -206,8 +247,7 @@ class EditDishActivity : AppCompatActivity() {
             .setMessage("Klikni checkbpx'a żeby dodać skłądnik")
             .setView(dialogLayout)
             .setPositiveButton("OK") { dialog, which ->
-                selectedProducts = adapter.getData().filter { it.checked }
-                Log.d(TAG, "Selected products: $selectedProducts")
+
             }
             .setNegativeButton("Cancel") { dialog, which ->
 
