@@ -29,23 +29,14 @@ import kotlin.math.roundToInt
 
 class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.ProductAdapterDishDetailsListener {
 
-    private lateinit var logout: ImageButton
-    private lateinit var home: ImageButton
-    private lateinit var categories: ImageButton
     private lateinit var goback: ImageButton
 
     private lateinit var nameField: TextView
     private lateinit var average: TextView
-    private lateinit var categoryField: TextView
-    private lateinit var quantityField: TextView
+
     private lateinit var dishImage: ImageView
-    private lateinit var kcal: TextView
-    private lateinit var proteins: TextView
-    private lateinit var carbs: TextView
-    private lateinit var fats: TextView
 
     private lateinit var rating_spn: Spinner
-    private lateinit var clock: ImageView
 
     private lateinit var productAdapter: ProductAdapterDishDetails
     private lateinit var productList: MutableList<Skladnik>
@@ -60,14 +51,14 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
     private var dishName: String? = ""
     private var dishCategory: String? = ""
     private var dishQuantity: Int? = 1
+
+    private var userPhotoUrl: String? = ""
+
     private lateinit var dishCalories: TextView
     private lateinit var dishProteins: TextView
     private lateinit var dishCarbs: TextView
     private lateinit var dishFats: TextView
 
-    private lateinit var commentRecyclerView: RecyclerView
-    private lateinit var commentAdapter: CommentAdapter
-    private lateinit var commentList: MutableList<Comment>
     private lateinit var currentUserId: String
 
     //Average dishes rating
@@ -116,10 +107,6 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
 
         nameField = findViewById(R.id.dish_name)
         dishImage = findViewById(R.id.dish_image)
-        kcal = findViewById(R.id.dish_kcal)
-        proteins = findViewById(R.id.dish_proteins)
-        carbs = findViewById(R.id.dish_carbs)
-        fats = findViewById(R.id.dish_fats)
 
         dishCalories = findViewById(R.id.dish_kcal)
         dishProteins = findViewById(R.id.dish_proteins)
@@ -324,50 +311,62 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
 
             val database = Firebase.database.reference
             val commentId = database.child("dishes").child(dishId).child("comments").push().key
-            val comment = currentUserId?.let { it1 ->
-                Comment(
-                    id = commentId,
-                    text = text,
-                    ocena = selectedItem,
-                    userId = it1,
-                    posilekId = dishId
-                )
-            }
 
-            if (comment != null) {
-                if (comment.id != null) {
-                    val commentsRef = database.child("dishes").child(dishId).child("comments")
-                    val newCommentRef = commentsRef.push()
-                    newCommentRef.setValue(comment).addOnSuccessListener {
-                        Toast.makeText(this, "Nowy komentarz dodany pomyślnie", Toast.LENGTH_SHORT).show()
-                        edit_text.text.clear()
+            val userIdForAvatar = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
-                        //Update average rating value after adding a comment
-                        val posilekRef = database.child("dishes").child(dishId)
-                        posilekRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                            override fun onDataChange(snapshot: DataSnapshot) {
-                                val posilek = snapshot.getValue(Posilki::class.java)
+            database.child("users").child(userIdForAvatar).get().addOnSuccessListener { dataSnapshot ->
+                val userData = dataSnapshot.value as? Map<*, *>
+                userPhotoUrl = userData?.get("photoUrl") as? String
 
-                                if (posilek != null) {
-                                    val averageRating = calculateAverageRating(posilek)
-                                    average.text = averageRating.toString()
-                                }
-                            }
-
-                            override fun onCancelled(error: DatabaseError) {
-                                Log.w(ContentValues.TAG, "loadPosilek:onCancelled", error.toException())
-                            }
-                        })
-                    }
-                        .addOnFailureListener {
-                            Toast.makeText(
-                                this,
-                                "Błąd podczas dodawania komentarza: ${it.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                val comment = currentUserId?.let { it1 ->
+                    Comment(
+                        id = commentId,
+                        text = text,
+                        ocena = selectedItem,
+                        userPhotoUrl = userPhotoUrl,
+                        userId = it1,
+                        posilekId = dishId
+                    )
                 }
+
+                if (comment != null) {
+                    if (comment.id != null) {
+                        val commentsRef = database.child("dishes").child(dishId).child("comments")
+                        val newCommentRef = commentsRef.push()
+                        newCommentRef.setValue(comment).addOnSuccessListener {
+                            Toast.makeText(this, "Nowy komentarz dodany pomyślnie", Toast.LENGTH_SHORT).show()
+                            edit_text.text.clear()
+
+                            //Update average rating value after adding a comment
+                            val posilekRef = database.child("dishes").child(dishId)
+                            posilekRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                                override fun onDataChange(snapshot: DataSnapshot) {
+                                    val posilek = snapshot.getValue(Posilki::class.java)
+
+                                    if (posilek != null) {
+                                        val averageRating = calculateAverageRating(posilek)
+                                        average.text = averageRating.toString()
+                                    }
+                                }
+
+                                override fun onCancelled(error: DatabaseError) {
+                                    Log.w(ContentValues.TAG, "loadPosilek:onCancelled", error.toException())
+                                }
+                            })
+                        }
+                            .addOnFailureListener {
+                                Toast.makeText(
+                                    this,
+                                    "Błąd podczas dodawania komentarza: ${it.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                    }
+                }
+            }.addOnFailureListener { error ->
+                Log.e("Firebase", "Failed to get user data: ${error.message}")
             }
+
 
         }
 

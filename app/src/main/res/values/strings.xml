@@ -64,6 +64,32 @@
     <string name="time_to_consume">Time to consume</string>
     <string name="product_name">Product Name</string>
     <string name="dropdown_icon_alt">Dropdown Icon</string>
+    <string name="nazwa_label">Nazwa</string>
+    <string name="utworz_posilek_title">Utwórz posiłek</string>
+    <string name="category_dropdown_alt">Category dropdown</string>
+    <string name="wpisz_ilosc_posilku_lable">Wpisz ilość posiłku</string>
+    <string name="wybierz_skladniki_btn">Wybierz składniki</string>
+    <string name="wybierz_zdjecie_btn">Wybierz zdjęcie</string>
+    <string name="image_of_posilek_alt">Image of posilek</string>
+    <string name="spojrze_na_liste_posiilkow_link">Spojrzeć na listę posiłków</string>
+    <string name="profile_image_alt">Profile image</string>
+    <string name="wystaw_ocene_label">Wystaw ocenę</string>
+    <string name="rating_dropdown_alt">Rating dropdown</string>
+    <string name="send_comment_button_alt">Send comment button</string>
+    <string name="komentarze_label">Komentarze</string>
+    <string name="lista_skladnikow_label">Lista składników:</string>
+    <string name="dish_image_alt">Dish image</string>
+    <string name="p">p</string>
+    <string name="kcal">kcal</string>
+    <string name="c">c</string>
+    <string name="f">f</string>
+    <string name="go_back_button_alt">Go back button</string>
+    <string name="napisz_komentarz_label">Napisz komentarz</string>
+    <string name="moim_zdaniem_placeholder">Moim zdaniem...</string>
+    <string name="average_rating_alt">Average rating</string>
+    <string name="rating_value">0</string>
+    <string name="like_button">Like button</string>
+    <string name="clock_button_alt">Clock button</string>
     <string-array name="menu_options">
         <item>Strona główna</item>
         <item>Składniki</item>
