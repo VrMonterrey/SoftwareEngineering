@@ -84,9 +84,8 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
     }
 
 
-
     @SuppressLint("SetTextI18n")
-    fun calculateAverageMacro(posilek: Posilki) {
+    fun calculateAverageMacro(posilek: Posilki, callback: (amount: Int) -> Unit) {
         val posilkiId = posilek.id
         val databaseReference = FirebaseDatabase.getInstance().reference.child("composition")
 
@@ -94,64 +93,90 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
         var sumProteins: Double = 0.0
         var sumCarbs: Double = 0.0
         var sumFats: Double = 0.0
-
+        var amount: Int = 0
         val skladnikIds: MutableList<String> = mutableListOf()
 
-        databaseReference.orderByChild("posilkiId").equalTo(posilkiId).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (skladPosilkiSnapshot in snapshot.children) {
-                    val skladPosilki = skladPosilkiSnapshot.getValue(SkladPosilku::class.java)
-                    skladPosilki?.let {
-                        val skladnikId = it.skladnikId
-                        val amountInGrams = it.amount
+        databaseReference.orderByChild("posilkiId").equalTo(posilkiId)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (skladPosilkiSnapshot in snapshot.children) {
+                        val skladPosilki = skladPosilkiSnapshot.getValue(SkladPosilku::class.java)
+                        skladPosilki?.let {
+                            val skladnikId = it.skladnikId
+                            val amountInGrams = it.amount
 
-                        skladnikIds.add(skladnikId)
+                            skladnikIds.add(skladnikId)
+                            amount += amountInGrams
 
-                        val skladnikReference = FirebaseDatabase.getInstance().reference.child("products").child(skladnikId)
-                        skladnikReference.addListenerForSingleValueEvent(object : ValueEventListener {
-                            override fun onDataChange(skladnikSnapshot: DataSnapshot) {
-                                val skladnik = skladnikSnapshot.getValue(Skladnik::class.java)
-                                skladnik?.let { skladnik ->
-                                    val skladnikCaloriesPer100g = skladnik.calories
-                                    val skladnikProteinsPer100g = skladnik.protein
-                                    val skladnikCarbsPer100g = skladnik.carbs
-                                    val skladnikFatsPer100g = skladnik.fat
+                            val skladnikReference =
+                                FirebaseDatabase.getInstance().reference.child("products")
+                                    .child(skladnikId)
+                            skladnikReference.addListenerForSingleValueEvent(object :
+                                ValueEventListener {
+                                override fun onDataChange(skladnikSnapshot: DataSnapshot) {
+                                    val skladnik = skladnikSnapshot.getValue(Skladnik::class.java)
+                                    skladnik?.let { skladnik ->
+                                        val skladnikCaloriesPer100g = skladnik.calories
+                                        val skladnikProteinsPer100g = skladnik.protein
+                                        val skladnikCarbsPer100g = skladnik.carbs
+                                        val skladnikFatsPer100g = skladnik.fat
 
-                                    val skladnikCalories: Double = (skladnikCaloriesPer100g * amountInGrams) / 100
-                                    val skladnikProteins: Double = (skladnikProteinsPer100g * amountInGrams) / 100
-                                    val skladnikCarbs: Double = (skladnikCarbsPer100g * amountInGrams) / 100
-                                    val skladnikFats: Double = (skladnikFatsPer100g * amountInGrams) / 100
+                                        val skladnikCalories: Double =
+                                            (skladnikCaloriesPer100g * amountInGrams) / 100
+                                        val skladnikProteins: Double =
+                                            (skladnikProteinsPer100g * amountInGrams) / 100
+                                        val skladnikCarbs: Double =
+                                            (skladnikCarbsPer100g * amountInGrams) / 100
+                                        val skladnikFats: Double =
+                                            (skladnikFatsPer100g * amountInGrams) / 100
 
-                                    sumCalories += skladnikCalories
-                                    sumProteins += skladnikProteins
-                                    sumCarbs += skladnikCarbs
-                                    sumFats += skladnikFats
+                                        sumCalories += skladnikCalories
+                                        sumProteins += skladnikProteins
+                                        sumCarbs += skladnikCarbs
+                                        sumFats += skladnikFats
+                                    }
+
+                                    val weightRatio = 100.0 / amount
+                                    val caloriesPer100g: Double = sumCalories * weightRatio
+                                    val proteinsPer100g: Double = sumProteins * weightRatio
+                                    val carbsPer100g: Double = sumCarbs * weightRatio
+                                    val fatsPer100g: Double = sumFats * weightRatio
+
+                                    val roundedCalories: String =
+                                        String.format("%.1f", caloriesPer100g)
+                                    val roundedProteins: String =
+                                        String.format("%.1f", proteinsPer100g)
+                                    val roundedCarbs: String = String.format("%.1f", carbsPer100g)
+                                    val roundedFats: String = String.format("%.1f", fatsPer100g)
+
+                                    dishCalories.text = "kcal: $roundedCalories"
+                                    dishProteins.text = "p: $roundedProteins"
+                                    dishCarbs.text = "c: $roundedCarbs"
+                                    dishFats.text = "f: $roundedFats"
+
+                                    callback(amount)
                                 }
 
-                                dishCalories.text = "kcal: $sumCalories"
-                                dishProteins.text = "p: $sumProteins"
-                                dishCarbs.text = "c: $sumCarbs"
-                                dishFats.text = "f: $sumFats"
-                            }
-
-                            override fun onCancelled(error: DatabaseError) {
-                                // Handle error
-                            }
-                        })
+                                override fun onCancelled(error: DatabaseError) {
+                                    // Handle error
+                                }
+                            })
+                        }
                     }
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                // Handle error
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle error
+                }
+            })
     }
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dish_detail)
+
 
         nameField = findViewById(R.id.dish_name)
         dishImage = findViewById(R.id.dish_image)
@@ -215,6 +240,7 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
 
         //Reading dish
         database.child("dishes").child(dishId).addListenerForSingleValueEvent(object : ValueEventListener {
+            @SuppressLint("SetTextI18n")
             override fun onDataChange(snapshot: DataSnapshot) {
                 val dish = snapshot.getValue(Posilki::class.java)
                 if (dish != null) {
@@ -251,16 +277,20 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
                         dishRef.setValue(dish)
                     }
                 }
-                nameField.text = dish?.name
-                dishName = dish?.name
-                dishCategory = dish?.category
-                Glide.with(applicationContext)
-                    .load(dish?.photoUrl)
-                    .into(dishImage)
-                dishImage.background = null;
-                averageRating = dish?.let { calculateAverageRating(it) }
-                average = findViewById(R.id.average_rate)
-                average.text = averageRating.toString()
+                if (dish != null) {
+                    calculateAverageMacro(dish) { amount ->
+                        nameField.text = "${dish?.name}(${amount}g)"
+                    }
+                    dishName = dish?.name
+                    dishCategory = dish?.category
+                    Glide.with(applicationContext)
+                        .load(dish?.photoUrl)
+                        .into(dishImage)
+                    dishImage.background = null;
+                    averageRating = dish?.let { calculateAverageRating(it) }
+                    average = findViewById(R.id.average_rate)
+                    average.text = averageRating.toString()
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -268,47 +298,48 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
             }
         })
 
-        //Initialise
-
-        val posilekRef = database.child("dishes").child(dishId)
-        posilekRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val posilek = snapshot.getValue(Posilki::class.java)
-
-                if (posilek != null) {
-                    calculateAverageMacro(posilek)
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.w(ContentValues.TAG, "loadPosilek:onCancelled", error.toException())
-            }
-        })
 
 
 
-        //List of "składniki"
+        // List of "składniki"
         productRecyclerView = findViewById(R.id.productRecyclerView)
-        productAdapter = ProductAdapterDishDetails(mutableListOf(), this)
+        productAdapter = ProductAdapterDishDetails(mutableListOf(), mutableListOf(),this)
         productRecyclerView.adapter = productAdapter
 
         database2 = FirebaseDatabase.getInstance()
-        productRef = FirebaseDatabase.getInstance().getReference("dishes").child(dishId).child("products")
+        productRef = FirebaseDatabase.getInstance().getReference("dishes").child(dishId).child("composition")
 
         productList = mutableListOf()
+        val skladnikAmounts = mutableListOf<Int>()
 
         productRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 productList.clear()
                 val products = mutableListOf<Skladnik>()
-                for (productSnapshot in snapshot.children) {
-                    val product = productSnapshot.getValue(Skladnik::class.java)
-                    product?.let {
-                        products.add(it)
+
+                for (skladPosilkiSnapshot in snapshot.children) {
+                    val skladPosilki = skladPosilkiSnapshot.getValue(SkladPosilku::class.java)
+                    skladPosilki?.let {
+                        val skladnikId = it.skladnikId
+                        val amountInGrams = it.amount
+
+                        val skladnikRef = FirebaseDatabase.getInstance().getReference("products").child(skladnikId)
+                        skladnikRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(skladnikSnapshot: DataSnapshot) {
+                                val skladnik = skladnikSnapshot.getValue(Skladnik::class.java)
+                                skladnik?.let { skladnik ->
+                                    skladnikAmounts.add(amountInGrams)
+                                    products.add(skladnik)
+                                    productAdapter.updateData(productList, skladnikAmounts)
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+                            }
+                        })
                     }
                 }
-                productList.addAll(products)
-                productAdapter.updateData(products)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -316,6 +347,7 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
             }
 
         })
+
 
         //Rating
         val ratings = arrayOf(1, 2, 3, 4, 5)
