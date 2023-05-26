@@ -27,7 +27,7 @@
                 android:id="@+id/search"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/search_tint"
+                android:hint="@string/wyszukaj"
                 android:inputType="text"
                 android:textColorHint="@color/greyLighter"
                 android:textSize="14sp"
@@ -38,15 +38,16 @@
                 android:layout_marginHorizontal="60dp"
                 />
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/vertical_menu"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_margin="19dp"
                 android:background="@color/transparent"
-                android:src="@drawable/ic_menu_vertical"
+                android:src="@drawable/ic_add2"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

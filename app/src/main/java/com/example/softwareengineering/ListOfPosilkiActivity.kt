@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -32,7 +33,7 @@ class ListOfPosilkiActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapter
     private lateinit var profile: ImageButton
     private lateinit var goback: ImageButton
 
-    private lateinit var add: ImageButton
+    private lateinit var add: ImageView
 
     private lateinit var searchEditText: EditText
     private lateinit var dishAdapter: PosilkiAdapter

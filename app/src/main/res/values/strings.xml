@@ -110,6 +110,19 @@
     <string name="podpowiedzi_button_alt">Podpowiedzi button</string>
     <string name="podpowiedzi">Podpowiedzi</string>
     <string name="posilki_button_alt">Posilki button</string>
+    <string name="wyszukaj">Wyszukaj...</string>
+    <string name="_0kcal">0kcal</string>
+    <string name="_100g">100g</string>
+    <string name="zero">0</string>
+    <string name="ingredient_icon_alt">Ingredient Icon</string>
+    <string name="tluszcz">Tłuszcz</string>
+    <string name="zero_grams">0g</string>
+    <string name="weglewodany">Weglewodany</string>
+    <string name="remove_blocked_button_alt">Remove blocked button</string>
+    <string name="remove_button_alt">Remove button</string>
+    <string name="bialko">Białko</string>
+    <string name="edit_blocked_button_alt">Edit Blocked Button</string>
+    <string name="edit_button">Edit Button</string>
     <string-array name="menu_options">
         <item>Strona główna</item>
         <item>Składniki</item>
