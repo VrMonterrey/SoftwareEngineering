@@ -6,14 +6,57 @@
     android:background="@drawable/gradient_green_main">
 
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/search_panel"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#1e5948"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ImageButton
+            android:id="@+id/goback_btn"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/ic_arrow_left"
+            android:layout_margin="19dp"
+            android:background="@color/transparent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <EditText
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Wpisz temat podpowiedzi"
+            android:inputType="text"
+            android:textColorHint="@color/greyLighter"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:maxLength="30"
+            android:background="@color/transparent"
+            app:layout_constraintLeft_toLeftOf="@+id/goback_btn"
+            android:layout_marginHorizontal="60dp"
+            />
+
+        <ImageButton
+            android:id="@+id/kategorie_arr_btn"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_margin="19dp"
+            android:background="@color/transparent"
+            android:src="@drawable/ic_menu_vertical"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tipRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="620dp"
+        android:layout_height="550dp"
         android:padding="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/search_panel">
 
     </androidx.recyclerview.widget.RecyclerView>
     <TextView
@@ -25,7 +68,6 @@
         android:textSize="14dp"
         android:textColor="@color/white"
         android:textAlignment="center"
-        android:layout_marginTop="135dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/tipRecyclerView"/>
 

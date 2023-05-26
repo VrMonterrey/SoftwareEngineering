@@ -5,6 +5,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_green_main">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/search_panel"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#1e5948"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/goback_btn"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/ic_arrow_left"
+            android:layout_margin="19dp"
+            android:background="@color/transparent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <EditText
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Wpisz nazwę posiłka/jego składniki"
+            android:inputType="text"
+            android:textColorHint="@color/greyLighter"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:maxLength="30"
+            android:background="@color/transparent"
+            app:layout_constraintLeft_toLeftOf="@+id/goback_btn"
+            android:layout_marginHorizontal="60dp"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <ScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
@@ -13,7 +48,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="120dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="70dp"
         android:background="@drawable/rounded_green"
         android:padding="15dp">
 

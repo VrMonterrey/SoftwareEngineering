@@ -3,8 +3,11 @@ package com.example.softwareengineering
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,8 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.softwareengineering.model.Posilki
+import com.example.softwareengineering.model.SkladPosilku
+import com.example.softwareengineering.model.Skladnik
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 
 
 class ListOfPosilkiActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapterListener {
@@ -26,6 +33,7 @@ class ListOfPosilkiActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapter
 
     private lateinit var add: ImageButton
 
+    private lateinit var searchEditText: EditText
     private lateinit var dishAdapter: PosilkiAdapter
     private lateinit var dishList: MutableList<Posilki>
     private lateinit var dishRecyclerView: RecyclerView
@@ -47,6 +55,7 @@ class ListOfPosilkiActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapter
         database = FirebaseDatabase.getInstance()
         dishRef = database.getReference("dishes")
 
+        searchEditText = findViewById(R.id.search)
         dishList = mutableListOf()
 
         dishRef.addValueEventListener(object : ValueEventListener {
@@ -67,6 +76,58 @@ class ListOfPosilkiActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapter
                 Log.w(TAG, "Failed to read value.", error.toException())
             }
 
+        })
+
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val searchTerm = s.toString().lowercase()
+
+                val database = FirebaseDatabase.getInstance()
+                val filteredList = mutableListOf<Posilki>()
+
+                for (dish in dishList) {
+                    if (dish.name.lowercase().contains(searchTerm)) {
+                        filteredList.add(dish)
+                        continue
+                    }
+
+                    // Listen for SkladPosilku data
+                    val skladPosilkuRef = database.getReference("composition").orderByChild("posilkiId").equalTo(dish.id)
+                    skladPosilkuRef.addListenerForSingleValueEvent(object: ValueEventListener {
+                        override fun onDataChange(skladPosilkuDataSnapshot: DataSnapshot) {
+                            for (skladPosilkuSnapshot in skladPosilkuDataSnapshot.children) {
+                                val skladPosilku = skladPosilkuSnapshot.getValue(SkladPosilku::class.java) ?: continue
+
+                                // Listen for Skladnik data
+                                val skladnikiRef = database.getReference("products").child(skladPosilku.skladnikId)
+                                skladnikiRef.addListenerForSingleValueEvent(object: ValueEventListener {
+                                    override fun onDataChange(skladnikDataSnapshot: DataSnapshot) {
+                                        val skladnik = skladnikDataSnapshot.getValue(Skladnik::class.java) ?: return
+
+                                        if (skladnik.name.lowercase().contains(searchTerm)) {
+                                            filteredList.add(dish)
+                                            // Notify adapter
+                                            dishAdapter.updateData(filteredList)
+                                        }
+                                    }
+
+                                    override fun onCancelled(error: DatabaseError) {
+                                        // Handle cancelled
+                                    }
+                                })
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            // Handle cancelled
+                        }
+                    })
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
         })
 
         logout = findViewById(R.id.logout_button)

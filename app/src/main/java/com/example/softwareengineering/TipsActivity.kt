@@ -23,6 +23,7 @@ class TipsActivity : AppCompatActivity(), TipsAdapter.TipAdapterListener {
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
     private lateinit var profile: ImageButton
+    private lateinit var goback: ImageButton
 
     private lateinit var remove: ImageButton
     private lateinit var tipsAdapter: TipsAdapter
