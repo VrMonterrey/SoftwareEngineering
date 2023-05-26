@@ -36,7 +36,7 @@ class CategoriesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_categories)
 
-        val textView = findViewById<TextView>(R.id.textview)
+        val waterTextView = findViewById<TextView>(R.id.water_label)
 
         val text = "Woda (wkrótce...)"
         val spannableString = SpannableString(text)
@@ -47,7 +47,7 @@ class CategoriesActivity : AppCompatActivity() {
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
 
-        textView.text = spannableString
+        waterTextView.text = spannableString
 
 
         logout = findViewById(R.id.logout_button)

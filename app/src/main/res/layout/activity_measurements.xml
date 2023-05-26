@@ -66,8 +66,8 @@
                     app:layout_constraintTop_toBottomOf="@+id/height_label"
                     app:layout_constraintLeft_toLeftOf="parent"
                     android:autofillHints="wzrost"
-                    android:hint="@string/height_hint"
-                    android:labelFor="@id/height_label"/>
+                    android:labelFor="@id/height_label"
+                    tools:ignore="LabelFor" />
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -102,7 +102,7 @@
                     android:textSize="12sp"
                     android:textColorHint="#397C70"
                     android:autofillHints="waga"
-                    android:hint="@string/weight_hint"
+                    tools:ignore="LabelFor"
                     android:labelFor="@id/weight_label"
                     app:layout_constraintTop_toBottomOf="@+id/weight_label"
                     app:layout_constraintLeft_toLeftOf="parent"/>
@@ -140,7 +140,7 @@
                     android:textSize="12sp"
                     android:textColorHint="#397C70"
                     android:autofillHints="obwod barkow"
-                    android:hint="@string/obwod_barkow_hint"
+                    tools:ignore="LabelFor"
                     android:labelFor="@id/shoulder_label"
                     app:layout_constraintTop_toBottomOf="@+id/shoulder_label"
                     app:layout_constraintLeft_toLeftOf="parent"/>
@@ -178,7 +178,7 @@
                     android:textSize="12sp"
                     android:textColorHint="#397C70"
                     android:autofillHints="obwod ramienia"
-                    android:hint="@string/obwod_ramienia_hint"
+                    tools:ignore="LabelFor"
                     android:labelFor="@id/arm_label"
                     app:layout_constraintTop_toBottomOf="@+id/arm_label"
                     app:layout_constraintLeft_toLeftOf="parent"/>
@@ -216,7 +216,7 @@
                     android:textSize="12sp"
                     android:textColorHint="#397C70"
                     android:autofillHints="obwod klatki pierściowej"
-                    android:hint="@string/chest_hint"
+                    tools:ignore="LabelFor"
                     android:labelFor="@id/chest_label"
                     app:layout_constraintTop_toBottomOf="@+id/chest_label"
                     app:layout_constraintLeft_toLeftOf="parent"/>
@@ -254,7 +254,7 @@
                     android:textSize="12sp"
                     android:textColorHint="#397C70"
                     android:autofillHints="obwód talii"
-                    android:hint="@string/waist_hint"
+                    tools:ignore="LabelFor"
                     android:labelFor="@id/waist_label"
                     app:layout_constraintTop_toBottomOf="@+id/waist_label"
                     app:layout_constraintLeft_toLeftOf="parent"/>
@@ -292,7 +292,7 @@
                     android:textSize="12sp"
                     android:textColorHint="#397C70"
                     android:autofillHints="obwód bioder"
-                    android:hint="@string/hips_hint"
+                    tools:ignore="LabelFor"
                     android:labelFor="@id/hips_label"
                     app:layout_constraintTop_toBottomOf="@+id/hips_label"
                     app:layout_constraintLeft_toLeftOf="parent"/>
@@ -330,7 +330,7 @@
                     android:textSize="12sp"
                     android:textColorHint="#397C70"
                     android:autofillHints="obwód ud"
-                    android:hint="@string/thigh_hint"
+                    tools:ignore="LabelFor"
                     android:labelFor="@id/thigh_label"
                     app:layout_constraintTop_toBottomOf="@+id/thigh_label"
                     app:layout_constraintLeft_toLeftOf="parent"/>
@@ -368,7 +368,7 @@
                     android:textSize="12sp"
                     android:textColorHint="#397C70"
                     android:autofillHints="obwód łydki"
-                    android:hint="19"
+                    tools:ignore="LabelFor"
                     android:labelFor="@id/calves_label"
                     app:layout_constraintTop_toBottomOf="@+id/calves_label"
                     app:layout_constraintLeft_toLeftOf="parent"/>

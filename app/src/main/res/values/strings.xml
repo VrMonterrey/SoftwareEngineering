@@ -90,6 +90,26 @@
     <string name="rating_value">0</string>
     <string name="like_button">Like button</string>
     <string name="clock_button_alt">Clock button</string>
+    <string name="skladniki_button_alt">Skladniki button</string>
+    <string name="skladniki">Składniki</string>
+    <string name="posilki">Posiłki</string>
+    <string name="zestawy_button_alt">Zestawy button</string>
+    <string name="zestawy">Zestawy</string>
+    <string name="ulubione_button_alt">Ulubione button</string>
+    <string name="ulubione">Ulubione</string>
+    <string name="woda_button_alt">Woda button</string>
+    <string name="woda">Woda</string>
+    <string name="pomiar_ciala_alt">Pomiar ciala</string>
+    <string name="pomiary_ciala">Pomiary ciała</string>
+    <string name="kategorie_button_alt">Kategorie button</string>
+    <string name="kategorie">Kategorie</string>
+    <string name="lista_na_dzien_button_alt">Lista na dzien button</string>
+    <string name="lista_na_dzien">Lista na dzień</string>
+    <string name="udostepnij_button_alt">Udostepnij button</string>
+    <string name="udostepnij">Udostępnij</string>
+    <string name="podpowiedzi_button_alt">Podpowiedzi button</string>
+    <string name="podpowiedzi">Podpowiedzi</string>
+    <string name="posilki_button_alt">Posilki button</string>
     <string-array name="menu_options">
         <item>Strona główna</item>
         <item>Składniki</item>

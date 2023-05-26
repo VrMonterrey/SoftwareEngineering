@@ -11,321 +11,412 @@
         android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="150dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginBottom="160dp"
+        android:layout_marginTop="60dp"
         android:background="@drawable/categories_rounded_bg"
-        android:padding="15dp"
-        android:elevation="10dp">
+        android:paddingVertical="35dp"
+        android:paddingHorizontal="10dp"
+        android:elevation="5dp">
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingVertical="5dp"
-            >
+            android:layout_height="wrap_content">
 
-            <RelativeLayout
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:layout_marginVertical="30dp"
-                android:layout_marginHorizontal="18dp"
-                android:layout_alignParentLeft="true"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/skladniki_wrapper"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 android:background="@drawable/gradient_categories"
-                >
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/posilki_wrapper">
 
                 <ImageButton
                     android:id="@+id/skladniki_btn"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginHorizontal="40dp"
-                    android:layout_marginTop="18dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:background="@drawable/ic_skladniki"
+                    android:contentDescription="@string/skladniki_button_alt"
+                    app:layout_constraintBottom_toTopOf="@+id/skladniki_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"/>
 
-                    />
                 <TextView
+                    android:id="@+id/skladniki_label"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="15dp"
-                    android:text="Składniki"
+                    android:text="@string/skladniki"
                     android:textAlignment="center"
-                    android:textSize="16dp"
+                    android:layout_marginBottom="12dp"
                     android:textColor="@color/white"
-                    android:textStyle="bold"/>
+                    android:textSize="15sp"
+                    android:fontFamily="@font/lacquer"
+                    android:letterSpacing="0.05"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
 
-            </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <RelativeLayout
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:layout_marginVertical="30dp"
-                android:layout_marginHorizontal="18dp"
-                android:layout_alignParentRight="true"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/posilki_wrapper"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 android:background="@drawable/gradient_categories"
+                app:layout_constraintLeft_toRightOf="@+id/skladniki_wrapper"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 >
 
                 <ImageButton
                     android:id="@+id/posilki_btn"
-                    android:layout_width="76dp"
-                    android:layout_height="76dp"
-                    android:layout_marginHorizontal="32dp"
-                    android:layout_marginTop="21dp"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
                     android:background="@drawable/ic_posilki"
+                    app:layout_constraintBottom_toTopOf="@+id/posilki_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:contentDescription="@string/posilki_button_alt" />
 
-                    />
                 <TextView
+                    android:id="@+id/posilki_label"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="15dp"
-                    android:text="Posiłki"
+                    android:layout_marginBottom="12dp"
+                    android:text="@string/posilki"
                     android:textAlignment="center"
-                    android:textSize="16dp"
+                    android:textSize="15sp"
                     android:textColor="@color/white"
-                    android:textStyle="bold"/>
-            </RelativeLayout>
+                    android:fontFamily="@font/lacquer"
+                    android:letterSpacing="0.05"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <RelativeLayout
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:layout_marginTop="200dp"
-                android:layout_marginHorizontal="18dp"
-                android:layout_alignParentLeft="true"
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/zestawy_wrapper"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 android:background="@drawable/gradient_categories"
-                >
+                android:layout_marginTop="30dp"
+                app:layout_constraintTop_toBottomOf="@id/skladniki_wrapper"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/posilki_wrapper">
 
                 <ImageButton
                     android:id="@+id/categoty_btn"
-                    android:layout_width="68dp"
-                    android:layout_height="85dp"
-                    android:layout_marginHorizontal="37dp"
-                    android:layout_marginTop="21dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:background="@drawable/ic_sets"
+                    android:contentDescription="@string/zestawy_button_alt"
+                    app:layout_constraintBottom_toTopOf="@+id/zestawy_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"/>
 
-                    />
                 <TextView
+                    android:id="@+id/zestawy_label"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="15dp"
-                    android:text="Zestawy"
+                    android:text="@string/zestawy"
                     android:textAlignment="center"
-                    android:textSize="16dp"
+                    android:layout_marginBottom="12dp"
                     android:textColor="@color/white"
-                    android:textStyle="bold"/>
+                    android:textSize="15sp"
+                    android:fontFamily="@font/lacquer"
+                    android:letterSpacing="0.05"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
 
-            </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <RelativeLayout
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:layout_marginTop="200dp"
-                android:layout_marginHorizontal="18dp"
-                android:layout_alignParentRight="true"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/favourite_wrapper"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/gradient_categories"
+                app:layout_constraintLeft_toRightOf="@+id/zestawy_wrapper"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/posilki_wrapper"
                 >
+
                 <ImageButton
                     android:id="@+id/favourite_btn"
-                    android:layout_width="76dp"
-                    android:layout_height="76dp"
-                    android:layout_marginHorizontal="32dp"
-                    android:layout_marginTop="21dp"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
                     android:background="@drawable/ic_favourite"
+                    app:layout_constraintBottom_toTopOf="@+id/favourite_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:contentDescription="@string/ulubione_button_alt" />
 
-                    />
                 <TextView
+                    android:id="@+id/favourite_label"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="15dp"
-                    android:text="Ulubione"
+                    android:layout_marginBottom="12dp"
+                    android:text="@string/ulubione"
                     android:textAlignment="center"
-                    android:textSize="16dp"
+                    android:textSize="15sp"
                     android:textColor="@color/white"
-                    android:textStyle="bold"/>
+                    android:fontFamily="@font/lacquer"
+                    android:letterSpacing="0.05"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
-            </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <RelativeLayout
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:layout_marginTop="370dp"
-                android:layout_marginHorizontal="18dp"
-                android:layout_alignParentLeft="true"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/water_wrapper"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 android:background="@drawable/gradient_categories"
-                >
+                android:layout_marginTop="30dp"
+                app:layout_constraintTop_toBottomOf="@id/zestawy_wrapper"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/measurements_wrapper">
+
                 <ImageButton
                     android:id="@+id/water_btn"
-                    android:layout_width="62dp"
-                    android:layout_height="62dp"
-                    android:layout_marginHorizontal="38dp"
-                    android:layout_marginTop="21dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:background="@drawable/ic_water"
+                    android:layout_marginBottom="10dp"
+                    android:contentDescription="@string/woda_button_alt"
+                    app:layout_constraintBottom_toTopOf="@+id/water_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"/>
 
-                    />
                 <TextView
-                    android:id="@+id/textview"
+                    android:id="@+id/water_label"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="15dp"
-                    android:text="Woda"
+                    android:text="@string/woda"
                     android:textAlignment="center"
-                    android:textSize="16dp"
+                    android:layout_marginBottom="12dp"
                     android:textColor="@color/white"
-                    android:textStyle="bold"/>
+                    android:textSize="15sp"
+                    android:fontFamily="@font/lacquer"
+                    android:letterSpacing="0.05"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
 
-            </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <RelativeLayout
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:layout_marginTop="370dp"
-                android:layout_marginHorizontal="18dp"
-                android:layout_alignParentRight="true"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/measurements_wrapper"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/gradient_categories"
+                app:layout_constraintLeft_toRightOf="@+id/water_wrapper"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/favourite_wrapper"
                 >
+
                 <ImageButton
                     android:id="@+id/measurements_btn"
-                    android:layout_width="76dp"
-                    android:layout_height="76dp"
-                    android:layout_marginHorizontal="32dp"
-                    android:layout_marginTop="21dp"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
                     android:background="@drawable/ic_measurements"
+                    app:layout_constraintBottom_toTopOf="@+id/measurements_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:contentDescription="@string/pomiar_ciala_alt" />
 
-                    />
                 <TextView
+                    android:id="@+id/measurements_label"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="15dp"
-                    android:text="Pomiary ciała"
+                    android:layout_marginBottom="12dp"
+                    android:text="@string/pomiary_ciala"
                     android:textAlignment="center"
-                    android:textSize="16dp"
+                    android:textSize="15sp"
                     android:textColor="@color/white"
-                    android:textStyle="bold"/>
+                    android:fontFamily="@font/lacquer"
+                    android:letterSpacing="0.05"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:layout_marginTop="540dp"
-                android:layout_marginHorizontal="18dp"
-                android:layout_alignParentLeft="true"
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dishcat_wrapper"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 android:background="@drawable/gradient_categories"
-                >
+                android:layout_marginTop="30dp"
+                app:layout_constraintTop_toBottomOf="@id/water_wrapper"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/daily_wrapper">
+
                 <ImageButton
                     android:id="@+id/dishcat_btn"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:layout_marginHorizontal="37dp"
-                    android:layout_marginTop="22dp"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_marginBottom="5dp"
                     android:background="@drawable/ic_category"
+                    android:contentDescription="@string/kategorie_button_alt"
+                    app:layout_constraintBottom_toTopOf="@+id/dishcat_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"/>
 
-                    />
                 <TextView
+                    android:id="@+id/dishcat_label"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="15dp"
-                    android:text="Kategorie"
+                    android:text="@string/kategorie"
                     android:textAlignment="center"
-                    android:textSize="16dp"
+                    android:layout_marginBottom="12dp"
                     android:textColor="@color/white"
-                    android:textStyle="bold"/>
+                    android:textSize="15sp"
+                    android:fontFamily="@font/lacquer"
+                    android:letterSpacing="0.05"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
 
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:layout_marginTop="540dp"
-                android:layout_marginHorizontal="18dp"
-                android:layout_alignParentRight="true"
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/daily_wrapper"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/gradient_categories"
+                app:layout_constraintLeft_toRightOf="@+id/dishcat_wrapper"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/measurements_wrapper"
                 >
+
                 <ImageButton
                     android:id="@+id/daily_btn"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:layout_marginHorizontal="37dp"
-                    android:layout_marginTop="23dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="5dp"
                     android:background="@drawable/ic_calendar"
+                    app:layout_constraintBottom_toTopOf="@+id/daily_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:contentDescription="@string/pomiar_ciala_alt" />
 
-                    />
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="15dp"
-                    android:text="Lista na dzień"
+                    android:id="@+id/daily_label"
+                    android:layout_width="80dp"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/lista_na_dzien"
                     android:textAlignment="center"
-                    android:textSize="16dp"
+                    android:textSize="15sp"
                     android:textColor="@color/white"
-                    android:textStyle="bold"/>
+                    android:fontFamily="@font/lacquer"
+                    android:letterSpacing="0.05"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"/>
 
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:layout_marginTop="710dp"
-                android:layout_marginHorizontal="18dp"
-                android:layout_alignParentLeft="true"
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/share_wrapper"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 android:background="@drawable/gradient_categories"
-                >
+                android:layout_marginTop="30dp"
+                app:layout_constraintTop_toBottomOf="@id/dishcat_wrapper"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/tips_wrapper">
+
                 <ImageButton
                     android:id="@+id/share_btn"
-                    android:layout_width="76dp"
-                    android:layout_height="76dp"
-                    android:layout_marginHorizontal="32dp"
-                    android:layout_marginTop="21dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginBottom="5dp"
                     android:background="@drawable/ic_share"
+                    android:contentDescription="@string/udostepnij_button_alt"
+                    app:layout_constraintBottom_toTopOf="@+id/share_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"/>
 
-                    />
                 <TextView
+                    android:id="@+id/share_label"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="15dp"
-                    android:text="Udostępnij"
+                    android:text="@string/udostepnij"
                     android:textAlignment="center"
-                    android:textSize="16dp"
+                    android:layout_marginBottom="12dp"
                     android:textColor="@color/white"
-                    android:textStyle="bold"/>
+                    android:textSize="15sp"
+                    android:fontFamily="@font/lacquer"
+                    android:letterSpacing="0.05"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
 
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:layout_marginTop="710dp"
-                android:layout_marginHorizontal="18dp"
-                android:layout_alignParentRight="true"
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/tips_wrapper"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/gradient_categories"
+                app:layout_constraintLeft_toRightOf="@+id/share_wrapper"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/daily_wrapper"
                 >
+
                 <ImageButton
                     android:id="@+id/tips_btn"
-                    android:layout_width="76dp"
-                    android:layout_height="76dp"
-                    android:layout_marginHorizontal="32dp"
-                    android:layout_marginTop="21dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:background="@drawable/ic_tips"
+                    app:layout_constraintBottom_toTopOf="@+id/tips_label"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:contentDescription="@string/podpowiedzi_button_alt" />
 
-                    />
                 <TextView
+                    android:id="@+id/tips_label"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="15dp"
-                    android:text="Podpowiedzi"
+                    android:layout_marginBottom="12dp"
+                    android:text="@string/podpowiedzi"
                     android:textAlignment="center"
-                    android:textSize="16dp"
+                    android:textSize="15sp"
                     android:textColor="@color/white"
-                    android:textStyle="bold"/>
+                    android:fontFamily="@font/lacquer"
+                    android:letterSpacing="0.05"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
-            </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+<!--            <RelativeLayout-->
+<!--                android:layout_width="140dp"-->
+<!--                android:layout_height="140dp"-->
+<!--                android:layout_marginTop="710dp"-->
+<!--                android:layout_marginHorizontal="18dp"-->
+<!--                android:layout_alignParentEnd="true"-->
+<!--                android:background="@drawable/gradient_categories"-->
+<!--                >-->
+<!--                <ImageButton-->
+<!--                    android:id="@+id/tips_btn"-->
+<!--                    android:layout_width="76dp"-->
+<!--                    android:layout_height="76dp"-->
+<!--                    android:layout_marginHorizontal="32dp"-->
+<!--                    android:layout_marginTop="21dp"-->
+<!--                    android:background="@drawable/ic_tips"-->
+<!--                    android:contentDescription="@string/podpowiedzi_button_alt" />-->
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="30dp"-->
+<!--                    android:layout_alignParentBottom="true"-->
+<!--                    android:layout_marginBottom="15dp"-->
+<!--                    android:text="@string/podpowiedzi"-->
+<!--                    android:textAlignment="center"-->
+<!--                    android:textSize="15sp"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:fontFamily="@font/lacquer"-->
+<!--                    android:letterSpacing="0.05" />-->
 
+<!--            </RelativeLayout>-->
 
-
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
 
