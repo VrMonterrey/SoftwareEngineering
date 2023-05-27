@@ -4,14 +4,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_green_main">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/search_panel"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#1e5948"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ImageButton
+            android:id="@+id/goback_btn"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/ic_arrow_left"
+            android:layout_margin="19dp"
+            android:background="@color/transparent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <EditText
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/wyszukaj"
+            android:inputType="text"
+            android:textColorHint="@color/greyLighter"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:maxLength="30"
+            android:background="@color/transparent"
+            app:layout_constraintLeft_toLeftOf="@+id/goback_btn"
+            android:layout_marginHorizontal="60dp"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/products_labels"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#327D68"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/search_panel">
 
         <TextView
             android:layout_width="wrap_content"

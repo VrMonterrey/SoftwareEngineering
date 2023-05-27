@@ -23,6 +23,7 @@ class DishCatActivity : AppCompatActivity(), DishCatAdapter.DishCatAdapterListen
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
+    private lateinit var goback: ImageButton
     private lateinit var profile: ImageButton
 
     private lateinit var catAdapter: DishCatAdapter
@@ -80,6 +81,7 @@ class DishCatActivity : AppCompatActivity(), DishCatAdapter.DishCatAdapterListen
         logout = findViewById(R.id.logout_button)
         home = findViewById(R.id.home_button)
         categories = findViewById(R.id.categories_btn)
+        goback = findViewById(R.id.goback_btn)
         profile = findViewById(R.id.profile_button)
 
         kategorieArr = findViewById(R.id.kategorie_arr_btn)
@@ -96,6 +98,11 @@ class DishCatActivity : AppCompatActivity(), DishCatAdapter.DishCatAdapterListen
         }
 
         categories.setOnClickListener {
+            startActivity(Intent(applicationContext, CategoriesActivity::class.java))
+            finish()
+        }
+
+        goback.setOnClickListener {
             startActivity(Intent(applicationContext, CategoriesActivity::class.java))
             finish()
         }

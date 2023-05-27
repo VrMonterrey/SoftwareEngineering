@@ -40,12 +40,12 @@
             />
 
         <ImageButton
-            android:id="@+id/kategorie_arr_btn"
+            android:id="@+id/create_tip"
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:layout_margin="19dp"
             android:background="@color/transparent"
-            android:src="@drawable/ic_menu_vertical"
+            android:src="@drawable/ic_add2"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
@@ -59,17 +59,6 @@
         app:layout_constraintTop_toBottomOf="@+id/search_panel">
 
     </androidx.recyclerview.widget.RecyclerView>
-    <TextView
-        android:id="@+id/create_tip"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="Dodaj własną podpowiedź"
-        android:textSize="14dp"
-        android:textColor="@color/white"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/tipRecyclerView"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/menu_panel"

@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import java.util.concurrent.atomic.AtomicInteger
 
 
 class ListOfPosilkiActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapterListener {
@@ -87,14 +88,17 @@ class ListOfPosilkiActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapter
                 val searchTerm = s.toString().lowercase()
 
                 val database = FirebaseDatabase.getInstance()
-                val filteredList = mutableListOf<Posilki>()
+
+                if (searchTerm.isEmpty()) {
+                    dishAdapter.updateData(dishList)
+                    return
+                }
+
+                val dishesMatchedByName = dishList.filter { it.name.lowercase().contains(searchTerm) }.toMutableList()
+                val dishesMatchedByProduct = mutableListOf<Posilki>()
+                val asyncTasksCount = AtomicInteger(dishList.size)
 
                 for (dish in dishList) {
-                    if (dish.name.lowercase().contains(searchTerm)) {
-                        filteredList.add(dish)
-                        continue
-                    }
-
                     // Listen for SkladPosilku data
                     val skladPosilkuRef = database.getReference("composition").orderByChild("posilkiId").equalTo(dish.id)
                     skladPosilkuRef.addListenerForSingleValueEvent(object: ValueEventListener {
@@ -108,10 +112,13 @@ class ListOfPosilkiActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapter
                                     override fun onDataChange(skladnikDataSnapshot: DataSnapshot) {
                                         val skladnik = skladnikDataSnapshot.getValue(Skladnik::class.java) ?: return
 
-                                        if (skladnik.name.lowercase().contains(searchTerm)) {
-                                            filteredList.add(dish)
-                                            // Notify adapter
-                                            dishAdapter.updateData(filteredList)
+                                        if (skladnik.name.lowercase().contains(searchTerm) && !dishesMatchedByName.contains(dish)) {
+                                            dishesMatchedByProduct.add(dish)
+                                        }
+
+                                        if (asyncTasksCount.decrementAndGet() == 0) {
+                                            val combinedList = (dishesMatchedByName + dishesMatchedByProduct).distinct()
+                                            dishAdapter.updateData(combinedList as MutableList<Posilki>)
                                         }
                                     }
 
@@ -182,9 +189,24 @@ class ListOfPosilkiActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapter
 
     override fun onDeleteClick(position: Int) {
         val dish = dishList[position]
-        dish.id?.let {
-            val dishRef = database.getReference("dishes/$it")
+        dish.id?.let { dishId ->
+            val dishRef = database.getReference("dishes/$dishId")
             dishRef.removeValue().addOnSuccessListener {
+
+                // Deleting DailyNutrition nodes
+                val dailyNutritionRef = database.getReference("scheduled")
+                val query = dailyNutritionRef.orderByChild("posilekId").equalTo(dishId)
+                query.addListenerForSingleValueEvent(object: ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        for (snapshot in dataSnapshot.children) {
+                            snapshot.ref.removeValue()
+                        }
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                    }
+                })
+
                 Toast.makeText(this, "Posiłek został pomyślnie usunięty", Toast.LENGTH_SHORT).show()
             }
                 .addOnFailureListener {
