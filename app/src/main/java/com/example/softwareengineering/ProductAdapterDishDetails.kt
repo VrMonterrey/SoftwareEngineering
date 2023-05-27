@@ -27,11 +27,11 @@ class ProductAdapterDishDetails(
         val currentAmount = skladnikAmounts[position]
 
         holder.nameTextView.text = currentItem.name
-        holder.caloriesTextView.text = "Calories: ${currentItem.calories}"
-        holder.proteinsTextView.text = "Proteins: ${currentItem.protein}"
-        holder.carbsTextView.text = "Carbs: ${currentItem.carbs}"
-        holder.fatsTextView.text = "Fats: ${currentItem.fat}"
-        holder.amountTextView.text = "Amount: $currentAmount grams"
+        holder.caloriesTextView.text = "${currentItem.calories}kcal"
+        holder.proteinsTextView.text = "Białko: ${currentItem.protein}"
+        holder.carbsTextView.text = "Węglowodany: ${currentItem.carbs}"
+        holder.fatsTextView.text = "Tłuszcze: ${currentItem.fat}"
+        holder.amountTextView.text = "${currentAmount}g"
     }
 
     override fun getItemCount(): Int = productList.size

@@ -14,12 +14,13 @@
         android:text="Product Name"
         android:textSize="14sp"
         android:textColor="@color/white"
+        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:paddingBottom="10dp"/>
 
     <TextView
-        android:id="@+id/product_amount"
+        android:id="@+id/kalorii_e_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0g"
@@ -32,14 +33,13 @@
 
 
     <TextView
-        android:id="@+id/kalorii_e_text"
+        android:id="@+id/product_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Calories: "
         android:textColor="@color/white"
-        android:textSize="10sp"
-        app:layout_constraintTop_toBottomOf="@+id/product_name"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:textSize="14sp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0"/>
 
@@ -51,7 +51,7 @@
         android:textColor="@color/white"
         android:textSize="10sp"
         app:layout_constraintTop_toBottomOf="@+id/product_name"
-        app:layout_constraintLeft_toRightOf="@id/kalorii_e_text"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.1"/>
 

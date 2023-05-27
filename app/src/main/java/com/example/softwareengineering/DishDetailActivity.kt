@@ -310,17 +310,16 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
 
 
 
-        // List of "składniki"
         productRecyclerView = findViewById(R.id.productRecyclerView)
         productAdapter = ProductAdapterDishDetails(mutableListOf(), mutableListOf(),this)
         productRecyclerView.adapter = productAdapter
 
-        database2 = FirebaseDatabase.getInstance()
-        productRef = FirebaseDatabase.getInstance().getReference("dishes").child(dishId).child("composition")
+        val compositionsRef = FirebaseDatabase.getInstance().getReference("composition")
+        val query = compositionsRef.orderByChild("posilkiId").equalTo(dishId)
 
         productList = mutableListOf()
 
-        productRef.addValueEventListener(object : ValueEventListener {
+        query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val tasks = mutableListOf<Task<*>>()
                 val productAmountMap = mutableMapOf<Skladnik, Int>()
