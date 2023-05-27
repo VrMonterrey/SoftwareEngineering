@@ -40,12 +40,7 @@ class CreateTipActivity : AppCompatActivity() {
             val currentUser = FirebaseAuth.getInstance().currentUser
             val currentUserId = currentUser?.uid
 
-            val database = Firebase.database.reference
-            val userIdForAvatar = currentUserId ?: ""
 
-            database.child("users").child(userIdForAvatar).get().addOnSuccessListener { dataSnapshot ->
-                val userData = dataSnapshot.value as? Map<*, *>
-                userPhotoUrl = userData?.get("photoUrl") as? String
 
                 if (Topic.isNotEmpty() && Text.isNotEmpty()) {
                     val database = Firebase.database.reference
@@ -54,7 +49,6 @@ class CreateTipActivity : AppCompatActivity() {
                         topic = Topic,
                         text = Text,
                         userId = currentUserId,
-                        userPhotoUrl = userPhotoUrl
                     )
 
                     if (tip.id != null) {
@@ -79,9 +73,6 @@ class CreateTipActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(this, "Wszystkie pola muszą być wypełnione poprawnie", Toast.LENGTH_SHORT).show()
                 }
-            }.addOnFailureListener { error ->
-                Log.e("Firebase", "Failed to get user data: ${error.message}")
-            }
         }
 
         logout = findViewById(R.id.logout_button)

@@ -1,3 +1,5 @@
+import android.content.ContentValues
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +16,11 @@ import com.example.softwareengineering.model.Tip
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import model.User
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -44,14 +48,29 @@ class TipsAdapter(
 
     override fun onBindViewHolder(holder: TipViewHolder, position: Int) {
         val currentItem = tipList[position]
+        val userId = currentItem.userId
 
-        val photoUrl = currentItem.userPhotoUrl
 
-        if(photoUrl != ""){
-            Glide.with(holder.itemView.context)
-                .load(photoUrl)
-                .apply(RequestOptions.circleCropTransform())
-                .into(holder.tipUserImage)
+        val usersRef = FirebaseDatabase.getInstance().getReference("users")
+
+        if (userId != null) {
+            usersRef.child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(userSnapshot: DataSnapshot) {
+                    val user = userSnapshot.getValue(User::class.java)
+                    val photoUrl = user?.photoUrl
+
+                    if (!photoUrl.isNullOrEmpty()) {
+                        Glide.with(holder.itemView.context)
+                            .load(photoUrl)
+                            .apply(RequestOptions.circleCropTransform())
+                            .into(holder.tipUserImage)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.w(ContentValues.TAG, "Failed to read user.", error.toException())
+                }
+            })
         }
 
         holder.tipTopic.text = currentItem.topic

@@ -385,18 +385,12 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
             val database = Firebase.database.reference
             val commentId = database.child("dishes").child(dishId).child("comments").push().key
 
-            val userIdForAvatar = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-
-            database.child("users").child(userIdForAvatar).get().addOnSuccessListener { dataSnapshot ->
-                val userData = dataSnapshot.value as? Map<*, *>
-                userPhotoUrl = userData?.get("photoUrl") as? String
-
+            if (text.isNotEmpty()) {
                 val comment = currentUserId?.let { it1 ->
                     Comment(
                         id = commentId,
                         text = text,
                         ocena = selectedItem,
-                        userPhotoUrl = userPhotoUrl,
                         userId = it1,
                         posilekId = dishId
                     )
@@ -436,12 +430,10 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
                             }
                     }
                 }
-            }.addOnFailureListener { error ->
-                Log.e("Firebase", "Failed to get user data: ${error.message}")
-            }
-
-
-        }
+                } else {
+                    Toast.makeText(this, "Należy wpisać tekst", Toast.LENGTH_SHORT).show()
+                }
+                    }
 
         //Comments list
         val commentsRef = FirebaseDatabase.getInstance().reference.child("dishes").child(dishId).child("comments")

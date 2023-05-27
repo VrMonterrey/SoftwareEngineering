@@ -6,7 +6,6 @@ data class Comment(
     val ocena: Int = 0,
     val date: Long = System.currentTimeMillis(),
 
-    val userPhotoUrl: String? = "",
     val userId: String = "",
     val posilekId: String = ""
 )
