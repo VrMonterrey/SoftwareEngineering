@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.softwareengineering.model.*
@@ -202,31 +203,45 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
 
             val timePickerDialog = TimePickerDialog(context, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
                 val timeToEat = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute)
-                val database = FirebaseDatabase.getInstance()
-                val dailyNutritionRef = database.getReference("scheduled")
 
-                // Generate a unique key for the new dailyNutrition entry
-                val newDailyNutritionKey = dailyNutritionRef.push().key
+                val daysOfWeek = arrayOf("Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela")
 
-                val dailyNutrition = DailyNutrition(
-                    id = newDailyNutritionKey,
-                    time = timeToEat,
-                    userId = currentUserId,
-                    posilekId = dishId
-                )
-                if (newDailyNutritionKey != null) {
-                    dailyNutritionRef.child(newDailyNutritionKey).setValue(dailyNutrition)
-                        .addOnSuccessListener {
-                            Toast.makeText(applicationContext, "Posiłek dodany do listy na dzień pomyślnie", Toast.LENGTH_SHORT).show()
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(
-                                applicationContext,
-                                "Błąd podczas dodawania posiłka: ${it.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                val builder = AlertDialog.Builder(context)
+                builder.setTitle("Wybierz dzień tygodnia")
+                builder.setItems(daysOfWeek) { _, selectedDayIndex ->
+                    val selectedDayOfWeek = selectedDayIndex + 1 // Adding 1 to make it 1-based index
+
+                    val database = FirebaseDatabase.getInstance()
+                    val dailyNutritionRef = database.getReference("scheduled")
+
+                    // Generate a unique key for the new dailyNutrition entry
+                    val newDailyNutritionKey = dailyNutritionRef.push().key
+
+                    val dailyNutrition = DailyNutrition(
+                        id = newDailyNutritionKey,
+                        time = timeToEat,
+                        day = selectedDayOfWeek,
+                        userId = currentUserId,
+                        posilekId = dishId
+                    )
+
+                    // Save the dailyNutrition object to the database
+                    if (newDailyNutritionKey != null) {
+                        dailyNutritionRef.child(newDailyNutritionKey).setValue(dailyNutrition)
+                            .addOnSuccessListener {
+                                Toast.makeText(applicationContext, "Posiłek dodany do listy na dzień pomyślnie", Toast.LENGTH_SHORT).show()
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Błąd podczas dodawania posiłka: ${it.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                    }
                 }
+
+                builder.create().show()
             }, currentHour, currentMinute, false)
 
             timePickerDialog.show()

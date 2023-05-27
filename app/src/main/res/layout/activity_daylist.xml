@@ -5,21 +5,103 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_green_main">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/search_panel"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#1e5948"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/monday"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/ic_monday"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/tuesday"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:backgroundTint="@color/white"
+            android:layout_marginEnd="5dp"/>
+        <ImageButton
+            android:id="@+id/tuesday"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/ic_tuesday"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/wednesday"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:backgroundTint="@color/white"
+            android:layout_marginEnd="5dp"/>
+        <ImageButton
+            android:id="@+id/wednesday"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/ic_wednesday"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/thursday"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:backgroundTint="@color/white"
+            android:layout_marginEnd="5dp"/>
+        <ImageButton
+            android:id="@+id/thursday"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_thursday"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:backgroundTint="@color/white"
+            android:layout_marginEnd="5dp"/>
+        <ImageButton
+            android:id="@+id/friday"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/ic_friday"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/thursday"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:backgroundTint="@color/white"
+            android:layout_marginStart="5dp"/>
+        <ImageButton
+            android:id="@+id/saturday"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/ic_saturday"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/friday"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:backgroundTint="@color/white"
+            android:layout_marginStart="5dp"/>
+        <ImageButton
+            android:id="@+id/sunday"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/ic_sunday"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/saturday"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:backgroundTint="@color/white"
+            android:layout_marginStart="5dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <ScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_panel"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="120dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="70dp"
         android:background="@drawable/rounded_green"
         android:padding="15dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             >
 
             <androidx.recyclerview.widget.RecyclerView
