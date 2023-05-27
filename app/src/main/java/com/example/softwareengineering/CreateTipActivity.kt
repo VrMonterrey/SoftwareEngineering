@@ -1,10 +1,12 @@
 package com.example.softwareengineering
 
 import android.content.Intent
+import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
@@ -28,6 +30,26 @@ class CreateTipActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_tip)
+        val rootView = findViewById<ScrollView>(R.id.scroll_view)
+        rootView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                val r = Rect()
+                rootView.getWindowVisibleDisplayFrame(r)
+                val screenHeight = rootView.rootView.height
+
+                // r.bottom is the position above soft keypad or device button.
+                // if keypad is shown, the r.bottom is smaller than that before.
+                val keypadHeight = screenHeight - r.bottom
+
+                if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
+                    // keyboard is opened
+                    rootView.setPadding(0, 0, 0, keypadHeight-300)
+                } else {
+                    // keyboard is closed
+                    rootView.setPadding(0, 0, 0, 0)
+                }
+            }
+        })
 
         val addButton = findViewById<ImageButton>(R.id.submit_btn)
         addButton.setOnClickListener {
