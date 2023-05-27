@@ -14,6 +14,8 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.softwareengineering.model.*
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
@@ -302,12 +304,11 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
         productRef = FirebaseDatabase.getInstance().getReference("dishes").child(dishId).child("composition")
 
         productList = mutableListOf()
-        val skladnikAmounts = mutableListOf<Int>()
 
         productRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                productList.clear()
-                val products = mutableListOf<Skladnik>()
+                val tasks = mutableListOf<Task<*>>()
+                val productAmountMap = mutableMapOf<Skladnik, Int>()
 
                 for (skladPosilkiSnapshot in snapshot.children) {
                     val skladPosilki = skladPosilkiSnapshot.getValue(SkladPosilku::class.java)
@@ -316,28 +317,25 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
                         val amountInGrams = it.amount
 
                         val skladnikRef = FirebaseDatabase.getInstance().getReference("products").child(skladnikId)
-                        skladnikRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                            override fun onDataChange(skladnikSnapshot: DataSnapshot) {
-                                val skladnik = skladnikSnapshot.getValue(Skladnik::class.java)
-                                skladnik?.let { skladnik ->
-                                    skladnikAmounts.add(amountInGrams)
-                                    products.add(skladnik)
-                                    productAdapter.updateData(productList, skladnikAmounts)
-                                }
-                            }
-
-                            override fun onCancelled(error: DatabaseError) {
-                                Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
-                            }
-                        })
+                        val task = skladnikRef.get().addOnSuccessListener { skladnikSnapshot ->
+                            val skladnik = skladnikSnapshot.getValue(Skladnik::class.java)
+                            skladnik?.let { productAmountMap[it] = amountInGrams }
+                        }
+                        tasks.add(task)
                     }
+                }
+
+                Tasks.whenAllComplete(tasks).addOnCompleteListener {
+                    productList.clear()
+                    productList.addAll(productAmountMap.keys)
+                    val skladnikAmounts = productAmountMap.values.toMutableList()
+                    productAdapter.updateData(productList, skladnikAmounts)
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
             }
-
         })
 
 

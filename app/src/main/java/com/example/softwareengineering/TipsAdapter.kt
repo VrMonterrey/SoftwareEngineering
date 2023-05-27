@@ -2,9 +2,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.softwareengineering.R
 import com.example.softwareengineering.model.Skladnik
 import com.example.softwareengineering.model.Tip
@@ -42,6 +45,15 @@ class TipsAdapter(
     override fun onBindViewHolder(holder: TipViewHolder, position: Int) {
         val currentItem = tipList[position]
 
+        val photoUrl = currentItem.userPhotoUrl
+
+        if(photoUrl != ""){
+            Glide.with(holder.itemView.context)
+                .load(photoUrl)
+                .apply(RequestOptions.circleCropTransform())
+                .into(holder.tipUserImage)
+        }
+
         holder.tipTopic.text = currentItem.topic
         holder.tipDescription.text = currentItem.text
         currentItem.userId?.let { holder.bindEmail(it) }
@@ -77,6 +89,7 @@ class TipsAdapter(
         val tipDescription: TextView = itemView.findViewById(R.id.tip_description)
         val tipTopic: TextView = itemView.findViewById(R.id.tip_topic)
         val tipUserName: TextView = itemView.findViewById(R.id.tip_user_name)
+        val tipUserImage: ImageView = itemView.findViewById(R.id.tip_user_image)
         val tipDate: TextView = itemView.findViewById(R.id.tip_date)
         val deleteButton: AppCompatImageView = itemView.findViewById(R.id.remove_btn)
         val editButton: AppCompatImageView = itemView.findViewById(R.id.edit_btn)

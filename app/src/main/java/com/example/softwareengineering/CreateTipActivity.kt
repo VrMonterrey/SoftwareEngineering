@@ -3,6 +3,7 @@ package com.example.softwareengineering
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
@@ -21,6 +22,7 @@ class CreateTipActivity : AppCompatActivity() {
     private lateinit var addButton: ImageButton
 
     private lateinit var goback: ImageButton
+    private var userPhotoUrl: String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -38,36 +40,47 @@ class CreateTipActivity : AppCompatActivity() {
             val currentUser = FirebaseAuth.getInstance().currentUser
             val currentUserId = currentUser?.uid
 
-            if (Topic.isNotEmpty() && Text.isNotEmpty()) {
-                val database = Firebase.database.reference
-                val tip = Tip(
-                    id = database.child("tips").push().key,
-                    topic = Topic,
-                    text = Text,
-                    userId = currentUserId
-                )
+            val database = Firebase.database.reference
+            val userIdForAvatar = currentUserId ?: ""
 
-                if (tip.id != null) {
-                    database.child("tips").child(tip.id!!).setValue(tip)
-                        .addOnSuccessListener {
-                            Toast.makeText(
-                                this,
-                                "Nowa podpowiedź dodana pomyślnie",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            topic.text.clear()
-                            text.text.clear()
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(
-                                this,
-                                "Błąd podczas dodawania podpowiedzi: ${it.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+            database.child("users").child(userIdForAvatar).get().addOnSuccessListener { dataSnapshot ->
+                val userData = dataSnapshot.value as? Map<*, *>
+                userPhotoUrl = userData?.get("photoUrl") as? String
+
+                if (Topic.isNotEmpty() && Text.isNotEmpty()) {
+                    val database = Firebase.database.reference
+                    val tip = Tip(
+                        id = database.child("tips").push().key,
+                        topic = Topic,
+                        text = Text,
+                        userId = currentUserId,
+                        userPhotoUrl = userPhotoUrl
+                    )
+
+                    if (tip.id != null) {
+                        database.child("tips").child(tip.id!!).setValue(tip)
+                            .addOnSuccessListener {
+                                Toast.makeText(
+                                    this,
+                                    "Nowa podpowiedź dodana pomyślnie",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                topic.text.clear()
+                                text.text.clear()
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(
+                                    this,
+                                    "Błąd podczas dodawania podpowiedzi: ${it.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                    }
+                } else {
+                    Toast.makeText(this, "Wszystkie pola muszą być wypełnione poprawnie", Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                Toast.makeText(this, "Wszystkie pola muszą być wypełnione poprawnie", Toast.LENGTH_SHORT).show()
+            }.addOnFailureListener { error ->
+                Log.e("Firebase", "Failed to get user data: ${error.message}")
             }
         }
 

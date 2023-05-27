@@ -209,10 +209,23 @@ class FavouriteActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapterList
             val dishRef = database.getReference("dishes/$dishId")
             dishRef.removeValue().addOnSuccessListener {
 
-                // Deleting DailyNutrition nodes
+
                 val dailyNutritionRef = database.getReference("scheduled")
                 val query = dailyNutritionRef.orderByChild("posilekId").equalTo(dishId)
                 query.addListenerForSingleValueEvent(object: ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        for (snapshot in dataSnapshot.children) {
+                            snapshot.ref.removeValue()
+                        }
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                    }
+                })
+
+                val comRef = database.getReference("composition")
+                val comQuery = comRef.orderByChild("posilkiId").equalTo(dishId)
+                comQuery.addListenerForSingleValueEvent(object: ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         for (snapshot in dataSnapshot.children) {
                             snapshot.ref.removeValue()
