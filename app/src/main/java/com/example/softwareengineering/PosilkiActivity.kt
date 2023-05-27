@@ -176,6 +176,13 @@ class PosilkiActivity : AppCompatActivity() {
         val dialogLayout = LayoutInflater.from(this).inflate(R.layout.dialog_layout, null)
         val recyclerView = dialogLayout.findViewById<RecyclerView>(R.id.ingredients_rv)
 
+        recyclerView.apply {
+            // Set the max height of the RecyclerView
+            val displayMetrics = context.resources.displayMetrics
+            layoutParams.height = (displayMetrics.heightPixels * 0.5).toInt() // This sets the max height to 50% of screen height
+            requestLayout()
+        }
+
         val database = Firebase.database.reference
         val productsRef = database.child("products")
         val productsListener = object : ValueEventListener {
@@ -210,13 +217,14 @@ class PosilkiActivity : AppCompatActivity() {
             .setMessage("Nazwa \nKalorie | Białko | Weglewodany | Tłuszcz")
             .setView(dialogLayout)
             .setPositiveButton("OK") { dialog, which ->
-                amounts = adapter.getAmountMap()
+                amounts = adapter.amountMap
             }
             .setNegativeButton("Cancel") { dialog, which ->
 
             }
             .create()
             .show()
+
 
         addButton.setOnClickListener {
             dishName = findViewById<EditText>(R.id.name_edit_text)

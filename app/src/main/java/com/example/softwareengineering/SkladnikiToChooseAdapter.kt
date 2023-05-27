@@ -18,7 +18,7 @@ class SkladnikiToChooseAdapter(
 ) : RecyclerView.Adapter<SkladnikiToChooseAdapter.IngredientViewHolder>() {
 
     private val skladPosilkuList: MutableList<SkladPosilku> = mutableListOf()
-    private val amountMap: MutableMap<String?, Int> = mutableMapOf()
+    val amountMap: MutableMap<String?, Int> = mutableMapOf()
     fun setData(newProducts: List<Skladnik>) {
         products.clear()
         products.addAll(newProducts)
@@ -32,9 +32,7 @@ class SkladnikiToChooseAdapter(
         return skladPosilkuList
     }
 
-    fun getAmountMap(): Map<String?, Int> {
-        return amountMap
-    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.skladnki_to_choose_item, parent, false)
         return IngredientViewHolder(view)

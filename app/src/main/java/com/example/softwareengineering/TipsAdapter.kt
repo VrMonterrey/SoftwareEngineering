@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -83,15 +84,24 @@ class TipsAdapter(
         val currentUser = FirebaseAuth.getInstance().currentUser
         val currentUserId = currentUser?.uid
 
+
         if (currentUserId == currentItem.userId) {
             holder.deleteButton.visibility = View.VISIBLE
             holder.deleteButton.isEnabled = true
             holder.editButton.visibility = View.VISIBLE
             holder.editButton.isEnabled = true
+            holder.deleteNonActiveButton.visibility = View.GONE
+            holder.deleteNonActiveButton.isEnabled = false
+            holder.editNonActiveButton.visibility = View.GONE
+            holder.editNonActiveButton.isEnabled = false
         } else {
-            holder.deleteButton.visibility = View.INVISIBLE
+            holder.deleteNonActiveButton.visibility = View.VISIBLE
+            holder.deleteNonActiveButton.isEnabled = true
+            holder.editNonActiveButton.visibility = View.VISIBLE
+            holder.editNonActiveButton.isEnabled = true
+            holder.deleteButton.visibility = View.GONE
             holder.deleteButton.isEnabled = false
-            holder.editButton.visibility = View.INVISIBLE
+            holder.editButton.visibility = View.GONE
             holder.editButton.isEnabled = false
         }
     }
@@ -111,7 +121,11 @@ class TipsAdapter(
         val tipUserImage: ImageView = itemView.findViewById(R.id.tip_user_image)
         val tipDate: TextView = itemView.findViewById(R.id.tip_date)
         val deleteButton: AppCompatImageView = itemView.findViewById(R.id.remove_btn)
+        val deleteNonActiveButton: AppCompatImageView =
+            itemView.findViewById(R.id.remove_nonactive_btn)
         val editButton: AppCompatImageView = itemView.findViewById(R.id.edit_btn)
+        val editNonActiveButton: AppCompatImageView = itemView.findViewById(R.id.edit_nonactive_btn)
+
         init {
             deleteButton.setOnClickListener {
                 val position = adapterPosition
@@ -125,24 +139,40 @@ class TipsAdapter(
                     listener.onEditClick(position)
                 }
             }
+            deleteNonActiveButton.setOnClickListener {
+                Toast.makeText(
+                    itemView.context,
+                    "Tylko autorzy podpowiedzi mogą usuwać lub edytować podpowiedzi",
+                    Toast.LENGTH_SHORT
+                ).show();
+            }
+            editNonActiveButton.setOnClickListener {
+                Toast.makeText(
+                    itemView.context,
+                    "Tylko autorzy podpowiedzi mogą usuwać lub edytować podpowiedzi",
+                    Toast.LENGTH_SHORT
+                ).show();
+            }
         }
-        fun bindEmail(userId: String) {
-            val database = Firebase.database.reference
-            database.child("users").child(userId).addListenerForSingleValueEvent(object :
-                ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val email = dataSnapshot.child("email").value as? String
-                    if (email != null) {
-                        tipUserName.text = email
-                    }
-                }
 
-                override fun onCancelled(databaseError: DatabaseError) {
-                    //...
-                }
-            })
+            fun bindEmail(userId: String) {
+                val database = Firebase.database.reference
+                database.child("users").child(userId).addListenerForSingleValueEvent(object :
+                    ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val email = dataSnapshot.child("email").value as? String
+                        if (email != null) {
+                            tipUserName.text = email
+                        }
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        //...
+                    }
+                })
+            }
         }
-    }
+
 
     interface TipAdapterListener {
         fun onDeleteClick(position: Int)

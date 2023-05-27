@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.example.softwareengineering.adapter.SkladnikiToChooseAdapter
 import com.example.softwareengineering.model.Posilki
 import com.example.softwareengineering.model.ProductCategory
+import com.example.softwareengineering.model.SkladPosilku
 import com.example.softwareengineering.model.Skladnik
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -81,11 +82,11 @@ class EditDishActivity : AppCompatActivity() {
         // Initialize Firebase database
         database = Firebase.database.reference
 
-
         databaseReference = FirebaseDatabase.getInstance().reference.child("categories")
         categoryList = mutableListOf()
-
-        val categoriesorSpinner: MutableList<String> = mutableListOf()
+        dishId = intent.getStringExtra("posilek") ?: ""
+        val categoriesForSpinner: MutableList<String> = mutableListOf()
+        val categoryIndices = mutableMapOf<String?, Int>()
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -95,54 +96,39 @@ class EditDishActivity : AppCompatActivity() {
                     val category = categorySnapshot.getValue(ProductCategory::class.java)
                     category?.let {
                         categoryList.add(it)
+                        categoriesForSpinner.add(it.name)
+                        categoryIndices[it.id] = categoriesForSpinner.size - 1
                     }
                 }
 
-                for (category in categoryList) {
-                    categoriesorSpinner.add(category.name)
-                }
-
-                val adapter = ArrayAdapter(this@EditDishActivity, R.layout.spinner_item_layout, categoriesorSpinner)
+                val adapter = ArrayAdapter(this@EditDishActivity, R.layout.spinner_item_layout, categoriesForSpinner)
                 categorySpinner.adapter = adapter
 
 
-                categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                        selectedCategory = categoriesorSpinner[position]
-//                        kategoriaText.text = selectedCategory
+                database.child("dishes").child(dishId).addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val dish = snapshot.getValue(Posilki::class.java)
+                        dishName.setText(dish?.name)
+
+                        val categoryId = dish?.category
+                        val selectedCategoryIndex = categoryIndices[categoryId]
+                        if (selectedCategoryIndex != null) {
+                            categorySpinner.setSelection(selectedCategoryIndex)
+                        }
+
+                        Glide.with(applicationContext)
+                            .load(dish?.photoUrl)
+                            .into(imageView)
                     }
 
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.w(TAG, "loadDish:onCancelled", error.toException())
                     }
-                }
+                })
             }
 
             override fun onCancelled(error: DatabaseError) {
-
-            }
-        })
-
-        // Get dish ID from intent
-        dishId = intent.getStringExtra("posilek") ?: ""
-
-        // Retrieve dish data from Firebase database
-        database.child("dishes").child(dishId).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                // Fill fields with dish data
-                val dish = snapshot.getValue(Posilki::class.java)
-                dishName.setText(dish?.name)
-                val selectedCategoryIndex = categoriesorSpinner.indexOf(dish?.category)
-                if (selectedCategoryIndex != -1) {
-                    categorySpinner.setSelection(selectedCategoryIndex)
-                }
-                Glide.with(applicationContext)
-                    .load(dish?.photoUrl)
-                    .into(imageView)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.w(TAG, "loadDish:onCancelled", error.toException())
+                Log.w(TAG, "loadCategories:onCancelled", error.toException())
             }
         })
 
@@ -162,14 +148,14 @@ class EditDishActivity : AppCompatActivity() {
 
                 database.child("dishes").child(dishId).setValue(dish)
                     .addOnSuccessListener {
-                        Toast.makeText(this, "Dish updated successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Posiłek pomyślnie zmieniony", Toast.LENGTH_SHORT).show()
                         finish()
                     }
                     .addOnFailureListener {
                         Toast.makeText(this, "Failed to update dish", Toast.LENGTH_SHORT).show()
                     }
             } else {
-                Toast.makeText(this, "Please fill in all the required fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Wszystkie pola muszą być wypełnione", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -215,19 +201,45 @@ class EditDishActivity : AppCompatActivity() {
         val dialogLayout = LayoutInflater.from(this).inflate(R.layout.dialog_layout, null)
         val recyclerView = dialogLayout.findViewById<RecyclerView>(R.id.ingredients_rv)
 
+        recyclerView.apply {
+            val displayMetrics = context.resources.displayMetrics
+            layoutParams.height = (displayMetrics.heightPixels * 0.5).toInt()
+            requestLayout()
+        }
+
         val database = FirebaseDatabase.getInstance()
-        val productsRef = database.getReference("products")
-        val productsListener = object : ValueEventListener {
+        val skladPosilkuRef = database.getReference("composition")
+        val skladPosilkuListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val products = dataSnapshot.children.mapNotNull { it.getValue(Skladnik::class.java) }
-                adapter.setData(products)
+                val skladPosilkuList = dataSnapshot.children.mapNotNull { it.getValue(SkladPosilku::class.java) }
+                val skladPosilkuMap = skladPosilkuList.associateBy { it.skladnikId }
+
+                val productsRef = database.getReference("products")
+                val productsListener = object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val products = dataSnapshot.children.mapNotNull { it.getValue(Skladnik::class.java) }
+                        for (product in products) {
+                            val skladPosilku = skladPosilkuMap[product.id]
+                            if (skladPosilku != null) {
+                                product.checked = true
+                                adapter.amountMap[product.id] = skladPosilku.amount
+                            }
+                        }
+                        adapter.setData(products)
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        Log.w(TAG, "loadIngredients:onCancelled", databaseError.toException())
+                    }
+                }
+                productsRef.addValueEventListener(productsListener)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Log.w(TAG, "loadIngredients:onCancelled", databaseError.toException())
+                Log.w(TAG, "loadSkladPosilku:onCancelled", databaseError.toException())
             }
         }
-        productsRef.addValueEventListener(productsListener)
+        skladPosilkuRef.addValueEventListener(skladPosilkuListener)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -241,7 +253,6 @@ class EditDishActivity : AppCompatActivity() {
         }
 
         recyclerView.adapter = adapter
-
 
         builder.setTitle("Wybierz składniki")
             .setMessage("Klikni checkbpx'a żeby dodać skłądnik")
