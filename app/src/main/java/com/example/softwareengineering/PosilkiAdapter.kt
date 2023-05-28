@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.example.softwareengineering.model.Posilki
+import model.Posilki
 
 class PosilkiAdapter(
     private var posilkiList: MutableList<Posilki>,

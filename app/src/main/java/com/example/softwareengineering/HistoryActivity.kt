@@ -63,9 +63,12 @@ class HistoryActivity : AppCompatActivity(), HistoryAdapter.HistoryAdapterListen
                 for (posilekSnapshot in snapshot.children) {
                     val dish = posilekSnapshot.getValue(Eaten::class.java)
                     dish?.let {
-                        dishes.add(it)
+                        if (it.userId == currentUserId) {
+                            dishes.add(it)
+                        }
                     }
                 }
+                dishes.sortBy { it.date }
                 dishList.addAll(dishes)
                 dishAdapter.updateData(dishes)
             }

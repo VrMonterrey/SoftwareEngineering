@@ -22,7 +22,7 @@ import com.google.firebase.ktx.Firebase
 import model.*
 
 
-class DaylistActivity : AppCompatActivity(), DailyAdapter.PosilkiAdapterListener {
+class DaylistActivity : AppCompatActivity(), DailyAdapter.DailyAdapterListener {
 
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton

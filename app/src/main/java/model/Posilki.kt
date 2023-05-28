@@ -1,6 +1,4 @@
-package com.example.softwareengineering.model
-
-import model.Comment
+package model
 
 data class Posilki(
     val id: String? = "",

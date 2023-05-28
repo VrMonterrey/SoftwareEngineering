@@ -14,7 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.softwareengineering.model.Posilki
+import model.Posilki
 import model.SkladPosilku
 import model.Skladnik
 import com.google.firebase.auth.FirebaseAuth
@@ -46,6 +46,8 @@ class EditDishActivity : AppCompatActivity() {
     private lateinit var databaseReference: DatabaseReference
     private lateinit var categoryList: MutableList<DishCategory>
     private var selectedCategory: String = ""
+    private var dish: Posilki? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +71,10 @@ class EditDishActivity : AppCompatActivity() {
 
         imageView = findViewById<ImageView>(R.id.image_view)
         chooseImageButton = findViewById<Button>(R.id.choose_image_button)
+
+        chooseImageButton.setOnClickListener {
+            galleryLauncher.launch("image/*")
+        }
 
         galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             if (uri != null) {
@@ -105,7 +111,7 @@ class EditDishActivity : AppCompatActivity() {
 
                 database.child("dishes").child(dishId).addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        val dish = snapshot.getValue(Posilki::class.java)
+                        dish = snapshot.getValue(Posilki::class.java)
                         dishName.setText(dish?.name)
 
                         val categoryId = dish?.category
@@ -139,22 +145,29 @@ class EditDishActivity : AppCompatActivity() {
 
             if (name.isNotEmpty() && category.isNotEmpty()) {
 
-                val dish = Posilki(
-                    id = dishId,
-                    name = name,
-                    category = category,
-                    photoUrl = photoUrl,
-                    userId = currentUserId
-                )
+                // If a new image isn't selected, use the existing photoUrl
+                val newPhotoUrl = if (photoUrl.isBlank()) dish?.photoUrl ?: "" else photoUrl
+                dish?.let { it1 ->
+                    val updatedDish = Posilki(
+                        id = dishId,
+                        name = name,
+                        category = category,
+                        photoUrl = newPhotoUrl,
+                        userId = currentUserId,
+                        comments = dish?.comments,
+                        liked = it1.liked
+                    )
 
-                database.child("dishes").child(dishId).setValue(dish)
-                    .addOnSuccessListener {
-                        Toast.makeText(this, "Posiłek pomyślnie zmieniony", Toast.LENGTH_SHORT).show()
-                        finish()
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(this, "Failed to update dish", Toast.LENGTH_SHORT).show()
-                    }
+                    database.child("dishes").child(dishId).setValue(updatedDish)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "Posiłek pomyślnie zmieniony", Toast.LENGTH_SHORT)
+                                .show()
+                            finish()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(this, "Failed to update dish", Toast.LENGTH_SHORT).show()
+                        }
+                }
             } else {
                 Toast.makeText(this, "Wszystkie pola muszą być wypełnione", Toast.LENGTH_SHORT).show()
             }

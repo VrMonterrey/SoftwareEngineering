@@ -10,7 +10,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.softwareengineering.model.Posilki
+import model.Posilki
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 

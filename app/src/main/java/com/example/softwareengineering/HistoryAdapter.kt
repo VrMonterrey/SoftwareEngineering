@@ -52,7 +52,7 @@ class HistoryAdapter(
             override fun onDataChange(snapshot: DataSnapshot) {
                 val category = snapshot.getValue(DishCategory::class.java)
                 if (category != null) {
-                    holder.catTextView.text = "Kategoria:${category.name}"
+                    holder.catTextView.text = "Kategoria: ${category.name}"
                 }
             }
 

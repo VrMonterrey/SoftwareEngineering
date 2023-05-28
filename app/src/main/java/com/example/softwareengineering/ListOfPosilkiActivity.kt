@@ -14,7 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.softwareengineering.model.Posilki
+import model.Posilki
 import model.SkladPosilku
 import model.Skladnik
 import com.google.firebase.auth.FirebaseAuth
