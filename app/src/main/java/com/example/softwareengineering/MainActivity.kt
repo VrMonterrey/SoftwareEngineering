@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import com.example.softwareengineering.model.Eaten
+import com.example.softwareengineering.model.Macros
 import com.example.softwareengineering.model.SkladPosilku
 import com.example.softwareengineering.model.Skladnik
 import com.github.mikephil.charting.charts.BarChart
@@ -27,7 +28,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
-import model.Macros
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -95,19 +95,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Create BarDataSets
-        val caloriesDataSet = BarDataSet(caloriesEntries, "Calories")
+        val caloriesDataSet = BarDataSet(caloriesEntries, "Kalorie")
         caloriesDataSet.color = Color.rgb(104, 241, 175)
         caloriesDataSet.valueTextColor = Color.rgb(104, 241, 175)
 
-        val proteinsDataSet = BarDataSet(proteinsEntries, "Proteins")
+        val proteinsDataSet = BarDataSet(proteinsEntries, "Białko")
         proteinsDataSet.color = Color.rgb(164, 228, 251)
         proteinsDataSet.valueTextColor = Color.rgb(164, 228, 251)
 
-        val carbsDataSet = BarDataSet(carbsEntries, "Carbs")
+        val carbsDataSet = BarDataSet(carbsEntries, "Węglowodany")
         carbsDataSet.color = Color.rgb(242, 247, 158)
         carbsDataSet.valueTextColor = Color.rgb(242, 247, 158)
 
-        val fatsDataSet = BarDataSet(fatsEntries, "Fats")
+        val fatsDataSet = BarDataSet(fatsEntries, "Tłuszcz")
         fatsDataSet.color = Color.rgb(255, 102, 0)
         fatsDataSet.valueTextColor = Color.rgb(255, 102, 0)
 

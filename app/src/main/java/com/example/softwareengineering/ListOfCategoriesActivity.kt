@@ -1,6 +1,5 @@
 package com.example.softwareengineering
 
-import CategoryAdapter
 import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

@@ -1,7 +1,5 @@
 package com.example.softwareengineering
 
-import ProductAdapter
-import TipsAdapter
 import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

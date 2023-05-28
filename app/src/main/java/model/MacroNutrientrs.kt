@@ -1,4 +1,4 @@
-package com.example.softwareengineering
+package com.example.softwareengineering.model
 
 data class MacroNutrients(
     val calories: Double,

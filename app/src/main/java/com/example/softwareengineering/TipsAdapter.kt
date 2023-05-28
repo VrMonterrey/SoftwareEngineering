@@ -1,3 +1,4 @@
+package com.example.softwareengineering
 import android.content.ContentValues
 import android.util.Log
 import android.view.LayoutInflater

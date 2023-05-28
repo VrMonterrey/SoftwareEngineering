@@ -1,7 +1,5 @@
 package com.example.softwareengineering
 
-import MeasurementAdapter
-import ProductAdapter
 import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

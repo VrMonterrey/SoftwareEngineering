@@ -1,3 +1,4 @@
+package com.example.softwareengineering
 import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.NotificationChannel
@@ -12,6 +13,8 @@ import com.example.softwareengineering.R
 import com.example.softwareengineering.model.DailyNutrition
 import java.text.SimpleDateFormat
 import java.util.*
+
+
 
 class NotificationUtils {
     private val CHANNEL_ID = "YourChannelId"

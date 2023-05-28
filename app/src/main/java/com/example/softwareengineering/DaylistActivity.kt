@@ -1,20 +1,17 @@
 package com.example.softwareengineering
 
-import NotificationUtils
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.softwareengineering.model.*
@@ -167,6 +164,16 @@ class DaylistActivity : AppCompatActivity(), DailyAdapter.PosilkiAdapterListener
                 }
             })
     }
+    companion object {
+        private const val SHARED_PREFS = "sharedPrefs"
+        private const val LAST_DAY = "lastDay"
+    }
+    private fun saveDay(day: Int) {
+        val sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putInt(LAST_DAY, day)
+        editor.apply()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_daylist)
@@ -196,27 +203,59 @@ class DaylistActivity : AppCompatActivity(), DailyAdapter.PosilkiAdapterListener
 
 
         monday.setOnClickListener {
-            selectDay(1, monday)
-        }
-        tuesday.setOnClickListener {
-            selectDay(2, tuesday)
-        }
-        wednesday.setOnClickListener {
-            selectDay(3, wednesday)
-        }
-        thursday.setOnClickListener {
-            selectDay(4, thursday)
-        }
-        friday.setOnClickListener {
-            selectDay(5, friday)
-        }
-        saturday.setOnClickListener {
-            selectDay(6, saturday)
-        }
-        sunday.setOnClickListener {
-            selectDay(7, sunday)
+            val day = 1
+            saveDay(day)
+            selectDay(day, monday)
         }
 
+        tuesday.setOnClickListener {
+            val day = 2
+            saveDay(day)
+            selectDay(day, tuesday)
+        }
+
+        wednesday.setOnClickListener {
+            val day = 3
+            saveDay(day)
+            selectDay(day, wednesday)
+        }
+
+        thursday.setOnClickListener {
+            val day = 4
+            saveDay(day)
+            selectDay(day, thursday)
+        }
+
+        friday.setOnClickListener {
+            val day = 5
+            saveDay(day)
+            selectDay(day, friday)
+        }
+
+        saturday.setOnClickListener {
+            val day = 6
+            saveDay(day)
+            selectDay(day, saturday)
+        }
+
+        sunday.setOnClickListener {
+            val day = 7
+            saveDay(day)
+            selectDay(day, sunday)
+        }
+
+        val sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
+        val lastDay = sharedPreferences.getInt(LAST_DAY, 1)
+
+        when(lastDay) {
+            1 -> selectDay(lastDay, monday)
+            2 -> selectDay(lastDay, tuesday)
+            3 -> selectDay(lastDay, wednesday)
+            4 -> selectDay(lastDay, thursday)
+            5 -> selectDay(lastDay, friday)
+            6 -> selectDay(lastDay, saturday)
+            7 -> selectDay(lastDay, sunday)
+        }
 
 
         logout = findViewById(R.id.logout_button)
@@ -320,6 +359,7 @@ class DaylistActivity : AppCompatActivity(), DailyAdapter.PosilkiAdapterListener
 
         val intent = Intent(this, DishDetailActivity::class.java)
         intent.putExtra("posilek", daily.posilekId)
+        intent.putExtra("sourceActivity", "DaylistActivity")
         startActivity(intent)
     }
 

@@ -30,7 +30,7 @@ class ProductAdapterDishDetails(
         holder.caloriesTextView.text = "${currentItem.calories}kcal"
         holder.proteinsTextView.text = "Białko: ${currentItem.protein}"
         holder.carbsTextView.text = "Węglowodany: ${currentItem.carbs}"
-        holder.fatsTextView.text = "Tłuszcze: ${currentItem.fat}"
+        holder.fatsTextView.text = "Tłuszcz: ${currentItem.fat}"
         holder.amountTextView.text = "${currentAmount}g"
     }
 
