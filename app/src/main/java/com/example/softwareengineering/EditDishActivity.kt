@@ -139,11 +139,13 @@ class EditDishActivity : AppCompatActivity() {
         // Save edited dish to Firebase database
         addButton.setOnClickListener {
             val name = dishName.text.toString()
-            val category = categorySpinner.selectedItem.toString()
+            val categoryName = categorySpinner.selectedItem.toString()
+            val category = categoryList.find { it.name == categoryName }
+            val categoryId = category?.id ?: ""
             val currentUser = FirebaseAuth.getInstance().currentUser
             val currentUserId = currentUser?.uid ?: ""
 
-            if (name.isNotEmpty() && category.isNotEmpty()) {
+            if (name.isNotEmpty()) {
 
                 // If a new image isn't selected, use the existing photoUrl
                 val newPhotoUrl = if (photoUrl.isBlank()) dish?.photoUrl ?: "" else photoUrl
@@ -151,7 +153,7 @@ class EditDishActivity : AppCompatActivity() {
                     val updatedDish = Posilki(
                         id = dishId,
                         name = name,
-                        category = category,
+                        category = categoryId,
                         photoUrl = newPhotoUrl,
                         userId = currentUserId,
                         comments = dish?.comments,
