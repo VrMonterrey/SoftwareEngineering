@@ -55,7 +55,7 @@ class EditDishActivity : AppCompatActivity() {
 
         //Dialog window init.
         dialogButton = findViewById(R.id.dialog_btn)
-        dialogButton.setOnClickListener{ showCustomDialog() }
+        dialogButton.setOnClickListener { showCustomDialog() }
 
         // Initialize views
         dishName = findViewById(R.id.name_edit_text)
@@ -71,10 +71,6 @@ class EditDishActivity : AppCompatActivity() {
 
         imageView = findViewById<ImageView>(R.id.image_view)
         chooseImageButton = findViewById<Button>(R.id.choose_image_button)
-
-        chooseImageButton.setOnClickListener {
-            galleryLauncher.launch("image/*")
-        }
 
         galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             if (uri != null) {
@@ -105,30 +101,35 @@ class EditDishActivity : AppCompatActivity() {
                     }
                 }
 
-                val adapter = ArrayAdapter(this@EditDishActivity, R.layout.spinner_item_layout, categoriesForSpinner)
+                val adapter = ArrayAdapter(
+                    this@EditDishActivity,
+                    R.layout.spinner_item_layout,
+                    categoriesForSpinner
+                )
                 categorySpinner.adapter = adapter
 
 
-                database.child("dishes").child(dishId).addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        dish = snapshot.getValue(Posilki::class.java)
-                        dishName.setText(dish?.name)
+                database.child("dishes").child(dishId)
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            dish = snapshot.getValue(Posilki::class.java)
+                            dishName.setText(dish?.name)
 
-                        val categoryId = dish?.category
-                        val selectedCategoryIndex = categoryIndices[categoryId]
-                        if (selectedCategoryIndex != null) {
-                            categorySpinner.setSelection(selectedCategoryIndex)
+                            val categoryId = dish?.category
+                            val selectedCategoryIndex = categoryIndices[categoryId]
+                            if (selectedCategoryIndex != null) {
+                                categorySpinner.setSelection(selectedCategoryIndex)
+                            }
+
+                            Glide.with(applicationContext)
+                                .load(dish?.photoUrl)
+                                .into(imageView)
                         }
 
-                        Glide.with(applicationContext)
-                            .load(dish?.photoUrl)
-                            .into(imageView)
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        Log.w(TAG, "loadDish:onCancelled", error.toException())
-                    }
-                })
+                        override fun onCancelled(error: DatabaseError) {
+                            Log.w(TAG, "loadDish:onCancelled", error.toException())
+                        }
+                    })
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -171,7 +172,8 @@ class EditDishActivity : AppCompatActivity() {
                         }
                 }
             } else {
-                Toast.makeText(this, "Wszystkie pola muszą być wypełnione", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Wszystkie pola muszą być wypełnione", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -211,8 +213,9 @@ class EditDishActivity : AppCompatActivity() {
             galleryLauncher.launch("image/*")
         }
     }
-
+    val amountMap = mutableMapOf<String, Int>()
     private fun showCustomDialog() {
+        amountMap.clear()
         val builder = AlertDialog.Builder(this)
         val dialogLayout = LayoutInflater.from(this).inflate(R.layout.dialog_layout, null)
         val recyclerView = dialogLayout.findViewById<RecyclerView>(R.id.ingredients_rv)
@@ -227,13 +230,15 @@ class EditDishActivity : AppCompatActivity() {
         val skladPosilkuRef = database.getReference("composition")
         val skladPosilkuListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val skladPosilkuList = dataSnapshot.children.mapNotNull { it.getValue(SkladPosilku::class.java) }
+                val skladPosilkuList =
+                    dataSnapshot.children.mapNotNull { it.getValue(SkladPosilku::class.java) }
                 val skladPosilkuMap = skladPosilkuList.associateBy { it.skladnikId }
 
                 val productsRef = database.getReference("products")
                 val productsListener = object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        val products = dataSnapshot.children.mapNotNull { it.getValue(Skladnik::class.java) }
+                        val products =
+                            dataSnapshot.children.mapNotNull { it.getValue(Skladnik::class.java) }
                         for (product in products) {
                             val skladPosilku = skladPosilkuMap[product.id]
                             if (skladPosilku != null) {
@@ -260,9 +265,11 @@ class EditDishActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         val products = mutableListOf<Skladnik>()
-        adapter = SkladnikiToChooseAdapter(products, dishId) { product ->
+        adapter = SkladnikiToChooseAdapter(products, dishId) { product, amount ->
             if (product.checked) {
                 products.add(product)
+                val productId = product.id ?: ""
+                amountMap[productId] = amount
             } else {
                 products.remove(product)
             }
@@ -274,10 +281,29 @@ class EditDishActivity : AppCompatActivity() {
             .setMessage("Kliknij checkbox'a żeby dodać skłądnik")
             .setView(dialogLayout)
             .setPositiveButton("OK") { dialog, which ->
-
+                // On positive button click, iterate through the products
+                for (product in products) {
+                    val skladPosilkuRef = database.getReference("composition").child(dishId).child(product.id!!)
+                    if (product.checked) {
+                        // If the product is checked, update or create the SkladPosilku in Firebase
+                        val amount = amountMap[product.id]
+                        if (amount != null && amount > 0) {  // Make sure that the amount is not null and more than 0
+                            val newSkladPosilku = SkladPosilku(dishId, product.id!!, amount)
+                            skladPosilkuRef.setValue(newSkladPosilku)
+                        } else {
+                            // If amount is 0 or null, remove the SkladPosilku from Firebase
+                            skladPosilkuRef.removeValue()
+                        }
+                    } else {
+                        // If the product is not checked, remove the SkladPosilku from Firebase
+                        skladPosilkuRef.removeValue()
+                    }
+                    // Trigger the ValueEventListener to update the Firebase data
+                    skladPosilkuRef.keepSynced(true)
+                }
             }
             .setNegativeButton("Cancel") { dialog, which ->
-
+                // No action needed on cancel
             }
             .create()
             .show()

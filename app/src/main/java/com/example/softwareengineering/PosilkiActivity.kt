@@ -196,18 +196,19 @@ class PosilkiActivity : AppCompatActivity() {
         }
         productsRef.addValueEventListener(productsListener)
 
+        val amountMap = mutableMapOf<String, Int>()
         recyclerView.layoutManager = LinearLayoutManager(this)
-        var dishId = database.child("dishes").push().key
+        var dishId = database.child("dishes").push().key ?: ""
         val products = mutableListOf<Skladnik>()
-        adapter = dishId?.let {
-            SkladnikiToChooseAdapter(products, it) { product ->
-                if (product.checked) {
-                    products.add(product)
-                } else {
-                    products.remove(product)
-                }
+        adapter = SkladnikiToChooseAdapter(products, dishId) { product, amount ->
+            if (product.checked && amount > 0) {
+                products.add(product)
+                val productId = product.id ?: ""
+                amountMap[productId] = amount
+            } else {
+                products.remove(product)
             }
-        }!!
+        }
 
         recyclerView.adapter = adapter
 
@@ -258,15 +259,16 @@ class PosilkiActivity : AppCompatActivity() {
                         val collectionRef = database.child("composition")
 
                         for ((skladnikId, amount) in amounts) {
-                            val skladPosilku = skladnikId?.let { it1 ->
-                                SkladPosilku(
-                                    posilkiId = dishId,
-                                    skladnikId = it1,
-                                    amount = amount
-                                )
+                            if(amount > 0) {
+                                val skladPosilku = skladnikId?.let { it1 ->
+                                    SkladPosilku(
+                                        posilkiId = dishId,
+                                        skladnikId = it1,
+                                        amount = amount
+                                    )
+                                }
+                                collectionRef.push().setValue(skladPosilku)
                             }
-
-                            collectionRef.push().setValue(skladPosilku)
                         }
 
                         val dish = categoryId?.let { it1 ->

@@ -13,7 +13,7 @@ import model.Skladnik
 class SkladnikiToChooseAdapter(
     private val products: MutableList<Skladnik>,
     private val posilkiId: String,
-    private val onProductSelected: (Skladnik) -> Unit
+    private val onProductSelected: (Skladnik, Int) -> Unit
 ) : RecyclerView.Adapter<SkladnikiToChooseAdapter.IngredientViewHolder>() {
 
     private val skladPosilkuList: MutableList<SkladPosilku> = mutableListOf()
