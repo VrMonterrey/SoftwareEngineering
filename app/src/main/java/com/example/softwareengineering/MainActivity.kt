@@ -12,10 +12,10 @@ import android.widget.*
 import model.Eaten
 import model.Macros
 import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var textView: TextView
     private var user: FirebaseUser? = null
+
     suspend fun fetchUserEatenEntries(userId: String): List<Eaten> = suspendCoroutine { cont ->
         val eatenRef = FirebaseDatabase.getInstance().getReference("eaten")
         eatenRef.orderByChild("userId").equalTo(userId).addListenerForSingleValueEvent(object : ValueEventListener {
@@ -212,6 +213,33 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         })
+
+        // First chart
+        val pieChart: PieChart = findViewById(R.id.chart)
+
+        pieChart.setUsePercentValues(true)
+        pieChart.description.isEnabled = false
+        pieChart.setExtraOffsets(5f, 10f, 5f, 5f)
+        pieChart.dragDecelerationFrictionCoef = 0.95f
+        pieChart.isDrawHoleEnabled = true
+        pieChart.setHoleColor(Color.WHITE)
+        pieChart.transparentCircleRadius = 61f
+
+        val entries = arrayListOf(
+            PieEntry(18.5f, "Red"),
+            PieEntry(26.7f, "Green"),
+            PieEntry(24.0f, "Blue"),
+            PieEntry(30.8f, "Yellow")
+        )
+
+        val dataSet = PieDataSet(entries, "Colors")
+        dataSet.setColors(*ColorTemplate.MATERIAL_COLORS)
+
+        val data = PieData(dataSet)
+        data.setValueTextSize(15f)
+        data.setValueTextColor(Color.WHITE)
+
+        pieChart.data = data
 
     }
 

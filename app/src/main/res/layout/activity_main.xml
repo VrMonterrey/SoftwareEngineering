@@ -35,10 +35,10 @@
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/user"/>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rounded_wrapper"
         android:layout_width="match_parent"
-        android:layout_height="430dp"
+        android:layout_height="250dp"
         android:background="@drawable/categories_rounded_bg"
         android:layout_marginHorizontal="40dp"
         android:layout_alignParentBottom="true"
@@ -46,11 +46,94 @@
         android:elevation="20dp"
         android:alpha=".95"
         app:layout_constraintTop_toBottomOf="@id/header">
+
+        <TextView
+            android:id="@+id/macro_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="30dp"
+            android:paddingHorizontal="25dp"
+            android:text="@string/makroelementy"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="25dp"
+            android:text="@string/g"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/macro_title"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="25dp"
+            android:src="@drawable/ic_chart_history"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/chart_history_icon_alt" />
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/chart"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginHorizontal="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rounded_wrapper2"
+        android:layout_width="match_parent"
+        android:layout_height="210dp"
+        android:background="@drawable/categories_rounded_bg"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="40dp"
+        android:elevation="20dp"
+        android:alpha=".95"
+        app:layout_constraintTop_toBottomOf="@id/rounded_wrapper">
+
+        <TextView
+            android:id="@+id/calories_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="30dp"
+            android:paddingHorizontal="25dp"
+            android:text="@string/kalorie"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="25dp"
+            android:text="@string/kcal_outline_side"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/calories_title"/>
+
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/idBarChart"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </RelativeLayout>
+            android:layout_height="115dp"
+            android:layout_marginHorizontal="25dp"
+            android:layout_marginBottom="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/menu_panel"

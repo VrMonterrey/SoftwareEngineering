@@ -57,5 +57,11 @@ dependencies {
 
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     implementation 'com.google.firebase:firebase-storage:20.2.0'
+
+    implementation("ir.mahozad.android:pie-chart:0.7.0")
+
+    implementation 'androidx.compose.ui:ui:1.4.3'
+    implementation 'androidx.compose.ui:ui-tooling:1.4.3'
+    implementation 'androidx.compose.material:material:1.4.3'
 }
 
