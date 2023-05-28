@@ -17,6 +17,7 @@ class SkladnikiActivity : AppCompatActivity() {
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
+    private lateinit var profile: ImageButton
     private lateinit var nameOfProduct: EditText
     private lateinit var caloriesEditText: EditText
     private lateinit var proteinsEditText: EditText
@@ -112,6 +113,7 @@ class SkladnikiActivity : AppCompatActivity() {
         logout = findViewById(R.id.logout_button)
         home = findViewById(R.id.home_button)
         categories = findViewById(R.id.categories_btn)
+        profile = findViewById(R.id.profile_button)
         skladnikiArr = findViewById(R.id.skladniki_arr_btn)
 
         home.setOnClickListener(View.OnClickListener {
@@ -122,6 +124,12 @@ class SkladnikiActivity : AppCompatActivity() {
 
         categories.setOnClickListener(View.OnClickListener {
             var intent: Intent = Intent(applicationContext, CategoriesActivity::class.java)
+            startActivity(intent)
+            finish()
+        })
+
+        profile.setOnClickListener(View.OnClickListener{
+            var intent : Intent = Intent(applicationContext,ProfileActivity::class.java)
             startActivity(intent)
             finish()
         })

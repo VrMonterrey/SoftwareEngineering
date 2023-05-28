@@ -607,8 +607,7 @@
             android:id="@+id/logout_wrapper"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="19dp"
+            android:layout_marginBottom="18dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/profile_wrapper"
             app:layout_constraintRight_toRightOf="parent">

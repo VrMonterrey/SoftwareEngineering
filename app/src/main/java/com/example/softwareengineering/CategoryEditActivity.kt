@@ -23,6 +23,7 @@ class CategoryEditActivity : AppCompatActivity() {
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
+    private lateinit var profile: ImageButton
     private lateinit var catName: EditText
     private lateinit var addButton: ImageButton
     private lateinit var dialogButton: Button
@@ -45,6 +46,7 @@ class CategoryEditActivity : AppCompatActivity() {
 
         catName = findViewById(R.id.name_edit_text)
         logout = findViewById(R.id.logout_button)
+        profile = findViewById(R.id.profile_button)
         home = findViewById(R.id.home_button)
         categories = findViewById(R.id.categories_btn)
 
@@ -110,6 +112,12 @@ class CategoryEditActivity : AppCompatActivity() {
 
         categories.setOnClickListener(View.OnClickListener {
             var intent: Intent = Intent(applicationContext, CategoriesActivity::class.java)
+            startActivity(intent)
+            finish()
+        })
+
+        profile.setOnClickListener(View.OnClickListener{
+            var intent : Intent = Intent(applicationContext,ProfileActivity::class.java)
             startActivity(intent)
             finish()
         })

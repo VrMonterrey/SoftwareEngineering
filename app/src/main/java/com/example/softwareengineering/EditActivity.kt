@@ -20,6 +20,7 @@ class EditActivity : AppCompatActivity() {
     private lateinit var productRef: DatabaseReference
     private lateinit var skladnikId: String
     private lateinit var logout: ImageButton
+    private lateinit var profile: ImageButton
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
     private lateinit var nameOfProduct: EditText
@@ -96,7 +97,9 @@ class EditActivity : AppCompatActivity() {
 
         logout = findViewById(R.id.logout_button)
         home = findViewById(R.id.home_button)
+        profile = findViewById(R.id.profile_button)
         categories = findViewById(R.id.categories_btn)
+
         skladnikiArr = findViewById(R.id.skladniki_arr_btn)
 
         home.setOnClickListener(View.OnClickListener {
@@ -107,6 +110,12 @@ class EditActivity : AppCompatActivity() {
 
         categories.setOnClickListener(View.OnClickListener {
             var intent: Intent = Intent(applicationContext, CategoriesActivity::class.java)
+            startActivity(intent)
+            finish()
+        })
+
+        profile.setOnClickListener(View.OnClickListener{
+            var intent : Intent = Intent(applicationContext,ProfileActivity::class.java)
             startActivity(intent)
             finish()
         })

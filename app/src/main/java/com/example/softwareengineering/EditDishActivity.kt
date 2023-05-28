@@ -28,6 +28,7 @@ class EditDishActivity : AppCompatActivity() {
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
+    private lateinit var profile: ImageButton
     private lateinit var dishName: EditText
     private lateinit var categorySpinner: Spinner
     private lateinit var addButton: ImageButton
@@ -65,6 +66,7 @@ class EditDishActivity : AppCompatActivity() {
         // Init. nav. buttons
         logout = findViewById(R.id.logout_button)
         home = findViewById(R.id.home_button)
+        profile = findViewById(R.id.profile_button)
         categories = findViewById(R.id.categories_btn)
 
         //Choose image from gallery init.
@@ -187,6 +189,12 @@ class EditDishActivity : AppCompatActivity() {
 
         categories.setOnClickListener(View.OnClickListener {
             var intent: Intent = Intent(applicationContext, CategoriesActivity::class.java)
+            startActivity(intent)
+            finish()
+        })
+
+        profile.setOnClickListener(View.OnClickListener{
+            var intent : Intent = Intent(applicationContext,ProfileActivity::class.java)
             startActivity(intent)
             finish()
         })
