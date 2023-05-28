@@ -170,7 +170,23 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
             })
     }
 
+    fun fetchCategory(categoryId: String, callback: (ProductCategory) -> Unit) {
+        val categoryRef = FirebaseDatabase.getInstance().getReference("categories").child(categoryId)
+        categoryRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val category = dataSnapshot.getValue(ProductCategory::class.java)
+                if (category != null) {
+                    callback(category)
+                } else {
+                    Log.e("Firebase", "Category not found")
+                }
+            }
 
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("Firebase", "Error getting category", error.toException())
+            }
+        })
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -184,7 +200,7 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
         dishProteins = findViewById(R.id.dish_proteins)
         dishCarbs = findViewById(R.id.dish_carbs)
         dishFats = findViewById(R.id.dish_fats)
-
+        categoryField = findViewById(R.id.category)
         // Initialize Firebase database
         val database = Firebase.database.reference
         currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
@@ -285,8 +301,6 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
                         val dishRef = database.child("dishes").child(dishId)
                         dishRef.setValue(dish)
                     }
-                }
-                if (dish != null) {
                     calculateAverageMacro(dish) { amount ->
                         nameField.text = "${dish?.name}(${amount}g)"
                     }
@@ -299,6 +313,10 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
                     averageRating = dish?.let { calculateAverageRating(it) }
                     average = findViewById(R.id.average_rate)
                     average.text = averageRating.toString()
+
+                    fetchCategory(dish.category) { category ->
+                        categoryField.text = category.name // assuming the Category object has a name property
+                    }
                 }
             }
 

@@ -17,9 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.softwareengineering.model.DailyNutrition
-import com.example.softwareengineering.model.Eaten
-import com.example.softwareengineering.model.Posilki
+import com.example.softwareengineering.model.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
@@ -96,6 +94,78 @@ class DaylistActivity : AppCompatActivity(), DailyAdapter.PosilkiAdapterListener
                 Log.w(TAG, "Failed to read value.", error.toException())
             }
         })
+    }
+
+
+    fun calculateMacro(posilek: Posilki, callback: (MacroNutrients) -> Unit) {
+        val posilkiId = posilek.id
+        val databaseReference = FirebaseDatabase.getInstance().reference.child("composition")
+
+        var sumCalories: Double = 0.0
+        var sumProteins: Double = 0.0
+        var sumCarbs: Double = 0.0
+        var sumFats: Double = 0.0
+        var amount: Int = 0
+        val skladnikIds: MutableList<String> = mutableListOf()
+
+        databaseReference.orderByChild("posilkiId").equalTo(posilkiId)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (skladPosilkiSnapshot in snapshot.children) {
+                        val skladPosilki = skladPosilkiSnapshot.getValue(SkladPosilku::class.java)
+                        skladPosilki?.let {
+                            val skladnikId = it.skladnikId
+                            val amountInGrams = it.amount
+
+                            skladnikIds.add(skladnikId)
+                            amount += amountInGrams
+
+                            val skladnikReference =
+                                FirebaseDatabase.getInstance().reference.child("products")
+                                    .child(skladnikId)
+                            skladnikReference.addListenerForSingleValueEvent(object :
+                                ValueEventListener {
+                                override fun onDataChange(skladnikSnapshot: DataSnapshot) {
+                                    val skladnik = skladnikSnapshot.getValue(Skladnik::class.java)
+                                    skladnik?.let { skladnik ->
+                                        val skladnikCaloriesPer100g = skladnik.calories
+                                        val skladnikProteinsPer100g = skladnik.protein
+                                        val skladnikCarbsPer100g = skladnik.carbs
+                                        val skladnikFatsPer100g = skladnik.fat
+
+                                        val skladnikCalories: Double =
+                                            (skladnikCaloriesPer100g * amountInGrams) / 100
+                                        val skladnikProteins: Double =
+                                            (skladnikProteinsPer100g * amountInGrams) / 100
+                                        val skladnikCarbs: Double =
+                                            (skladnikCarbsPer100g * amountInGrams) / 100
+                                        val skladnikFats: Double =
+                                            (skladnikFatsPer100g * amountInGrams) / 100
+
+                                        sumCalories += skladnikCalories
+                                        sumProteins += skladnikProteins
+                                        sumCarbs += skladnikCarbs
+                                        sumFats += skladnikFats
+                                    }
+
+
+
+                                    val nutrients = MacroNutrients(sumCalories, sumProteins, sumCarbs, sumFats, amount)
+                                    callback(nutrients)
+                                }
+
+                                override fun onCancelled(error: DatabaseError) {
+                                    // Handle error
+                                }
+                            })
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle error
+                }
+            })
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -206,29 +276,45 @@ class DaylistActivity : AppCompatActivity(), DailyAdapter.PosilkiAdapterListener
         val daily = dishList[position]
         val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
         val database = Firebase.database.reference
-        // Create a new instance of the Eaten data class
-        val eaten = Eaten(
-            id = database.child("eaten").push().key,
-            date = System.currentTimeMillis(),
-            userId = currentUserId.orEmpty(),
-            posilekId = daily.posilekId
-        )
+        database.child("dishes").child(daily.posilekId)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val dish = snapshot.getValue(Posilki::class.java)
+                    if (dish != null) {
+                        calculateMacro(dish) { nutrients ->
+                            val eaten = Eaten(
+                                id = database.child("eaten").push().key,
+                                date = System.currentTimeMillis(),
+                                userId = currentUserId.orEmpty(),
+                                calories = nutrients.calories,
+                                protein = nutrients.proteins,
+                                carbs = nutrients.carbs,
+                                fat = nutrients.fats
+                            )
 
-        if (eaten.id != null) {
-            database.child("eaten").child(eaten.id!!).setValue(eaten)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Posiłek spożyty", Toast.LENGTH_SHORT).show()
+                            if (eaten.id != null) {
+                                database.child("eaten").child(eaten.id!!).setValue(eaten)
+                                    .addOnSuccessListener {
+                                        Toast.makeText(this@DaylistActivity, "Posiłek spożyty", Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+                                    .addOnFailureListener {
+                                        Toast.makeText(
+                                            this@DaylistActivity,
+                                            "Błąd podczas dodawania posiłku do spożytych: ${it.message}",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                            }
+                        }
+                    }
                 }
-                .addOnFailureListener {
-                    Toast.makeText(
-                        this,
-                        "Błąd podczas dodawania posiłku do spożytych: ${it.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.w(TAG, "loadDish:onCancelled", error.toException())
                 }
-        }
+            })
     }
-
     override fun onDishClick(position: Int) {
         val daily = dishList[position]
 

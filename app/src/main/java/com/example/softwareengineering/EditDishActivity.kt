@@ -255,7 +255,7 @@ class EditDishActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         builder.setTitle("Wybierz składniki")
-            .setMessage("Klikni checkbpx'a żeby dodać skłądnik")
+            .setMessage("Kliknij checkbox'a żeby dodać skłądnik")
             .setView(dialogLayout)
             .setPositiveButton("OK") { dialog, which ->
 
