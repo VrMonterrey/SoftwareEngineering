@@ -12,17 +12,13 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.softwareengineering.model.Posilki
-import com.example.softwareengineering.model.SkladPosilku
-import com.example.softwareengineering.model.Skladnik
+import model.SkladPosilku
+import model.Skladnik
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 import java.util.concurrent.atomic.AtomicInteger
 
 

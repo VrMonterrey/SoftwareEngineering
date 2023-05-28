@@ -12,8 +12,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.softwareengineering.model.ProductCategory
-import com.example.softwareengineering.model.Skladnik
+import model.ProductCategory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 

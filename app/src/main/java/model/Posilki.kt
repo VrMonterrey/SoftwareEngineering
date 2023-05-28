@@ -1,5 +1,7 @@
 package com.example.softwareengineering.model
 
+import model.Comment
+
 data class Posilki(
     val id: String? = "",
     val name: String = "",

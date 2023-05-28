@@ -21,8 +21,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import java.lang.Math.round
-import java.text.DecimalFormat
+import model.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt

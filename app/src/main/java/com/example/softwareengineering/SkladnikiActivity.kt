@@ -10,7 +10,7 @@ import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.example.softwareengineering.model.Skladnik
+import model.Skladnik
 
 class SkladnikiActivity : AppCompatActivity() {
 

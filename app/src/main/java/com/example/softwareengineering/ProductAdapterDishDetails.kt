@@ -2,12 +2,10 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.softwareengineering.R
-import com.example.softwareengineering.model.Skladnik
+import model.Skladnik
 
 class ProductAdapterDishDetails(
     private var productList: MutableList<Skladnik>,

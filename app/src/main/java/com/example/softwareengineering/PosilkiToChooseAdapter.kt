@@ -6,9 +6,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.softwareengineering.R
 import com.example.softwareengineering.model.Posilki
-import com.example.softwareengineering.model.Skladnik
 
 class PosilkiToChooseAdapter(
     private val dishes: MutableList<Posilki>,

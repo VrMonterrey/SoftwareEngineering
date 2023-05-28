@@ -7,9 +7,8 @@ import android.widget.CheckBox
 import android.widget.NumberPicker
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.softwareengineering.R
-import com.example.softwareengineering.model.SkladPosilku
-import com.example.softwareengineering.model.Skladnik
+import model.SkladPosilku
+import model.Skladnik
 
 class SkladnikiToChooseAdapter(
     private val products: MutableList<Skladnik>,

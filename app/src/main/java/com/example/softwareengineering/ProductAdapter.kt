@@ -2,17 +2,14 @@ package com.example.softwareengineering
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.example.softwareengineering.R
-import com.example.softwareengineering.model.Skladnik
+import model.Skladnik
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.NonDisposableHandle.parent
 
 class ProductAdapter(
     private var productList: MutableList<Skladnik>,

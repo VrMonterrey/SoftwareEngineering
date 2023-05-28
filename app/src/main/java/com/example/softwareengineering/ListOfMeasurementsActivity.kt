@@ -9,8 +9,7 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.softwareengineering.model.Measurement
-import com.example.softwareengineering.model.Skladnik
+import model.Measurement
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 

@@ -10,7 +10,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
-import com.example.softwareengineering.model.Skladnik
+import model.Skladnik
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 

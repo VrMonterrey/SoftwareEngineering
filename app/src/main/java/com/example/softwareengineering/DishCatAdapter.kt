@@ -4,7 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.softwareengineering.model.DishCategory
+import model.DishCategory
 
 class DishCatAdapter(
     private var catList: MutableList<DishCategory>,

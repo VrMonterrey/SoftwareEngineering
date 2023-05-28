@@ -7,11 +7,10 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.*
-import com.example.softwareengineering.model.Measurement
+import model.Measurement
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.example.softwareengineering.model.Skladnik
 
 class MeasurementsActivity : AppCompatActivity() {
 

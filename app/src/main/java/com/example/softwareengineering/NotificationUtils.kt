@@ -9,8 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import com.example.softwareengineering.R
-import com.example.softwareengineering.model.DailyNutrition
+import model.DailyNutrition
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -75,15 +74,5 @@ class NotificationUtils {
         }
 
         notificationManager.notify(0, notificationBuilder.build())
-    }
-}
-
-class NotificationReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        val message = intent.getStringExtra("NOTIFICATION_MESSAGE")
-        // Show the notification
-        if (message != null) {
-            NotificationUtils().showNotification(context, message)
-        }
     }
 }

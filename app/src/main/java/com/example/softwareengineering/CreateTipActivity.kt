@@ -4,15 +4,13 @@ import android.content.Intent
 import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.example.softwareengineering.model.Skladnik
-import com.example.softwareengineering.model.Tip
+import model.Tip
 
 class CreateTipActivity : AppCompatActivity() {
 

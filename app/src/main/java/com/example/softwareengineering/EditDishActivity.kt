@@ -11,14 +11,13 @@ import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.softwareengineering.model.Posilki
-import com.example.softwareengineering.model.ProductCategory
-import com.example.softwareengineering.model.SkladPosilku
-import com.example.softwareengineering.model.Skladnik
+import model.ProductCategory
+import model.SkladPosilku
+import model.Skladnik
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database

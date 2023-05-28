@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import model.*
 
 
 class DaylistActivity : AppCompatActivity(), DailyAdapter.PosilkiAdapterListener {
