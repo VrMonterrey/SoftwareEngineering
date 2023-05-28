@@ -16,6 +16,7 @@ import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -39,133 +40,119 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var textView: TextView
     private var user: FirebaseUser? = null
+    suspend fun fetchUserEatenEntries(userId: String): List<Eaten> = suspendCoroutine { cont ->
+        val eatenRef = FirebaseDatabase.getInstance().getReference("eaten")
+        eatenRef.orderByChild("userId").equalTo(userId).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val eatenEntries = dataSnapshot.children.mapNotNull { it.getValue(Eaten::class.java) }
+                cont.resume(eatenEntries)
+            }
+            override fun onCancelled(error: DatabaseError) {
+                cont.resumeWithException(error.toException())
+            }
+        })
+    }
+    fun aggregateEatenEntriesByDay(eatenEntries: List<Eaten>): Map<String, Macros> {
+        val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val aggregatedEntries = mutableMapOf<String, Macros>()
 
-//    suspend fun fetchEatenEntries(): List<Eaten> = suspendCoroutine { cont ->
-//        val eatenRef = FirebaseDatabase.getInstance().getReference("eaten")
-//        eatenRef.addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                val eatenEntries = dataSnapshot.children.mapNotNull { it.getValue(Eaten::class.java) }
-//                cont.resume(eatenEntries)
-//            }
-//            override fun onCancelled(error: DatabaseError) {
-//                cont.resumeWithException(error.toException())
-//            }
-//        })
-//    }
-//
-//    suspend fun fetchSkladPosilkuEntries(posilkiId: String): List<SkladPosilku> = suspendCoroutine { cont ->
-//        val skladPosilkuRef = FirebaseDatabase.getInstance().getReference("composition")
-//        skladPosilkuRef.orderByChild("posilkiId").equalTo(posilkiId).addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                val skladPosilkuEntries = dataSnapshot.children.mapNotNull { it.getValue(SkladPosilku::class.java) }
-//                cont.resume(skladPosilkuEntries)
-//            }
-//            override fun onCancelled(error: DatabaseError) {
-//                cont.resumeWithException(error.toException())
-//            }
-//        })
-//    }
-//
-//    suspend fun fetchSkladnik(skladnikId: String): Skladnik = suspendCoroutine { cont ->
-//        val skladnikRef = FirebaseDatabase.getInstance().getReference("products").child(skladnikId)
-//        skladnikRef.addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                val skladnik = dataSnapshot.getValue(Skladnik::class.java)
-//                if (skladnik != null) cont.resume(skladnik) else cont.resumeWithException(IllegalStateException("Skladnik not found"))
-//            }
-//            override fun onCancelled(error: DatabaseError) {
-//                cont.resumeWithException(error.toException())
-//            }
-//        })
-//    }
-//    suspend fun fetchMacros(): List<Macros> {
-//        val macrosList = mutableListOf<Macros>()
-//
-//        // Fetch 'eaten' entries
-//        val eatenEntries = fetchEatenEntries()
-//
-//        for (eatenEntry in eatenEntries) {
-//            // Fetch 'SkladPosilku' entries
-//            val skladPosilkuEntries = fetchSkladPosilkuEntries(eatenEntry.posilekId)
-//
-//            for (skladPosilku in skladPosilkuEntries) {
-//                // Fetch 'Skladnik' entries
-//                val skladnik = fetchSkladnik(skladPosilku.skladnikId)
-//
-//                // Calculate the macros and pass the eaten date
-//                val macros = calculateMacros(skladnik, skladPosilku.amount, eatenEntry.date)
-//                macrosList.add(macros)
-//            }
-//        }
-//        return macrosList
-//    }
-//
-//    fun calculateMacros(skladnik: Skladnik, amount: Int, date: Long): Macros {
-//        val factor = amount / 100f
-//        return Macros(
-//            cals = skladnik.calories * factor,
-//            prots = skladnik.protein * factor,
-//            carbs = skladnik.carbs * factor,
-//            fats = skladnik.fat * factor,
-//            date = date
-//        )
-//    }
-//
-//    @SuppressLint("SimpleDateFormat")
-//    fun aggregateMacrosByDay(macrosList: List<Macros>): Map<String, Macros> {
-//        val aggregatedMacros = mutableMapOf<String, Macros>()
-//        val sdf = SimpleDateFormat("yyyy-MM-dd")
-//
-//        for (macros in macrosList) {
-//            val date = sdf.format(Date(macros.date))
-//            val aggregatedMacro = aggregatedMacros[date]
-//            if (aggregatedMacro == null) {
-//                aggregatedMacros[date] = macros
-//            } else {
-//                aggregatedMacro.cals += macros.cals
-//                aggregatedMacro.prots += macros.prots
-//                aggregatedMacro.carbs += macros.carbs
-//                aggregatedMacro.fats += macros.fats
-//            }
-//        }
-//        return aggregatedMacros
-//    }
-//
-//    fun updateBarChart(aggregatedMacros: Map<String, Macros>) {
-//        val barChart = findViewById<BarChart>(R.id.idBarChart)
-//
-//        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-//        val entries = aggregatedMacros.map {
-//            val dateMillis = sdf.parse(it.key).time.toFloat()
-//            BarEntry(dateMillis, floatArrayOf(it.value.cals.toFloat(), it.value.prots.toFloat(), it.value.carbs.toFloat(), it.value.fats.toFloat()))
-//        }
-//
-//        val colors = listOf(
-//            Color.parseColor("#FF0000"), // Red
-//            Color.parseColor("#00FF00"), // Green
-//            Color.parseColor("#0000FF"), // Blue
-//            Color.parseColor("#FFFF00")  // Yellow
-//        )
-//
-//        val barDataSet = BarDataSet(entries, "Macros").apply {
-//            setColors(colors)
-//            stackLabels = arrayOf("Cals", "Prots", "Carbs", "Fats")
-//        }
-//
-//        val barData = BarData(barDataSet)
-//        barChart.data = barData
-//
-//        // Formatting X-Axis to display dates
-//        val xAxis = barChart.xAxis
-//        xAxis.valueFormatter = object : ValueFormatter() {
-//            private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-//            override fun getFormattedValue(value: Float): String {
-//                return sdf.format(Date(value.toLong()))
-//            }
-//        }
-//
-//        barChart.invalidate() // refresh chart
-//    }
+        for (entry in eatenEntries) {
+            val date = format.format(Date(entry.date))
+            val existingMacros = aggregatedEntries[date]
+
+            if (existingMacros == null) {
+                aggregatedEntries[date] = Macros(
+                    cals = entry.calories,
+                    prots = entry.protein,
+                    carbs = entry.carbs,
+                    fats = entry.fat,
+                    date = entry.date
+                )
+            } else {
+                existingMacros.cals += entry.calories
+                existingMacros.prots += entry.protein
+                existingMacros.carbs += entry.carbs
+                existingMacros.fats += entry.fat
+            }
+        }
+        return aggregatedEntries
+    }
+    fun updateBarChart(aggregatedMacros: Map<String, Macros>) {
+        val barChart = findViewById<BarChart>(R.id.idBarChart)
+
+        // Create BarEntry for each day
+        val caloriesEntries = aggregatedMacros.entries.mapIndexed { index, entry ->
+            BarEntry(index.toFloat(), entry.value.cals.toFloat())
+        }
+        val proteinsEntries = aggregatedMacros.entries.mapIndexed { index, entry ->
+            BarEntry(index.toFloat(), entry.value.prots.toFloat())
+        }
+        val carbsEntries = aggregatedMacros.entries.mapIndexed { index, entry ->
+            BarEntry(index.toFloat(), entry.value.carbs.toFloat())
+        }
+        val fatsEntries = aggregatedMacros.entries.mapIndexed { index, entry ->
+            BarEntry(index.toFloat(), entry.value.fats.toFloat())
+        }
+
+        // Create BarDataSets
+        val caloriesDataSet = BarDataSet(caloriesEntries, "Calories")
+        caloriesDataSet.color = Color.rgb(104, 241, 175)
+        caloriesDataSet.valueTextColor = Color.rgb(104, 241, 175)
+
+        val proteinsDataSet = BarDataSet(proteinsEntries, "Proteins")
+        proteinsDataSet.color = Color.rgb(164, 228, 251)
+        proteinsDataSet.valueTextColor = Color.rgb(164, 228, 251)
+
+        val carbsDataSet = BarDataSet(carbsEntries, "Carbs")
+        carbsDataSet.color = Color.rgb(242, 247, 158)
+        carbsDataSet.valueTextColor = Color.rgb(242, 247, 158)
+
+        val fatsDataSet = BarDataSet(fatsEntries, "Fats")
+        fatsDataSet.color = Color.rgb(255, 102, 0)
+        fatsDataSet.valueTextColor = Color.rgb(255, 102, 0)
+
+        // Create BarData and set it to BarChart
+        val data = BarData(caloriesDataSet, proteinsDataSet, carbsDataSet, fatsDataSet)
+        barChart.data = data
+        barChart.isDragEnabled = true
+        barChart.setScaleEnabled(true)
+        barChart.xAxis.axisMinimum = 0f
+        barChart.xAxis.axisMaximum = data.entryCount.toFloat()
+        // Set x-axis labels to the dates
+        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(aggregatedMacros.keys.toList())
+
+        val yAxisLeft = barChart.axisLeft
+        val yAxisRight = barChart.axisRight
+
+        yAxisLeft.axisMinimum = 0f
+        yAxisRight.axisMinimum = 0f
+
+        val textColor = Color.WHITE
+
+        // For X-Axis Labels
+        barChart.xAxis.textColor = textColor
+
+        // For Y-Axis Labels (Left and Right)
+        barChart.axisLeft.textColor = textColor
+        barChart.axisRight.textColor = textColor
+
+        // For Legend Labels
+        barChart.legend.textColor = textColor
+
+
+        // Remove description label
+        barChart.description.isEnabled = false
+
+        // Add space between bars
+        val groupSpace = 0.08f
+        val barSpace = 0.02f
+        val barWidth = 0.2f
+        data.barWidth = barWidth
+        barChart.groupBars(0f, groupSpace, barSpace)
+
+        // Update the BarChart
+        barChart.invalidate()
+    }
 
     @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("MissingInflatedId")
@@ -189,21 +176,20 @@ class MainActivity : AppCompatActivity() {
             textView.text=user?.email
         }
 
-//        GlobalScope.launch(Dispatchers.IO) {
-//            try {
-//                val macrosList = fetchMacros()
-//
-//                // Aggregate macros by day
-//                val aggregatedMacros = aggregateMacrosByDay(macrosList)
-//
-//                withContext(Dispatchers.Main) {
-//                    // Update BarChart
-//                    updateBarChart(aggregatedMacros)
-//                }
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//            }
-//        }
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val currentUserId = currentUser?.uid ?: ""
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val eatenEntries = fetchUserEatenEntries(currentUserId)
+                val aggregatedMacros = aggregateEatenEntriesByDay(eatenEntries)
+
+                withContext(Dispatchers.Main) {
+                    updateBarChart(aggregatedMacros)
+                }
+            } catch (e: Exception) {
+                // Handle exception
+            }
+        }
 
         home.setOnClickListener(View.OnClickListener{
             var intent : Intent = Intent(applicationContext,MainActivity::class.java)
