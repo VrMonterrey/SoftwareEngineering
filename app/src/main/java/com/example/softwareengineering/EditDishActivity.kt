@@ -15,13 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.softwareengineering.model.Posilki
-import model.ProductCategory
 import model.SkladPosilku
 import model.Skladnik
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import model.DishCategory
 
 class EditDishActivity : AppCompatActivity() {
 
@@ -44,7 +44,7 @@ class EditDishActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var dishId: String
     private lateinit var databaseReference: DatabaseReference
-    private lateinit var categoryList: MutableList<ProductCategory>
+    private lateinit var categoryList: MutableList<DishCategory>
     private var selectedCategory: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,7 +91,7 @@ class EditDishActivity : AppCompatActivity() {
                 categoryList.clear()
 
                 for (categorySnapshot in snapshot.children) {
-                    val category = categorySnapshot.getValue(ProductCategory::class.java)
+                    val category = categorySnapshot.getValue(DishCategory::class.java)
                     category?.let {
                         categoryList.add(it)
                         categoriesForSpinner.add(it.name)
@@ -133,7 +133,9 @@ class EditDishActivity : AppCompatActivity() {
         // Save edited dish to Firebase database
         addButton.setOnClickListener {
             val name = dishName.text.toString()
-            val category = selectedCategory
+            val category = categorySpinner.selectedItem.toString()
+            val currentUser = FirebaseAuth.getInstance().currentUser
+            val currentUserId = currentUser?.uid ?: ""
 
             if (name.isNotEmpty() && category.isNotEmpty()) {
 
@@ -141,7 +143,8 @@ class EditDishActivity : AppCompatActivity() {
                     id = dishId,
                     name = name,
                     category = category,
-                    photoUrl = photoUrl
+                    photoUrl = photoUrl,
+                    userId = currentUserId
                 )
 
                 database.child("dishes").child(dishId).setValue(dish)

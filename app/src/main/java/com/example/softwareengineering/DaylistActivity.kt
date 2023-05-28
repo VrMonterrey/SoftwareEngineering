@@ -329,7 +329,10 @@ class DaylistActivity : AppCompatActivity(), DailyAdapter.PosilkiAdapterListener
                                 calories = nutrients.calories,
                                 protein = nutrients.proteins,
                                 carbs = nutrients.carbs,
-                                fat = nutrients.fats
+                                fat = nutrients.fats,
+                                dishName = dish.name,
+                                photoUrl = dish.photoUrl,
+                                category = dish.category
                             )
 
                             if (eaten.id != null) {

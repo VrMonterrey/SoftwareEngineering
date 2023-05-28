@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -21,7 +22,7 @@ class DishCatDetailsActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapte
     private lateinit var categories: ImageButton
     private lateinit var profile: ImageButton
 
-    private lateinit var add : ImageButton
+    private lateinit var add : ImageView
 
     private lateinit var dishAdapter: PosilkiAdapter
     private lateinit var dishList: MutableList<Posilki>

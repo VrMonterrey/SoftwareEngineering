@@ -28,6 +28,8 @@ class CategoriesActivity : AppCompatActivity() {
     private lateinit var tips_btn: ImageButton
     private lateinit var category_btn: ImageButton
     private lateinit var favourite_btn: ImageButton
+    private lateinit var history_btn: ImageButton
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +65,8 @@ class CategoriesActivity : AppCompatActivity() {
         tips_btn = findViewById(R.id.tips_btn)
         favourite_btn = findViewById(R.id.favourite_btn)
         category_btn = findViewById(R.id.categoty_btn)
+        history_btn = findViewById(R.id.history_btn)
+
 
         home.setOnClickListener(View.OnClickListener{
             var intent : Intent = Intent(applicationContext,MainActivity::class.java)
@@ -112,6 +116,13 @@ class CategoriesActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         })
+
+        history_btn.setOnClickListener(View.OnClickListener{
+            var intent : Intent = Intent(applicationContext,HistoryActivity::class.java)
+            startActivity(intent)
+            finish()
+        })
+
         measurements_btn.setOnClickListener(View.OnClickListener{
             var intent : Intent = Intent(applicationContext,MeasurementsActivity::class.java)
             startActivity(intent)

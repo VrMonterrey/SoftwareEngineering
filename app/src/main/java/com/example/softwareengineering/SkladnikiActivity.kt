@@ -31,25 +31,23 @@ class SkladnikiActivity : AppCompatActivity() {
         setContentView(R.layout.activity_skladniki)
 
         val rootView = findViewById<ScrollView>(R.id.scroll_view)
-        rootView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                val r = Rect()
-                rootView.getWindowVisibleDisplayFrame(r)
-                val screenHeight = rootView.rootView.height
+        rootView.viewTreeObserver.addOnGlobalLayoutListener {
+            val r = Rect()
+            rootView.getWindowVisibleDisplayFrame(r)
+            val screenHeight = rootView.rootView.height
 
-                // r.bottom is the position above soft keypad or device button.
-                // if keypad is shown, the r.bottom is smaller than that before.
-                val keypadHeight = screenHeight - r.bottom
+            // r.bottom is the position above soft keypad or device button.
+            // if keypad is shown, the r.bottom is smaller than that before.
+            val keypadHeight = screenHeight - r.bottom
 
-                if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
-                    // keyboard is opened
-                    rootView.setPadding(0, 0, 0, keypadHeight-300)
-                } else {
-                    // keyboard is closed
-                    rootView.setPadding(0, 0, 0, 0)
-                }
+            if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
+                // keyboard is opened
+                rootView.setPadding(0, 0, 0, keypadHeight - 300)
+            } else {
+                // keyboard is closed
+                rootView.setPadding(0, 0, 0, 0)
             }
-        })
+        }
 
         val addButton = findViewById<ImageButton>(R.id.submit_btn)
         addButton.setOnClickListener {
