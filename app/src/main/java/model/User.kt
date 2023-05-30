@@ -7,4 +7,5 @@ data class User(
     val lastName: String? = "",
     val gender: String? = "",
     val photoUrl: String? = "",
+    val calsMax: Double? = 0.0
 )

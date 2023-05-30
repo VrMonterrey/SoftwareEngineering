@@ -35,6 +35,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var editTextFirstName: EditText
     private lateinit var editTextLastName: EditText
     private lateinit var editTextEmail: EditText
+    private lateinit var maxCals: EditText
     private lateinit var spinnerGender: Spinner
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private lateinit var switchNotifications: Switch
@@ -44,6 +45,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var getContent: ActivityResultLauncher<String>
     private var photoUrl: String = ""
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
@@ -53,6 +55,7 @@ class ProfileActivity : AppCompatActivity() {
         editTextLastName = findViewById(R.id.editTextLastName)
         editTextEmail = findViewById(R.id.editTextEmail)
         spinnerGender = findViewById(R.id.spinnerGender)
+        maxCals = findViewById(R.id.editTextCalsMax)
         switchNotifications = findViewById(R.id.switchNotifications)
         avatarImage = findViewById(R.id.avatar_profile)
 
@@ -65,10 +68,12 @@ class ProfileActivity : AppCompatActivity() {
                 val lastName = dataSnapshot.child("lastName").value as? String
                 val email = dataSnapshot.child("email").value as? String
                 val gender = dataSnapshot.child("gender").value as? String
+                val cals = dataSnapshot.child("calsMax").getValue(Double::class.java)
                 if (email != null) {
                     editTextFirstName.setText(firstName)
                     editTextLastName.setText(lastName)
                     editTextEmail.setText(email)
+                    maxCals.setText(cals?.toString())
                     spinnerGender.setSelection(getGenderIndex(gender?: "Nie wybrana"))
                     Glide.with(applicationContext)
                         .load(dataSnapshot.child("photoUrl").value).apply(RequestOptions.circleCropTransform())
@@ -226,6 +231,7 @@ class ProfileActivity : AppCompatActivity() {
         val firstName = editTextFirstName.text.toString()
         val lastName = editTextLastName.text.toString()
         val email = editTextEmail.text.toString()
+        val calsMax = maxCals.text.toString().toDoubleOrNull()
         val gender = spinnerGender.selectedItem.toString()
 
         val userRef = FirebaseDatabase.getInstance().reference.child("users").child(userId)
@@ -233,6 +239,7 @@ class ProfileActivity : AppCompatActivity() {
         userRef.child("lastName").setValue(lastName)
         userRef.child("email").setValue(email)
         userRef.child("gender").setValue(gender)
+        userRef.child("calsMax").setValue(calsMax)
 
         Toast.makeText(this, "Profil został zapisany", Toast.LENGTH_SHORT).show()
     }
