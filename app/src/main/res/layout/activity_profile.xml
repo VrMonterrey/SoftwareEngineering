@@ -170,13 +170,14 @@
 
         <RelativeLayout
             android:id="@+id/spinner_wrapper"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="47dp"
             android:background="@drawable/spinner_bg"
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/gender_label"
-            app:layout_constraintLeft_toLeftOf="parent">
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintWidth_percent="0.49">
 
             <Spinner
                 android:id="@+id/spinnerGender"
@@ -202,6 +203,38 @@
                 android:contentDescription="@string/dropdown_icon_alt" />
 
         </RelativeLayout>
+        <TextView
+            android:id="@+id/cals_max_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Max kalorii:"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:letterSpacing=".05"
+            android:textStyle="bold"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintWidth_percent="0.46"
+            app:layout_constraintTop_toBottomOf="@+id/editTextEmail"
+            app:layout_constraintLeft_toRightOf="@+id/spinner_wrapper"/>
+
+        <EditText
+            android:id="@+id/editTextCalsMax"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edittext_profile"
+            android:padding="15dp"
+            android:textSize="12sp"
+            android:textColorHint="#397C70"
+            app:layout_constraintTop_toBottomOf="@+id/cals_max_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintWidth_percent="0.49"
+            android:autofillHints="lastName"
+            android:inputType="text"
+            tools:ignore="LabelFor"/>
 
         <TextView
             android:id="@+id/notif_label"

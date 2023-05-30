@@ -39,6 +39,17 @@ class NotificationUtils {
             calendar.time = targetTime
         }
 
+        // Adjust `dailyNutrition.day` according to `Calendar`'s day constants
+        val targetDayOfWeek = if (dailyNutrition.day == 7) Calendar.SUNDAY else dailyNutrition.day + 1
+
+        // Set the day of the week
+        calendar.set(Calendar.DAY_OF_WEEK, targetDayOfWeek)
+
+        // Ensure that we are setting the alarm in the future, not the past
+        if (calendar.before(Calendar.getInstance())) {
+            calendar.add(Calendar.WEEK_OF_YEAR, 1)
+        }
+
         val database = FirebaseDatabase.getInstance()
         val posilkiRef = database.getReference("dishes")
         val posilekId = dailyNutrition.posilekId
@@ -60,9 +71,8 @@ class NotificationUtils {
                         }
                     )
 
-                    alarmManager.setExact(
-                        AlarmManager.RTC_WAKEUP,
-                        calendar.timeInMillis,
+                    alarmManager.setAlarmClock(
+                        AlarmManager.AlarmClockInfo(calendar.timeInMillis, pendingIntent),
                         pendingIntent
                     )
                 }

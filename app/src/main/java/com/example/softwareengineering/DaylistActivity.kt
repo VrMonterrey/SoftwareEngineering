@@ -19,6 +19,7 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import model.*
+import java.util.*
 
 
 class DaylistActivity : AppCompatActivity(), DailyAdapter.DailyAdapterListener {
@@ -168,6 +169,24 @@ class DaylistActivity : AppCompatActivity(), DailyAdapter.DailyAdapterListener {
         private const val SHARED_PREFS = "sharedPrefs"
         private const val LAST_DAY = "lastDay"
     }
+    fun getStartOfDayTimestamp(): Double {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        return calendar.timeInMillis.toDouble()
+    }
+
+    fun getEndOfDayTimestamp(): Double {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 23)
+        calendar.set(Calendar.MINUTE, 59)
+        calendar.set(Calendar.SECOND, 59)
+        calendar.set(Calendar.MILLISECOND, 999)
+        return calendar.timeInMillis.toDouble()
+    }
+
     private fun saveDay(day: Int) {
         val sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
@@ -337,8 +356,44 @@ class DaylistActivity : AppCompatActivity(), DailyAdapter.DailyAdapterListener {
                             if (eaten.id != null) {
                                 database.child("eaten").child(eaten.id!!).setValue(eaten)
                                     .addOnSuccessListener {
-                                        Toast.makeText(this@DaylistActivity, "Posiłek spożyty", Toast.LENGTH_SHORT)
-                                            .show()
+                                        database.child("eaten")
+                                            .orderByChild("date")
+                                            .startAt(getStartOfDayTimestamp())
+                                            .endAt(getEndOfDayTimestamp())
+                                            .addListenerForSingleValueEvent(object : ValueEventListener {
+                                                override fun onDataChange(snapshot: DataSnapshot) {
+                                                    var totalCalories = 0.0
+                                                    for (postSnapshot in snapshot.children) {
+                                                        val eatenEntry = postSnapshot.getValue(Eaten::class.java)
+                                                        totalCalories += eatenEntry?.calories ?: 0.0
+                                                    }
+
+                                                    database.child("users").child(currentUserId.orEmpty())
+                                                        .addListenerForSingleValueEvent(object : ValueEventListener {
+                                                            override fun onDataChange(snapshot: DataSnapshot) {
+                                                                val user = snapshot.getValue(User::class.java)
+                                                                val maxCalories = user?.calsMax ?: 0.0
+
+                                                                val message = if (totalCalories > maxCalories) {
+                                                                    "Zjadłeś już dziś za dużo!"
+                                                                } else {
+                                                                    "Posiłek spożyty"
+                                                                }
+
+                                                                Toast.makeText(this@DaylistActivity, message, Toast.LENGTH_SHORT)
+                                                                    .show()
+                                                            }
+
+                                                            override fun onCancelled(error: DatabaseError) {
+                                                                Log.w(TAG, "loadUser:onCancelled", error.toException())
+                                                            }
+                                                        })
+                                                }
+
+                                                override fun onCancelled(error: DatabaseError) {
+                                                    Log.w(TAG, "loadEatenEntries:onCancelled", error.toException())
+                                                }
+                                            })
                                     }
                                     .addOnFailureListener {
                                         Toast.makeText(
