@@ -5,11 +5,19 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.bumptech.glide.Glide
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import model.DailyNutrition
+import model.Posilki
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -31,31 +39,45 @@ class NotificationUtils {
             calendar.time = targetTime
         }
 
-        val requestCode = 0
-        val notificationIntent = Intent(context, NotificationReceiver::class.java)
-        notificationIntent.putExtra("NOTIFICATION_MESSAGE", "Your notification message")
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            requestCode,
-            notificationIntent,
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            } else {
-                PendingIntent.FLAG_UPDATE_CURRENT
-            }
-        )
+        val database = FirebaseDatabase.getInstance()
+        val posilkiRef = database.getReference("dishes")
+        val posilekId = dailyNutrition.posilekId
+        posilkiRef.child(posilekId).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val dish = snapshot.getValue(Posilki::class.java)
+                if (dish != null) {
+                    val requestCode = 0
+                    val notificationIntent = Intent(context, NotificationReceiver::class.java)
+                    notificationIntent.putExtra("NOTIFICATION_MESSAGE", "O ${dailyNutrition.time} jest ${dish.name} do zjedzenia!")
+                    val pendingIntent = PendingIntent.getBroadcast(
+                        context,
+                        requestCode,
+                        notificationIntent,
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                        } else {
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                        }
+                    )
 
-        alarmManager.setExact(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            pendingIntent
-        )
+                    alarmManager.setExact(
+                        AlarmManager.RTC_WAKEUP,
+                        calendar.timeInMillis,
+                        pendingIntent
+                    )
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+            }
+        })
     }
 
     // Method to create and show the notification
     fun showNotification(context: Context, message: String) {
         val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setContentTitle("Notification Title")
+            .setContentTitle("Przyszedł czas na spożycie posiłku!")
             .setContentText(message)
             .setSmallIcon(R.drawable.ic_posilki)
             .setAutoCancel(true)

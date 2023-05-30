@@ -7,10 +7,13 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.NotificationManagerCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -62,13 +65,11 @@ class ProfileActivity : AppCompatActivity() {
                 val lastName = dataSnapshot.child("lastName").value as? String
                 val email = dataSnapshot.child("email").value as? String
                 val gender = dataSnapshot.child("gender").value as? String
-                val notificationsEnabled = dataSnapshot.child("notificationsEnabled").value as? Boolean
                 if (email != null) {
                     editTextFirstName.setText(firstName)
                     editTextLastName.setText(lastName)
                     editTextEmail.setText(email)
                     spinnerGender.setSelection(getGenderIndex(gender?: "Nie wybrana"))
-                    switchNotifications.isChecked = notificationsEnabled?: true
                     Glide.with(applicationContext)
                         .load(dataSnapshot.child("photoUrl").value).apply(RequestOptions.circleCropTransform())
                         .into(avatarImage)
@@ -79,6 +80,42 @@ class ProfileActivity : AppCompatActivity() {
                 //...
             }
         })
+        var isUserInteraction = false // Flag to check if change is due to user interaction
+
+        switchNotifications.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                isUserInteraction = true
+            }
+            false
+        }
+        switchNotifications.isChecked = NotificationManagerCompat.from(this@ProfileActivity).areNotificationsEnabled()
+        switchNotifications.setOnCheckedChangeListener { _, isChecked ->
+            if (isUserInteraction) {
+                val builder = AlertDialog.Builder(this, R.style.AlertDialogCustom)
+                if (isChecked) {
+                    builder.setTitle("Notifications Disabled")
+                    builder.setMessage("Notifications are disabled for this app. Please enable notifications in the settings to receive updates.")
+                } else {
+                    builder.setTitle("Notifications Enabled")
+                    builder.setMessage("Notifications are enabled for this app. You can disable them in settings.")
+                }
+                builder.setPositiveButton("Go to Settings") { _, _ ->
+                    // Open the app's notification settings
+                    val intent = Intent()
+                    intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
+                    intent.putExtra("app_package", packageName)
+                    intent.putExtra("app_uid", applicationInfo.uid)
+                    intent.putExtra("android.provider.extra.APP_PACKAGE", packageName)
+                    startActivity(intent)
+                }
+                builder.setNegativeButton("Cancel") { _, _ ->
+                    // Handle the cancellation if needed
+                }
+                val dialog = builder.create()
+                dialog.show()
+                isUserInteraction = false
+            }
+        }
 
         //Edit image
         editImage = findViewById<ImageView>(R.id.edit_avatar_btn)
@@ -163,7 +200,10 @@ class ProfileActivity : AppCompatActivity() {
             finish()
         })
     }
-
+    override fun onResume() {
+        super.onResume()
+        switchNotifications.isChecked = NotificationManagerCompat.from(this@ProfileActivity).areNotificationsEnabled()
+    }
     private fun getGenderIndex(gender: String): Int {
         if(gender == "Żeńska"){
             return 1
@@ -187,14 +227,12 @@ class ProfileActivity : AppCompatActivity() {
         val lastName = editTextLastName.text.toString()
         val email = editTextEmail.text.toString()
         val gender = spinnerGender.selectedItem.toString()
-        val notificationsEnabled = switchNotifications.isChecked
 
         val userRef = FirebaseDatabase.getInstance().reference.child("users").child(userId)
         userRef.child("firstName").setValue(firstName)
         userRef.child("lastName").setValue(lastName)
         userRef.child("email").setValue(email)
         userRef.child("gender").setValue(gender)
-        userRef.child("notificationsEnabled").setValue(notificationsEnabled)
 
         Toast.makeText(this, "Profil został zapisany", Toast.LENGTH_SHORT).show()
     }

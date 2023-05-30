@@ -6,6 +6,5 @@ data class User(
     val firstName: String? = "",
     val lastName: String? = "",
     val gender: String? = "",
-    val notificationsEnabled: Boolean? = true,
     val photoUrl: String? = "",
 )
