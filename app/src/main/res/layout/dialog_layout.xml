@@ -9,7 +9,7 @@
             android:id="@+id/ingredients_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#A0327D68"/>
+            android:background="@drawable/gradient_green_main"/>
 
 
 </LinearLayout>
