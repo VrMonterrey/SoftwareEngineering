@@ -68,7 +68,7 @@ class HistoryActivity : AppCompatActivity(), HistoryAdapter.HistoryAdapterListen
                         }
                     }
                 }
-                dishes.sortBy { it.date }
+                dishes.sortByDescending { it.date }
                 dishList.addAll(dishes)
                 dishAdapter.updateData(dishes)
             }

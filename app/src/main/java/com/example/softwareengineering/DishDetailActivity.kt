@@ -215,12 +215,12 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
             val currentHour = currentTime.get(Calendar.HOUR_OF_DAY)
             val currentMinute = currentTime.get(Calendar.MINUTE)
 
-            val timePickerDialog = TimePickerDialog(context, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+            val timePickerDialog = TimePickerDialog(context,R.style.MyTimePickerDialogTheme, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
                 val timeToEat = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute)
 
                 val daysOfWeek = arrayOf("Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela")
 
-                val builder = AlertDialog.Builder(context)
+                val builder = AlertDialog.Builder(context, R.style.AlertDialogCustom)
                 builder.setTitle("Wybierz dzień tygodnia")
                 builder.setItems(daysOfWeek) { _, selectedDayIndex ->
                     val selectedDayOfWeek = selectedDayIndex + 1 // Adding 1 to make it 1-based index
