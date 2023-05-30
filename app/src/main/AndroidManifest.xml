@@ -26,6 +26,11 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".ChartActivity"
+            android:exported="false"
+            android:label="@string/title_activity_chart"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+        <activity
             android:name=".HistoryAdapter"
             android:exported="false" />
         <activity
@@ -150,7 +155,8 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"/>
 
         <meta-data
             android:name="preloaded_fonts"
