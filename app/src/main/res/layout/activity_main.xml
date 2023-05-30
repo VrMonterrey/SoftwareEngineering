@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/gradient_green_main">
+    android:background="@drawable/gradient_green_main"
+    android:theme="@style/Theme.AppCompat">
 
     <TextView
         android:id="@+id/user"
@@ -171,6 +172,7 @@
                 android:textStyle="bold"
                 android:textAlignment="center"
                 android:paddingVertical="1dp"
+                android:paddingHorizontal="8dp"
                 android:background="@drawable/menu_active_element_background"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/home_button"

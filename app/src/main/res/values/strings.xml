@@ -139,4 +139,5 @@
         <item>4</item>
         <item>5</item>
     </string-array>
+    <string name="title_activity_chart">ChartActivity</string>
 </resources>
