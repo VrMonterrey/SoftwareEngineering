@@ -7,21 +7,17 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.softwareengineering.ui.theme.PieChartView
 import model.Eaten
 import model.Macros
 import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -32,14 +28,18 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.*
+import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
     private lateinit var profile: ImageButton
     private lateinit var categories: ImageButton
+
+    private lateinit var carbsValueField: TextView
+    private lateinit var proteinValueField: TextView
+    private lateinit var fatValueField: TextView
 
     private lateinit var auth: FirebaseAuth
     private lateinit var textView: TextView
@@ -169,6 +169,11 @@ class MainActivity : AppCompatActivity() {
         categories = findViewById(R.id.categories_btn)
         profile = findViewById(R.id.profile_button)
 
+        //Pie Chart el. init.
+        carbsValueField = findViewById<TextView>(R.id.carbs_value)
+        proteinValueField = findViewById<TextView>(R.id.protein_value)
+        fatValueField = findViewById<TextView>(R.id.fat_value)
+
         textView = findViewById(R.id.user)
         auth = Firebase.auth
         user = auth.currentUser
@@ -183,13 +188,46 @@ class MainActivity : AppCompatActivity() {
 
         val currentUser = FirebaseAuth.getInstance().currentUser
         val currentUserId = currentUser?.uid ?: ""
+
+        var proteinValue: Double = 0.0
+        var carbsValue: Double = 0.0
+        var fatValue: Double = 0.0
+
+
+
+        // Pie Chart
+
+        //Get macro entries
+        val currentDate = System.currentTimeMillis()
+        println("Current date: $currentDate")
+
+        val composeView = findViewById<ComposeView>(R.id.composeView)
+
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val eatenEntries = fetchUserEatenEntries(currentUserId)
                 val aggregatedMacros = aggregateEatenEntriesByDay(eatenEntries)
 
+                for (entry in eatenEntries) {
+                    proteinValue += entry.protein
+                    carbsValue += entry.carbs
+                    fatValue += entry.fat
+                }
+
                 withContext(Dispatchers.Main) {
                     updateBarChart(aggregatedMacros)
+
+                    carbsValueField.text = carbsValue.roundToInt().toString()
+                    proteinValueField.text = proteinValue.roundToInt().toString()
+                    fatValueField.text = fatValue.roundToInt().toString()
+
+                    composeView.setContent {
+                        PieChartView(data = mapOf(
+                            Pair("Węglewodany", carbsValue.roundToInt()),
+                            Pair("Białko", proteinValue.roundToInt()),
+                            Pair("Tłuszcze", fatValue.roundToInt()),
+                        ))
+                    }
                 }
             } catch (e: Exception) {
                 // Handle exception
@@ -221,62 +259,6 @@ class MainActivity : AppCompatActivity() {
             finish()
         })
 
-        // Pie Chart
-        val pieChartWrapper: ConstraintLayout = findViewById(R.id.pieChartWrapper)
-        val context = pieChartWrapper.context
-
-        val composeView = ComposeView(context).apply {
-            id = View.generateViewId()
-            layoutParams = ConstraintLayout.LayoutParams(
-                ConstraintLayout.LayoutParams.MATCH_PARENT,
-                ConstraintLayout.LayoutParams.MATCH_PARENT
-            )
-        }
-
-        pieChartWrapper.addView(composeView)
-
-        //Get macro entries
-        val database = FirebaseDatabase.getInstance()
-
-        val currentDate = System.currentTimeMillis()
-        println("Current date: $currentDate")
-
-        val query = database.reference.child("eaten")
-            .orderByChild("userId")
-            .equalTo(currentUser?.uid)
-
-        var protein: Double = 0.0
-        var carbs: Double = 0.0
-        var fat: Double = 0.0
-
-        query.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (snapshot in dataSnapshot.children) {
-                    val eatenDish = snapshot.getValue(Eaten::class.java)
-                    protein += eatenDish?.protein ?: 0.0
-                    carbs += eatenDish?.carbs ?: 0.0
-                    fat += eatenDish?.fat ?: 0.0
-                }
-
-                println("protein: $protein")
-                println("carbs: $carbs")
-                println("fat: $fat")
-                println("User: ${currentUser?.uid}")
-
-                val composeContent: @Composable () -> Unit = {
-                    PieChartView(data = mapOf(
-                        Pair("Białko", protein.toInt()),
-                        Pair("Węglewodany", carbs.toInt()),
-                        Pair("Tłuszcze", fat.toInt()),
-                    ))
-                }
-                composeView.setContent(composeContent)
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                //...
-            }
-        })
     }
 
 }

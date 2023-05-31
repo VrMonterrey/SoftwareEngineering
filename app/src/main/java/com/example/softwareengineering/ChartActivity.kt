@@ -19,13 +19,13 @@ class ChartActivity : ComponentActivity() {
                 verticalArrangement = Arrangement.Center
             ) {
                 // Preview with sample data
-                PieChartView(
-                    data = mapOf(
-                        Pair("Białko", 115),
-                        Pair("Węglewodany", 230),
-                        Pair("Tłuszcze", 80),
-                    )
-                )
+//                PieChartView(
+//                    data = mapOf(
+//                        Pair("Białko", 115),
+//                        Pair("Węglewodany", 230),
+//                        Pair("Tłuszcze", 80),
+//                    )
+//                )
 
             }
 //            PieChartView2()

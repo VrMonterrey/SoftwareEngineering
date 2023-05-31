@@ -40,8 +40,8 @@ fun PieChartView(
 
     val colors = listOf(
         Green,
+        Yellow,
         Red,
-        Yellow
     )
 
     var animationPlayed by remember { mutableStateOf(false) }

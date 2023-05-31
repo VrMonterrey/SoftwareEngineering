@@ -87,5 +87,7 @@ dependencies {
     implementation 'androidx.compose.runtime:runtime:1.4.3'
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 
+    implementation 'com.github.furkanaskin:ClickablePieChart:1.0.9'
+
 }
 
