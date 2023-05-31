@@ -104,25 +104,22 @@ class DaylistActivity : AppCompatActivity(), DailyAdapter.DailyAdapterListener {
         var sumCarbs: Double = 0.0
         var sumFats: Double = 0.0
         var amount: Int = 0
-        val skladnikIds: MutableList<String> = mutableListOf()
 
         databaseReference.orderByChild("posilkiId").equalTo(posilkiId)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    val totalIngredients = snapshot.childrenCount.toInt()
+                    var processedIngredients = 0
+
                     for (skladPosilkiSnapshot in snapshot.children) {
                         val skladPosilki = skladPosilkiSnapshot.getValue(SkladPosilku::class.java)
                         skladPosilki?.let {
                             val skladnikId = it.skladnikId
                             val amountInGrams = it.amount
-
-                            skladnikIds.add(skladnikId)
                             amount += amountInGrams
 
-                            val skladnikReference =
-                                FirebaseDatabase.getInstance().reference.child("products")
-                                    .child(skladnikId)
-                            skladnikReference.addListenerForSingleValueEvent(object :
-                                ValueEventListener {
+                            val skladnikReference = FirebaseDatabase.getInstance().reference.child("products").child(skladnikId)
+                            skladnikReference.addListenerForSingleValueEvent(object : ValueEventListener {
                                 override fun onDataChange(skladnikSnapshot: DataSnapshot) {
                                     val skladnik = skladnikSnapshot.getValue(Skladnik::class.java)
                                     skladnik?.let { skladnik ->
@@ -131,25 +128,22 @@ class DaylistActivity : AppCompatActivity(), DailyAdapter.DailyAdapterListener {
                                         val skladnikCarbsPer100g = skladnik.carbs
                                         val skladnikFatsPer100g = skladnik.fat
 
-                                        val skladnikCalories: Double =
-                                            (skladnikCaloriesPer100g * amountInGrams) / 100
-                                        val skladnikProteins: Double =
-                                            (skladnikProteinsPer100g * amountInGrams) / 100
-                                        val skladnikCarbs: Double =
-                                            (skladnikCarbsPer100g * amountInGrams) / 100
-                                        val skladnikFats: Double =
-                                            (skladnikFatsPer100g * amountInGrams) / 100
+                                        val skladnikCalories: Double = (skladnikCaloriesPer100g * amountInGrams) / 100
+                                        val skladnikProteins: Double = (skladnikProteinsPer100g * amountInGrams) / 100
+                                        val skladnikCarbs: Double = (skladnikCarbsPer100g * amountInGrams) / 100
+                                        val skladnikFats: Double = (skladnikFatsPer100g * amountInGrams) / 100
 
                                         sumCalories += skladnikCalories
                                         sumProteins += skladnikProteins
                                         sumCarbs += skladnikCarbs
                                         sumFats += skladnikFats
+
+                                        processedIngredients++
+                                        if (processedIngredients == totalIngredients) {
+                                            val nutrients = MacroNutrients(sumCalories, sumProteins, sumCarbs, sumFats, amount)
+                                            callback(nutrients)
+                                        }
                                     }
-
-
-
-                                    val nutrients = MacroNutrients(sumCalories, sumProteins, sumCarbs, sumFats, amount)
-                                    callback(nutrients)
                                 }
 
                                 override fun onCancelled(error: DatabaseError) {
