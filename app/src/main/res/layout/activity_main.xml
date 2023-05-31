@@ -15,7 +15,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="20dp"
         android:layout_marginHorizontal="40dp"
-        android:text="TextView"
+        android:text="@string/textview"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="11sp"
@@ -84,21 +84,153 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/pieChartWrapper"
-            android:layout_width="180dp"
+            android:layout_width="0dp"
             android:layout_height="150dp"
+            app:layout_constraintWidth_percent="0.57"
             app:layout_constraintTop_toBottomOf="@+id/marco2_label"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent">
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--        <com.github.mikephil.charting.charts.PieChart-->
-<!--            android:id="@+id/chart"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="150dp"-->
-<!--            android:layout_marginBottom="15dp"-->
-<!--            android:layout_marginHorizontal="25dp"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/legendWrapper"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            app:layout_constraintWidth_percent="0.43"
+            app:layout_constraintTop_toBottomOf="@+id/marco2_label"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/pieChartWrapper">
+            
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/green_circle"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="2dp"
+                    android:src="@drawable/ic_circle_green"
+                    android:contentDescription="@string/green_legend_circle"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"/>
+                
+                <TextView
+                    android:id="@+id/carbs_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:text="@string/w_glewodany"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/green_circle"/>
+
+                <TextView
+                    android:id="@+id/carbs_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/green"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:text="@string/_120"
+                    app:layout_constraintTop_toBottomOf="@+id/carbs_title"
+                    app:layout_constraintLeft_toRightOf="@+id/green_circle"/>
+                
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/protein_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <ImageView
+                    android:id="@+id/yellow_circle"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="2dp"
+                    android:src="@drawable/ic_circle_yellow"
+                    android:contentDescription="@string/green_legend_circle"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"/>
+
+                <TextView
+                    android:id="@+id/protein_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:text="@string/bialko"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/yellow_circle"/>
+
+                <TextView
+                    android:id="@+id/protein_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/yellowWarm"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:text="@string/_120"
+                    app:layout_constraintTop_toBottomOf="@+id/protein_title"
+                    app:layout_constraintLeft_toRightOf="@+id/yellow_circle"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <ImageView
+                    android:id="@+id/red_circle"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="2dp"
+                    android:src="@drawable/ic_circle_red"
+                    android:contentDescription="@string/green_legend_circle"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"/>
+
+                <TextView
+                    android:id="@+id/fat_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:text="@string/tluszcze"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/red_circle"/>
+
+                <TextView
+                    android:id="@+id/fat_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/red"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:text="@string/_120"
+                    app:layout_constraintTop_toBottomOf="@+id/fat_title"
+                    app:layout_constraintLeft_toRightOf="@+id/red_circle"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

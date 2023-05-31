@@ -141,4 +141,9 @@
     </string-array>
     <string name="title_activity_chart">ChartActivity</string>
     <string name="max_kalorii">Max kalorii:</string>
+    <string name="w_glewodany">Węglewodany</string>
+    <string name="green_legend_circle">Green legend circle</string>
+    <string name="tluszcze">Tłuszcze</string>
+    <string name="textview">TextView</string>
+    <string name="_120">120</string>
 </resources>

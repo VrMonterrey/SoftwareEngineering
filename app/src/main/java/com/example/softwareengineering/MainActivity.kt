@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.compose.runtime.Composable
@@ -31,6 +32,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -232,31 +234,49 @@ class MainActivity : AppCompatActivity() {
         }
 
         pieChartWrapper.addView(composeView)
-        var protein: Macros?
-        var carbs: Int = 0
-        var fat: Int = 0
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-                val eatenEntries = fetchUserEatenEntries(currentUserId)
-                val aggregatedMacros = aggregateEatenEntriesByDay(eatenEntries)
 
-                //protein = aggregatedMacros[cals]
+        //Get macro entries
+        val database = FirebaseDatabase.getInstance()
 
+        val currentDate = System.currentTimeMillis()
+        println("Current date: $currentDate")
 
-            } catch (e: Exception) {
-                // Handle exception
+        val query = database.reference.child("eaten")
+            .orderByChild("userId")
+            .equalTo(currentUser?.uid)
+
+        var protein: Double = 0.0
+        var carbs: Double = 0.0
+        var fat: Double = 0.0
+
+        query.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (snapshot in dataSnapshot.children) {
+                    val eatenDish = snapshot.getValue(Eaten::class.java)
+                    protein += eatenDish?.protein ?: 0.0
+                    carbs += eatenDish?.carbs ?: 0.0
+                    fat += eatenDish?.fat ?: 0.0
+                }
+
+                println("protein: $protein")
+                println("carbs: $carbs")
+                println("fat: $fat")
+                println("User: ${currentUser?.uid}")
+
+                val composeContent: @Composable () -> Unit = {
+                    PieChartView(data = mapOf(
+                        Pair("Białko", protein.toInt()),
+                        Pair("Węglewodany", carbs.toInt()),
+                        Pair("Tłuszcze", fat.toInt()),
+                    ))
+                }
+                composeView.setContent(composeContent)
             }
-        }
 
-        val composeContent: @Composable () -> Unit = {
-            PieChartView(data = mapOf(
-                Pair("Białko", 115),
-                Pair("Węglewodany", 230),
-                Pair("Tłuszcze", 80),
-            ))
-        }
-
-        composeView.setContent(composeContent)
+            override fun onCancelled(databaseError: DatabaseError) {
+                //...
+            }
+        })
     }
 
 }
