@@ -25,9 +25,10 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun PieChartView(
     data: Map<String, Int>,
-    radiusOuter: Dp = 90.dp,
-    chartBarWidth: Dp = 20.dp,
+    radiusOuter: Dp = 50.dp,
+    chartBarWidth: Dp = 15.dp,
     animDuration: Int = 1000,
+    topPadding: Dp = 0.dp
 ) {
 
     val totalSum = data.values.sum()
@@ -70,8 +71,11 @@ fun PieChartView(
     }
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = topPadding)
+            .wrapContentHeight(),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
         Box(
@@ -96,10 +100,10 @@ fun PieChartView(
             }
         }
 
-        DetailsPieChart(
-            data = data,
-            colors = colors
-        )
+//        DetailsPieChart(
+//            data = data,
+//            colors = colors
+//        )
 
     }
 

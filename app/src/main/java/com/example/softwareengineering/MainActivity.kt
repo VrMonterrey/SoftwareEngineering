@@ -9,6 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.softwareengineering.ui.theme.PieChartView
 import model.Eaten
 import model.Macros
 import com.github.mikephil.charting.charts.BarChart
@@ -215,31 +220,55 @@ class MainActivity : AppCompatActivity() {
         })
 
         // First chart
-        val pieChart: PieChart = findViewById(R.id.chart)
+        val pieChartWrapper: ConstraintLayout = findViewById(R.id.pieChartWrapper)
+        val context = pieChartWrapper.context
 
-        pieChart.setUsePercentValues(true)
-        pieChart.description.isEnabled = false
-        pieChart.setExtraOffsets(5f, 10f, 5f, 5f)
-        pieChart.dragDecelerationFrictionCoef = 0.95f
-        pieChart.isDrawHoleEnabled = true
-        pieChart.setHoleColor(Color.WHITE)
-        pieChart.transparentCircleRadius = 61f
+        val composeView = ComposeView(context).apply {
+            id = View.generateViewId()
+            layoutParams = ConstraintLayout.LayoutParams(
+                ConstraintLayout.LayoutParams.MATCH_PARENT,
+                ConstraintLayout.LayoutParams.MATCH_PARENT
+            )
+        }
 
-        val entries = arrayListOf(
-            PieEntry(18.5f, "Red"),
-            PieEntry(26.7f, "Green"),
-            PieEntry(24.0f, "Blue"),
-            PieEntry(30.8f, "Yellow")
-        )
+        pieChartWrapper.addView(composeView)
 
-        val dataSet = PieDataSet(entries, "Colors")
-        dataSet.setColors(*ColorTemplate.MATERIAL_COLORS)
+        val composeContent: @Composable () -> Unit = {
+            // Создание и настройка Jetpack Compose диаграммы здесь
+            PieChartView(data = mapOf(
+                Pair("Białko", 115),
+                Pair("Węglewodany", 230),
+                Pair("Tłuszcze", 80),
+            ))
+        }
 
-        val data = PieData(dataSet)
-        data.setValueTextSize(15f)
-        data.setValueTextColor(Color.WHITE)
+        composeView.setContent(composeContent)
 
-        pieChart.data = data
+//        val pieChart: PieChart = findViewById(R.id.chart)
+//
+//        pieChart.setUsePercentValues(true)
+//        pieChart.description.isEnabled = false
+//        pieChart.setExtraOffsets(5f, 10f, 5f, 5f)
+//        pieChart.dragDecelerationFrictionCoef = 0.95f
+//        pieChart.isDrawHoleEnabled = true
+//        pieChart.setHoleColor(Color.WHITE)
+//        pieChart.transparentCircleRadius = 61f
+//
+//        val entries = arrayListOf(
+//            PieEntry(18.5f, "Red"),
+//            PieEntry(26.7f, "Green"),
+//            PieEntry(24.0f, "Blue"),
+//            PieEntry(30.8f, "Yellow")
+//        )
+//
+//        val dataSet = PieDataSet(entries, "Colors")
+//        dataSet.setColors(*ColorTemplate.MATERIAL_COLORS)
+//
+//        val data = PieData(dataSet)
+//        data.setValueTextSize(15f)
+//        data.setValueTextColor(Color.WHITE)
+//
+//        pieChart.data = data
 
     }
 

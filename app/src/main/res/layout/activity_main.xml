@@ -62,6 +62,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/marco2_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="25dp"
@@ -81,13 +82,23 @@
             app:layout_constraintTop_toTopOf="parent"
             android:contentDescription="@string/chart_history_icon_alt" />
 
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/chart"
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/pieChartWrapper"
+            android:layout_width="180dp"
             android:layout_height="150dp"
-            android:layout_marginBottom="15dp"
-            android:layout_marginHorizontal="25dp"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/marco2_label"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--        <com.github.mikephil.charting.charts.PieChart-->
+<!--            android:id="@+id/chart"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="150dp"-->
+<!--            android:layout_marginBottom="15dp"-->
+<!--            android:layout_marginHorizontal="25dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

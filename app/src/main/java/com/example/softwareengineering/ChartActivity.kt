@@ -14,21 +14,21 @@ class ChartActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-//            Column(
-//                modifier = Modifier.fillMaxSize(),
-//                verticalArrangement = Arrangement.Center
-//            ) {
-//                // Preview with sample data
-//                PieChartView(
-//                    data = mapOf(
-//                        Pair("Białko", 115),
-//                        Pair("Węglewodany", 230),
-//                        Pair("Tłuszcze", 80),
-//                    )
-//                )
-//
-//            }
-            PieChartView2()
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center
+            ) {
+                // Preview with sample data
+                PieChartView(
+                    data = mapOf(
+                        Pair("Białko", 115),
+                        Pair("Węglewodany", 230),
+                        Pair("Tłuszcze", 80),
+                    )
+                )
+
+            }
+//            PieChartView2()
         }
     }
 }
