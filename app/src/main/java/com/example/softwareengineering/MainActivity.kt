@@ -219,7 +219,7 @@ class MainActivity : AppCompatActivity() {
             finish()
         })
 
-        // First chart
+        // Pie Chart
         val pieChartWrapper: ConstraintLayout = findViewById(R.id.pieChartWrapper)
         val context = pieChartWrapper.context
 
@@ -232,9 +232,23 @@ class MainActivity : AppCompatActivity() {
         }
 
         pieChartWrapper.addView(composeView)
+        var protein: Macros?
+        var carbs: Int = 0
+        var fat: Int = 0
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val eatenEntries = fetchUserEatenEntries(currentUserId)
+                val aggregatedMacros = aggregateEatenEntriesByDay(eatenEntries)
+
+                //protein = aggregatedMacros[cals]
+
+
+            } catch (e: Exception) {
+                // Handle exception
+            }
+        }
 
         val composeContent: @Composable () -> Unit = {
-            // Создание и настройка Jetpack Compose диаграммы здесь
             PieChartView(data = mapOf(
                 Pair("Białko", 115),
                 Pair("Węglewodany", 230),
@@ -243,33 +257,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         composeView.setContent(composeContent)
-
-//        val pieChart: PieChart = findViewById(R.id.chart)
-//
-//        pieChart.setUsePercentValues(true)
-//        pieChart.description.isEnabled = false
-//        pieChart.setExtraOffsets(5f, 10f, 5f, 5f)
-//        pieChart.dragDecelerationFrictionCoef = 0.95f
-//        pieChart.isDrawHoleEnabled = true
-//        pieChart.setHoleColor(Color.WHITE)
-//        pieChart.transparentCircleRadius = 61f
-//
-//        val entries = arrayListOf(
-//            PieEntry(18.5f, "Red"),
-//            PieEntry(26.7f, "Green"),
-//            PieEntry(24.0f, "Blue"),
-//            PieEntry(30.8f, "Yellow")
-//        )
-//
-//        val dataSet = PieDataSet(entries, "Colors")
-//        dataSet.setColors(*ColorTemplate.MATERIAL_COLORS)
-//
-//        val data = PieData(dataSet)
-//        data.setValueTextSize(15f)
-//        data.setValueTextColor(Color.WHITE)
-//
-//        pieChart.data = data
-
     }
 
 }

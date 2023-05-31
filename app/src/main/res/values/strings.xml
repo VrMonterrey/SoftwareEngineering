@@ -140,4 +140,5 @@
         <item>5</item>
     </string-array>
     <string name="title_activity_chart">ChartActivity</string>
+    <string name="max_kalorii">Max kalorii:</string>
 </resources>
