@@ -217,9 +217,9 @@ class MainActivity : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     updateBarChart(aggregatedMacros)
 
-                    carbsValueField.text = carbsValue.roundToInt().toString()
-                    proteinValueField.text = proteinValue.roundToInt().toString()
-                    fatValueField.text = fatValue.roundToInt().toString()
+                    carbsValueField.text = String.format("%.1f", carbsValue)
+                    proteinValueField.text = String.format("%.1f", proteinValue)
+                    fatValueField.text = String.format("%.1f", fatValue)
 
                     composeView.setContent {
                         PieChartView(data = mapOf(
@@ -247,7 +247,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         profile.setOnClickListener(View.OnClickListener{
-            var intent : Intent = Intent(applicationContext,ChartActivity::class.java)
+            var intent : Intent = Intent(applicationContext,ProfileActivity::class.java)
             startActivity(intent)
             finish()
         })
