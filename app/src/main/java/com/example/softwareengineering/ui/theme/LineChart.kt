@@ -61,7 +61,7 @@ fun QuadLineChart(
                 }
             }
 
-            val priceStep = (upperValue - lowerValue) / 4.5f
+            val priceStep = (upperValue - lowerValue) / 4.67f
             (0..4).forEach { i ->
                 drawContext.canvas.nativeCanvas.apply {
                     drawText(
@@ -105,11 +105,11 @@ fun QuadLineChart(
                 )
             )
 
-            val redLineY = size.height - padding.toPx() - ((redLineValue - lowerValue) / (upperValue - lowerValue) * size.height).toFloat()
+            val redLineY = size.height - padding.toPx() - 6.dp.toPx() - ((redLineValue - lowerValue) / (upperValue - lowerValue) * size.height).toFloat()
             drawLine(
                 start = Offset(spacing, redLineY),
                 end = Offset(size.width - 7, redLineY),
-                color = Yellow,
+                color = Yellow50,
                 strokeWidth = 2.dp.toPx()
             )
 

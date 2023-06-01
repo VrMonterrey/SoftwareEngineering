@@ -18,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.softwareengineering.ui.theme.PieChartView
 import com.example.softwareengineering.ui.theme.QuadLineChart
 import model.Eaten
@@ -32,6 +34,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
@@ -47,7 +50,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var carbsValueField: TextView
     private lateinit var proteinValueField: TextView
     private lateinit var fatValueField: TextView
+
     private lateinit var currentMonthField: TextView
+
+    private lateinit var currentValue: TextView
+    private lateinit var targetedValue: TextView
 
     private lateinit var auth: FirebaseAuth
     private lateinit var textView: TextView
@@ -90,87 +97,6 @@ class MainActivity : AppCompatActivity() {
         }
         return aggregatedEntries
     }
-//    fun updateBarChart(aggregatedMacros: Map<String, Macros>) {
-//        val barChart = findViewById<BarChart>(R.id.idBarChart)
-//
-//        // Create BarEntry for each day
-//        val caloriesEntries = aggregatedMacros.entries.mapIndexed { index, entry ->
-//            BarEntry(index.toFloat(), entry.value.cals.toFloat())
-//        }
-//        val proteinsEntries = aggregatedMacros.entries.mapIndexed { index, entry ->
-//            BarEntry(index.toFloat(), entry.value.prots.toFloat())
-//        }
-//        val carbsEntries = aggregatedMacros.entries.mapIndexed { index, entry ->
-//            BarEntry(index.toFloat(), entry.value.carbs.toFloat())
-//        }
-//        val fatsEntries = aggregatedMacros.entries.mapIndexed { index, entry ->
-//            BarEntry(index.toFloat(), entry.value.fats.toFloat())
-//        }
-//
-//        // Create BarDataSets
-//        val caloriesDataSet = BarDataSet(caloriesEntries, "Kalorie")
-//        caloriesDataSet.color = Color.rgb(104, 241, 175)
-//        caloriesDataSet.valueTextColor = Color.rgb(104, 241, 175)
-//
-//        val proteinsDataSet = BarDataSet(proteinsEntries, "Białko")
-//        proteinsDataSet.color = Color.rgb(164, 228, 251)
-//        proteinsDataSet.valueTextColor = Color.rgb(164, 228, 251)
-//
-//        val carbsDataSet = BarDataSet(carbsEntries, "Węglowodany")
-//        carbsDataSet.color = Color.rgb(242, 247, 158)
-//        carbsDataSet.valueTextColor = Color.rgb(242, 247, 158)
-//
-//        val fatsDataSet = BarDataSet(fatsEntries, "Tłuszcz")
-//        fatsDataSet.color = Color.rgb(255, 102, 0)
-//        fatsDataSet.valueTextColor = Color.rgb(255, 102, 0)
-//
-//        // Create BarData and set it to BarChart
-//        val data = BarData(caloriesDataSet, proteinsDataSet, carbsDataSet, fatsDataSet)
-//        barChart.data = data
-//        barChart.isDragEnabled = true
-//        barChart.setScaleEnabled(true)
-//        barChart.xAxis.axisMinimum = 0f
-//        barChart.xAxis.axisMaximum = data.entryCount.toFloat()
-//
-//        val sdfInput = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-//        val sdfOutput = SimpleDateFormat("dd/MM", Locale.getDefault())
-//        val formattedDates = aggregatedMacros.keys.map { key ->
-//            sdfOutput.format(sdfInput.parse(key)!!)
-//        }
-//        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(formattedDates)
-//
-//        val yAxisLeft = barChart.axisLeft
-//        val yAxisRight = barChart.axisRight
-//
-//        yAxisLeft.axisMinimum = 0f
-//        yAxisRight.axisMinimum = 0f
-//
-//        val textColor = Color.WHITE
-//
-//        // For X-Axis Labels
-//        barChart.xAxis.textColor = textColor
-//
-//        // For Y-Axis Labels (Left and Right)
-//        barChart.axisLeft.textColor = textColor
-//        barChart.axisRight.textColor = textColor
-//
-//        // For Legend Labels
-//        barChart.legend.textColor = textColor
-//
-//
-//        // Remove description label
-//        barChart.description.isEnabled = false
-//
-//        // Add space between bars
-//        val groupSpace = 0.08f
-//        val barSpace = 0.04f
-//        val barWidth = 0.4f
-//        data.barWidth = barWidth
-//        barChart.groupBars(0f, groupSpace, barSpace)
-//
-//        // Update the BarChart
-//        barChart.invalidate()
-//    }
 
     @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("MissingInflatedId", "SetTextI18n")
@@ -189,6 +115,9 @@ class MainActivity : AppCompatActivity() {
 
         //Line Chart el. init.
         currentMonthField = findViewById<TextView>(R.id.currentMonthLabel)
+
+        currentValue = findViewById<TextView>(R.id.current_value)
+        targetedValue = findViewById<TextView>(R.id.targeted_value)
 
         //Current user email el. init.
         textView = findViewById(R.id.user)
@@ -209,6 +138,7 @@ class MainActivity : AppCompatActivity() {
         var proteinValue: Double = 0.0
         var carbsValue: Double = 0.0
         var fatValue: Double = 0.0
+        var calsValue: Double = 0.0
 
         //Charts
         val currentDate = System.currentTimeMillis()
@@ -231,6 +161,7 @@ class MainActivity : AppCompatActivity() {
                         proteinValue += macrosForToday.prots
                         carbsValue += macrosForToday.carbs
                         fatValue += macrosForToday.fats
+                        calsValue += macrosForToday.cals
                         break
                     }
                 }
@@ -274,39 +205,56 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                println("Line chart: $listOfPairs")
+                val database = Firebase.database.reference
+                if (currentUser != null) {
+                    val maxValue = suspendCoroutine<Double> { continuation ->
+                        database.child("users").child(currentUser.uid).addListenerForSingleValueEvent(object :
+                            ValueEventListener {
+                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                val value = dataSnapshot.child("calsMax").getValue(Double::class.java)!!
+                                targetedValue.text = value.toString()
+                                continuation.resume(value)
+                            }
 
-                withContext(Dispatchers.Main) {
-
-                    carbsValueField.text = String.format("%.1f", carbsValue)
-                    proteinValueField.text = String.format("%.1f", proteinValue)
-                    fatValueField.text = String.format("%.1f", fatValue)
-
-                    currentMonthField.text = "Miesiąc: ${SimpleDateFormat("MM", Locale.getDefault()).format(Date())}"
-
-                    composeView.setContent {
-                        PieChartView(data = mapOf(
-                            Pair("Węglewodany", carbsValue.roundToInt()),
-                            Pair("Białko", proteinValue.roundToInt()),
-                            Pair("Tłuszcze", fatValue.roundToInt()),
-                        ))
+                            override fun onCancelled(databaseError: DatabaseError) {
+                                continuation.resumeWithException(databaseError.toException())
+                            }
+                        })
                     }
 
-                    composeView2.setContent {
+                    withContext(Dispatchers.Main) {
+                        carbsValueField.text = String.format("%.1f", carbsValue)
+                        proteinValueField.text = String.format("%.1f", proteinValue)
+                        fatValueField.text = String.format("%.1f", fatValue)
+
+                        currentValue.text = String.format("%.1f", calsValue)
+
+                        currentMonthField.text = "Miesiąc: ${SimpleDateFormat("MM", Locale.getDefault()).format(Date())}"
+
+                        composeView.setContent {
+                            PieChartView(data = mapOf(
+                                Pair("Węglewodany", carbsValue.roundToInt()),
+                                Pair("Białko", proteinValue.roundToInt()),
+                                Pair("Tłuszcze", fatValue.roundToInt()),
+                            ))
+                        }
+
+                        composeView2.setContent {
                             QuadLineChart(
                                 data = listOfPairs,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(130.dp),
-                                redLineValue = 800.0
+                                redLineValue = maxValue
                             )
-
+                        }
                     }
                 }
             } catch (e: Exception) {
-                // Handle exception
+                // Обработка ошибок
             }
         }
+
 
         home.setOnClickListener(View.OnClickListener{
             var intent : Intent = Intent(applicationContext,MainActivity::class.java)

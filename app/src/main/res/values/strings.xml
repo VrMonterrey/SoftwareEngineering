@@ -147,4 +147,7 @@
     <string name="textview">TextView</string>
     <string name="_120">120</string>
     <string name="mesiac">Mesiąc</string>
+    <string name="postepy_dietetyczne">Postępy dietetyczne</string>
+    <string name="aktualne">Aktualne</string>
+    <string name="_2000">2000</string>
 </resources>
