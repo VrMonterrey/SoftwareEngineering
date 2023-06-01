@@ -82,87 +82,87 @@ class MainActivity : AppCompatActivity() {
         }
         return aggregatedEntries
     }
-    fun updateBarChart(aggregatedMacros: Map<String, Macros>) {
-        val barChart = findViewById<BarChart>(R.id.idBarChart)
-
-        // Create BarEntry for each day
-        val caloriesEntries = aggregatedMacros.entries.mapIndexed { index, entry ->
-            BarEntry(index.toFloat(), entry.value.cals.toFloat())
-        }
-        val proteinsEntries = aggregatedMacros.entries.mapIndexed { index, entry ->
-            BarEntry(index.toFloat(), entry.value.prots.toFloat())
-        }
-        val carbsEntries = aggregatedMacros.entries.mapIndexed { index, entry ->
-            BarEntry(index.toFloat(), entry.value.carbs.toFloat())
-        }
-        val fatsEntries = aggregatedMacros.entries.mapIndexed { index, entry ->
-            BarEntry(index.toFloat(), entry.value.fats.toFloat())
-        }
-
-        // Create BarDataSets
-        val caloriesDataSet = BarDataSet(caloriesEntries, "Kalorie")
-        caloriesDataSet.color = Color.rgb(104, 241, 175)
-        caloriesDataSet.valueTextColor = Color.rgb(104, 241, 175)
-
-        val proteinsDataSet = BarDataSet(proteinsEntries, "Białko")
-        proteinsDataSet.color = Color.rgb(164, 228, 251)
-        proteinsDataSet.valueTextColor = Color.rgb(164, 228, 251)
-
-        val carbsDataSet = BarDataSet(carbsEntries, "Węglowodany")
-        carbsDataSet.color = Color.rgb(242, 247, 158)
-        carbsDataSet.valueTextColor = Color.rgb(242, 247, 158)
-
-        val fatsDataSet = BarDataSet(fatsEntries, "Tłuszcz")
-        fatsDataSet.color = Color.rgb(255, 102, 0)
-        fatsDataSet.valueTextColor = Color.rgb(255, 102, 0)
-
-        // Create BarData and set it to BarChart
-        val data = BarData(caloriesDataSet, proteinsDataSet, carbsDataSet, fatsDataSet)
-        barChart.data = data
-        barChart.isDragEnabled = true
-        barChart.setScaleEnabled(true)
-        barChart.xAxis.axisMinimum = 0f
-        barChart.xAxis.axisMaximum = data.entryCount.toFloat()
-
-        val sdfInput = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val sdfOutput = SimpleDateFormat("dd/MM", Locale.getDefault())
-        val formattedDates = aggregatedMacros.keys.map { key ->
-            sdfOutput.format(sdfInput.parse(key)!!)
-        }
-        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(formattedDates)
-
-        val yAxisLeft = barChart.axisLeft
-        val yAxisRight = barChart.axisRight
-
-        yAxisLeft.axisMinimum = 0f
-        yAxisRight.axisMinimum = 0f
-
-        val textColor = Color.WHITE
-
-        // For X-Axis Labels
-        barChart.xAxis.textColor = textColor
-
-        // For Y-Axis Labels (Left and Right)
-        barChart.axisLeft.textColor = textColor
-        barChart.axisRight.textColor = textColor
-
-        // For Legend Labels
-        barChart.legend.textColor = textColor
-
-
-        // Remove description label
-        barChart.description.isEnabled = false
-
-        // Add space between bars
-        val groupSpace = 0.08f
-        val barSpace = 0.04f
-        val barWidth = 0.4f
-        data.barWidth = barWidth
-        barChart.groupBars(0f, groupSpace, barSpace)
-
-        // Update the BarChart
-        barChart.invalidate()
-    }
+//    fun updateBarChart(aggregatedMacros: Map<String, Macros>) {
+//        val barChart = findViewById<BarChart>(R.id.idBarChart)
+//
+//        // Create BarEntry for each day
+//        val caloriesEntries = aggregatedMacros.entries.mapIndexed { index, entry ->
+//            BarEntry(index.toFloat(), entry.value.cals.toFloat())
+//        }
+//        val proteinsEntries = aggregatedMacros.entries.mapIndexed { index, entry ->
+//            BarEntry(index.toFloat(), entry.value.prots.toFloat())
+//        }
+//        val carbsEntries = aggregatedMacros.entries.mapIndexed { index, entry ->
+//            BarEntry(index.toFloat(), entry.value.carbs.toFloat())
+//        }
+//        val fatsEntries = aggregatedMacros.entries.mapIndexed { index, entry ->
+//            BarEntry(index.toFloat(), entry.value.fats.toFloat())
+//        }
+//
+//        // Create BarDataSets
+//        val caloriesDataSet = BarDataSet(caloriesEntries, "Kalorie")
+//        caloriesDataSet.color = Color.rgb(104, 241, 175)
+//        caloriesDataSet.valueTextColor = Color.rgb(104, 241, 175)
+//
+//        val proteinsDataSet = BarDataSet(proteinsEntries, "Białko")
+//        proteinsDataSet.color = Color.rgb(164, 228, 251)
+//        proteinsDataSet.valueTextColor = Color.rgb(164, 228, 251)
+//
+//        val carbsDataSet = BarDataSet(carbsEntries, "Węglowodany")
+//        carbsDataSet.color = Color.rgb(242, 247, 158)
+//        carbsDataSet.valueTextColor = Color.rgb(242, 247, 158)
+//
+//        val fatsDataSet = BarDataSet(fatsEntries, "Tłuszcz")
+//        fatsDataSet.color = Color.rgb(255, 102, 0)
+//        fatsDataSet.valueTextColor = Color.rgb(255, 102, 0)
+//
+//        // Create BarData and set it to BarChart
+//        val data = BarData(caloriesDataSet, proteinsDataSet, carbsDataSet, fatsDataSet)
+//        barChart.data = data
+//        barChart.isDragEnabled = true
+//        barChart.setScaleEnabled(true)
+//        barChart.xAxis.axisMinimum = 0f
+//        barChart.xAxis.axisMaximum = data.entryCount.toFloat()
+//
+//        val sdfInput = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+//        val sdfOutput = SimpleDateFormat("dd/MM", Locale.getDefault())
+//        val formattedDates = aggregatedMacros.keys.map { key ->
+//            sdfOutput.format(sdfInput.parse(key)!!)
+//        }
+//        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(formattedDates)
+//
+//        val yAxisLeft = barChart.axisLeft
+//        val yAxisRight = barChart.axisRight
+//
+//        yAxisLeft.axisMinimum = 0f
+//        yAxisRight.axisMinimum = 0f
+//
+//        val textColor = Color.WHITE
+//
+//        // For X-Axis Labels
+//        barChart.xAxis.textColor = textColor
+//
+//        // For Y-Axis Labels (Left and Right)
+//        barChart.axisLeft.textColor = textColor
+//        barChart.axisRight.textColor = textColor
+//
+//        // For Legend Labels
+//        barChart.legend.textColor = textColor
+//
+//
+//        // Remove description label
+//        barChart.description.isEnabled = false
+//
+//        // Add space between bars
+//        val groupSpace = 0.08f
+//        val barSpace = 0.04f
+//        val barWidth = 0.4f
+//        data.barWidth = barWidth
+//        barChart.groupBars(0f, groupSpace, barSpace)
+//
+//        // Update the BarChart
+//        barChart.invalidate()
+//    }
 
     @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("MissingInflatedId")
@@ -213,14 +213,27 @@ class MainActivity : AppCompatActivity() {
                 val eatenEntries = fetchUserEatenEntries(currentUserId)
                 val aggregatedMacros = aggregateEatenEntriesByDay(eatenEntries)
 
-                for (entry in eatenEntries) {
-                    proteinValue += entry.protein
-                    carbsValue += entry.carbs
-                    fatValue += entry.fat
+                val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                var macrosForToday: Macros? = null
+
+                for ((date, macros) in aggregatedMacros) {
+                    if (date == today) {
+                        macrosForToday = macros
+                        proteinValue += macrosForToday.prots
+                        carbsValue += macrosForToday.carbs
+                        fatValue += macrosForToday.fats
+                        break
+                    }
                 }
 
+//                for (entry in eatenEntries) {
+//                    proteinValue += entry.protein
+//                    carbsValue += entry.carbs
+//                    fatValue += entry.fat
+//                }
+
                 withContext(Dispatchers.Main) {
-                    updateBarChart(aggregatedMacros)
+                    //updateBarChart(aggregatedMacros)
 
                     carbsValueField.text = String.format("%.1f", carbsValue)
                     proteinValueField.text = String.format("%.1f", proteinValue)

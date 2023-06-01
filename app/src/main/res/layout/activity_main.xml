@@ -265,6 +265,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/calories2_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="25dp"
@@ -275,13 +276,28 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/calories_title"/>
 
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/idBarChart"
+<!--        <com.github.mikephil.charting.charts.BarChart-->
+<!--            android:id="@+id/idBarChart"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="115dp"-->
+<!--            android:layout_marginHorizontal="25dp"-->
+<!--            android:layout_marginBottom="15dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lineChartWrapper"
             android:layout_width="match_parent"
-            android:layout_height="115dp"
-            android:layout_marginHorizontal="25dp"
-            android:layout_marginBottom="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            android:layout_height="150dp"
+            android:padding="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/calories2_title">
+
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/composeView2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
