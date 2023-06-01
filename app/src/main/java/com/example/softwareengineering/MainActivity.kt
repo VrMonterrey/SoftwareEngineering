@@ -9,10 +9,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.softwareengineering.ui.theme.PieChartView
+import com.example.softwareengineering.ui.theme.QuadLineChart
 import model.Eaten
 import model.Macros
 import com.github.mikephil.charting.charts.BarChart
@@ -40,6 +47,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var carbsValueField: TextView
     private lateinit var proteinValueField: TextView
     private lateinit var fatValueField: TextView
+    private lateinit var currentMonthField: TextView
 
     private lateinit var auth: FirebaseAuth
     private lateinit var textView: TextView
@@ -179,6 +187,10 @@ class MainActivity : AppCompatActivity() {
         proteinValueField = findViewById<TextView>(R.id.protein_value)
         fatValueField = findViewById<TextView>(R.id.fat_value)
 
+        //Line Chart el. init.
+        currentMonthField = findViewById<TextView>(R.id.currentMonthLabel)
+
+        //Current user email el. init.
         textView = findViewById(R.id.user)
         auth = Firebase.auth
         user = auth.currentUser
@@ -198,15 +210,12 @@ class MainActivity : AppCompatActivity() {
         var carbsValue: Double = 0.0
         var fatValue: Double = 0.0
 
-
-
-        // Pie Chart
-
-        //Get macro entries
+        //Charts
         val currentDate = System.currentTimeMillis()
         println("Current date: $currentDate")
 
         val composeView = findViewById<ComposeView>(R.id.composeView)
+        val composeView2 = findViewById<ComposeView>(R.id.composeView2)
 
         GlobalScope.launch(Dispatchers.IO) {
             try {
@@ -226,14 +235,48 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-//                for (entry in eatenEntries) {
-//                    proteinValue += entry.protein
-//                    carbsValue += entry.carbs
-//                    fatValue += entry.fat
-//                }
+                val currentMonth = SimpleDateFormat("MM", Locale.getDefault()).format(Date())
+                val monthDays = 1.rangeTo(31).toList()
+                val listOfPairs = mutableListOf<Pair<Int, Double>>()
+
+                for(day in monthDays){
+                    if(day == 2){
+                        listOfPairs.add(day to 800.0)
+                    }else if(day == 3){
+                        listOfPairs.add(day to 1100.0)
+                    }
+                    else if(day == 4){
+                        listOfPairs.add(day to 600.0)
+                    }else if(day == 8){
+                        listOfPairs.add(day to 800.0)
+                    }else if(day == 10){
+                        listOfPairs.add(day to 400.0)
+                    }else if(day == 12){
+                        listOfPairs.add(day to 600.0)
+                    }else {
+                        listOfPairs.add(day to 0.0)
+                    }
+                }
+
+                for ((date, macros) in aggregatedMacros) {
+                    val month = date.substring(5, 7)
+
+                    if (month == currentMonth) {
+                        val day: Int = SimpleDateFormat("dd", Locale.getDefault()).format(Date(macros.date)).toInt()
+                        val kcal: Double = macros.cals
+
+                        for (i in listOfPairs.indices) {
+                            if (listOfPairs[i].first == day) {
+                                listOfPairs[i] = listOfPairs[i].first to kcal
+                                break
+                            }
+                        }
+                    }
+                }
+
+                println("Line chart: $listOfPairs")
 
                 withContext(Dispatchers.Main) {
-                    //updateBarChart(aggregatedMacros)
 
                     carbsValueField.text = String.format("%.1f", carbsValue)
                     proteinValueField.text = String.format("%.1f", proteinValue)
@@ -245,6 +288,16 @@ class MainActivity : AppCompatActivity() {
                             Pair("Białko", proteinValue.roundToInt()),
                             Pair("Tłuszcze", fatValue.roundToInt()),
                         ))
+                    }
+
+                    composeView2.setContent {
+                            QuadLineChart(
+                                data = listOfPairs,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(130.dp)
+                            )
+
                     }
                 }
             } catch (e: Exception) {
@@ -265,7 +318,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         profile.setOnClickListener(View.OnClickListener{
-            var intent : Intent = Intent(applicationContext,ChartActivity::class.java)
+            var intent : Intent = Intent(applicationContext,ProfileActivity::class.java)
             startActivity(intent)
             finish()
         })

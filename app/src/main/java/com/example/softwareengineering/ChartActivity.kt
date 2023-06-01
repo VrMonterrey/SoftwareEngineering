@@ -43,7 +43,7 @@ class ChartActivity : ComponentActivity() {
                     data = data,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(300.dp)
+                        .fillMaxHeight()
                         .align(CenterHorizontally)
                 )
             }
