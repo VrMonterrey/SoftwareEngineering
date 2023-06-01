@@ -38,7 +38,8 @@ class NotificationUtils {
         }
 
         // Adjust `dailyNutrition.day` according to `Calendar`'s day constants
-        val targetDayOfWeek = if (dailyNutrition.day == 7) Calendar.SUNDAY else dailyNutrition.day + 1
+        val targetDayOfWeek =
+            if (dailyNutrition.day == 7) Calendar.SUNDAY else dailyNutrition.day + 1
 
         // Set the day of the week
         calendar.set(Calendar.DAY_OF_WEEK, targetDayOfWeek)
@@ -56,8 +57,12 @@ class NotificationUtils {
                 val dish = snapshot.getValue(Posilki::class.java)
                 if (dish != null) {
                     val requestCode = dailyNutrition.id?.toIntOrNull() ?: 0
+                    val dayInPolish = getDayInPolish(dailyNutrition.day)
                     val notificationIntent = Intent(context, NotificationReceiver::class.java)
-                    notificationIntent.putExtra("NOTIFICATION_MESSAGE", "O ${dailyNutrition.time} jest ${dish.name} do zjedzenia!")
+                    notificationIntent.putExtra(
+                        "NOTIFICATION_MESSAGE",
+                        "$dayInPolish o ${dailyNutrition.time} jest ${dish.name} do zjedzenia!"
+                    )
 
                     val pendingIntent = PendingIntent.getBroadcast(
                         context,
@@ -105,5 +110,17 @@ class NotificationUtils {
         }
 
         notificationManager.notify(0, notificationBuilder.build())
+    }
+    fun getDayInPolish(day: Int): String {
+        return when (day) {
+            1 -> "W poniedziałek"
+            2 -> "We wtorek"
+            3 -> "W środę"
+            4 -> "W czwartek"
+            5 -> "W piątek"
+            6 -> "W sobotę"
+            7 -> "W niedzielę"
+            else -> "Nieznany dzień"
+        }
     }
 }
