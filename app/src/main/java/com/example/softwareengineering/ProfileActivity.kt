@@ -98,13 +98,13 @@ class ProfileActivity : AppCompatActivity() {
             if (isUserInteraction) {
                 val builder = AlertDialog.Builder(this, R.style.AlertDialogCustom)
                 if (isChecked) {
-                    builder.setTitle("Notifications Disabled")
-                    builder.setMessage("Notifications are disabled for this app. Please enable notifications in the settings to receive updates.")
+                    builder.setTitle("Powiadomienia wyłączone")
+                    builder.setMessage("Powiadomienia są włączone dla tej aplikacji. Przejdź do ustawień żeby je włączyć.")
                 } else {
-                    builder.setTitle("Notifications Enabled")
-                    builder.setMessage("Notifications are enabled for this app. You can disable them in settings.")
+                    builder.setTitle("Powiadomienia włączone")
+                    builder.setMessage("Powiadomienia są wyłączone dla tej aplikacji. Przejdź do ustawień żeby je wyłączyć.")
                 }
-                builder.setPositiveButton("Go to Settings") { _, _ ->
+                builder.setPositiveButton("Ustawienia") { _, _ ->
                     // Open the app's notification settings
                     val intent = Intent()
                     intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
@@ -113,7 +113,7 @@ class ProfileActivity : AppCompatActivity() {
                     intent.putExtra("android.provider.extra.APP_PACKAGE", packageName)
                     startActivity(intent)
                 }
-                builder.setNegativeButton("Cancel") { _, _ ->
+                builder.setNegativeButton("Cofnij") { _, _ ->
                     // Handle the cancellation if needed
                 }
                 val dialog = builder.create()

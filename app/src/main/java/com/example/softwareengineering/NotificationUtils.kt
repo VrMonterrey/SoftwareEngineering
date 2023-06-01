@@ -4,14 +4,12 @@ import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -57,9 +55,10 @@ class NotificationUtils {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val dish = snapshot.getValue(Posilki::class.java)
                 if (dish != null) {
-                    val requestCode = 0
+                    val requestCode = dailyNutrition.id?.toIntOrNull() ?: 0
                     val notificationIntent = Intent(context, NotificationReceiver::class.java)
                     notificationIntent.putExtra("NOTIFICATION_MESSAGE", "O ${dailyNutrition.time} jest ${dish.name} do zjedzenia!")
+
                     val pendingIntent = PendingIntent.getBroadcast(
                         context,
                         requestCode,
@@ -87,7 +86,7 @@ class NotificationUtils {
     // Method to create and show the notification
     fun showNotification(context: Context, message: String) {
         val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setContentTitle("Przyszedł czas na spożycie posiłku!")
+            .setContentTitle("Przypomninie!")
             .setContentText(message)
             .setSmallIcon(R.drawable.ic_posilki)
             .setAutoCancel(true)

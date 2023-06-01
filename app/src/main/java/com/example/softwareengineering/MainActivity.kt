@@ -123,8 +123,13 @@ class MainActivity : AppCompatActivity() {
         barChart.setScaleEnabled(true)
         barChart.xAxis.axisMinimum = 0f
         barChart.xAxis.axisMaximum = data.entryCount.toFloat()
-        // Set x-axis labels to the dates
-        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(aggregatedMacros.keys.toList())
+
+        val sdfInput = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val sdfOutput = SimpleDateFormat("dd/MM", Locale.getDefault())
+        val formattedDates = aggregatedMacros.keys.map { key ->
+            sdfOutput.format(sdfInput.parse(key)!!)
+        }
+        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(formattedDates)
 
         val yAxisLeft = barChart.axisLeft
         val yAxisRight = barChart.axisRight
@@ -150,8 +155,8 @@ class MainActivity : AppCompatActivity() {
 
         // Add space between bars
         val groupSpace = 0.08f
-        val barSpace = 0.02f
-        val barWidth = 0.2f
+        val barSpace = 0.04f
+        val barWidth = 0.4f
         data.barWidth = barWidth
         barChart.groupBars(0f, groupSpace, barSpace)
 
