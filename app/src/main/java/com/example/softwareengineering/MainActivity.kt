@@ -173,7 +173,7 @@ class MainActivity : AppCompatActivity() {
 //    }
 
     @OptIn(DelicateCoroutinesApi::class)
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint("MissingInflatedId", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -282,6 +282,8 @@ class MainActivity : AppCompatActivity() {
                     proteinValueField.text = String.format("%.1f", proteinValue)
                     fatValueField.text = String.format("%.1f", fatValue)
 
+                    currentMonthField.text = "Miesiąc: ${SimpleDateFormat("MM", Locale.getDefault()).format(Date())}"
+
                     composeView.setContent {
                         PieChartView(data = mapOf(
                             Pair("Węglewodany", carbsValue.roundToInt()),
@@ -295,7 +297,8 @@ class MainActivity : AppCompatActivity() {
                                 data = listOfPairs,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(130.dp)
+                                    .height(130.dp),
+                                redLineValue = 800.0
                             )
 
                     }

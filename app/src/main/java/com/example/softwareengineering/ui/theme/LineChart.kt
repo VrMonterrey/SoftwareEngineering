@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
@@ -23,7 +24,8 @@ import kotlin.math.roundToInt
 fun QuadLineChart(
     data: List<Pair<Int, Double>> = emptyList(),
     modifier: Modifier = Modifier,
-    padding: Dp = 20.dp
+    padding: Dp = 20.dp,
+    redLineValue: Double = 800.0
 ) {
     val spacing = 70f
     val upperValue = remember { (data.maxOfOrNull { it.second }?.plus(1))?.roundToInt() ?: 0 }
@@ -101,6 +103,14 @@ fun QuadLineChart(
                     width = 2.dp.toPx(),
                     cap = StrokeCap.Round
                 )
+            )
+
+            val redLineY = size.height - padding.toPx() - ((redLineValue - lowerValue) / (upperValue - lowerValue) * size.height).toFloat()
+            drawLine(
+                start = Offset(spacing, redLineY),
+                end = Offset(size.width - 7, redLineY),
+                color = Yellow,
+                strokeWidth = 2.dp.toPx()
             )
 
             val fillPath = android.graphics.Path(strokePath.asAndroidPath()).asComposePath().apply {
