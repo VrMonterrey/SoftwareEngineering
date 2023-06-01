@@ -252,7 +252,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         profile.setOnClickListener(View.OnClickListener{
-            var intent : Intent = Intent(applicationContext,ProfileActivity::class.java)
+            var intent : Intent = Intent(applicationContext,ChartActivity::class.java)
             startActivity(intent)
             finish()
         })
