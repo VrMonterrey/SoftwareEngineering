@@ -1,5 +1,6 @@
 package com.example.softwareengineering
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,7 +34,7 @@ class SkladnikiToChooseAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.skladnki_to_choose_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.skladniki_to_choose_item2, parent, false)
         return IngredientViewHolder(view)
     }
 
@@ -54,20 +55,15 @@ class SkladnikiToChooseAdapter(
     inner class IngredientViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val nameTextView: TextView = itemView.findViewById(R.id.product_name)
         private val kaloriiTextView: TextView = itemView.findViewById(R.id.kalorii_edit_text)
-        private val proteinsTextView: TextView = itemView.findViewById(R.id.product_proteins)
-        private val carbsTextView: TextView = itemView.findViewById(R.id.product_carbs)
-        private val fatsTextView: TextView = itemView.findViewById(R.id.product_fats)
         private val checkBox: CheckBox = itemView.findViewById(R.id.ingredientCheckBox)
         val amountNumber: NumberPicker = itemView.findViewById(R.id.numberPicker)
 
+        @SuppressLint("SetTextI18n")
         fun bind(product: Skladnik) {
             nameTextView.text = product.name
-            kaloriiTextView.text = product.calories.toString()
-            proteinsTextView.text = product.protein.toString()
-            carbsTextView.text = product.carbs.toString()
-            fatsTextView.text = product.fat.toString()
+            kaloriiTextView.text = "${product.calories} kcal"
             amountNumber.minValue = 0
-            amountNumber.maxValue = 200
+            amountNumber.maxValue = 1000
 
             checkBox.isChecked = skladPosilkuList.any { it.skladnikId == product.id }
             checkBox.setOnCheckedChangeListener { _, isChecked ->
