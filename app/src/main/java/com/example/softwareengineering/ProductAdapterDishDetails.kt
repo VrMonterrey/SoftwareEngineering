@@ -1,11 +1,13 @@
+package com.example.softwareengineering
+
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.softwareengineering.R
 import model.Skladnik
+import java.text.DecimalFormat
 
 class ProductAdapterDishDetails(
     private var productList: MutableList<Skladnik>,
@@ -25,10 +27,10 @@ class ProductAdapterDishDetails(
         val currentAmount = skladnikAmounts[position]
 
         holder.nameTextView.text = currentItem.name
-        holder.caloriesTextView.text = "${currentItem.calories}kcal"
-        holder.proteinsTextView.text = "Białko: ${currentItem.protein}"
-        holder.carbsTextView.text = "Węglowodany: ${currentItem.carbs}"
-        holder.fatsTextView.text = "Tłuszcz: ${currentItem.fat}"
+        holder.caloriesTextView.text = "${roundToDecimal((currentItem.calories / 100) * currentAmount)} kcal"
+        holder.proteinsTextView.text = "Białko: ${roundToDecimal((currentItem.protein  / 100) * currentAmount)}"
+        holder.carbsTextView.text = "Węglowodany: ${roundToDecimal((currentItem.carbs  / 100) * currentAmount)}"
+        holder.fatsTextView.text = "Tłuszcz: ${roundToDecimal((currentItem.fat  / 100) * currentAmount)}"
         holder.amountTextView.text = "${currentAmount}g"
     }
 
@@ -54,5 +56,10 @@ class ProductAdapterDishDetails(
     interface ProductAdapterDishDetailsListener {
         fun onDeleteClick(position: Int)
         fun onEditClick(position: Int)
+    }
+    fun roundToDecimal(number: Double): Double {
+        val decimalFormat = DecimalFormat("#.#")
+        val formattedNumber = decimalFormat.format(number).replace(',', '.')
+        return formattedNumber.toDouble()
     }
 }

@@ -128,7 +128,7 @@
         <activity
             android:name=".CategoryEditActivity"
             android:exported="false"
-            android:theme="@style/Theme.Material3.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".PosilkiToChooseAdapter"
             android:exported="false"
@@ -136,7 +136,7 @@
         <activity
             android:name=".DishCategories"
             android:exported="false"
-            android:theme="@style/Theme.Material3.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".Water"
             android:exported="false"

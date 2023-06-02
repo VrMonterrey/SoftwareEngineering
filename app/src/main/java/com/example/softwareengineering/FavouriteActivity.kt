@@ -217,7 +217,7 @@ class FavouriteActivity : AppCompatActivity(), FavouriteAdapter.PosilkiAdapterLi
                     }
                     // Update the dish's liked list in the database
                     val dishRef = database.child("dishes").child(dish.id)
-                    dishRef.child("liked").setValue(dish.liked)
+                    dishRef.setValue(dish)
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {

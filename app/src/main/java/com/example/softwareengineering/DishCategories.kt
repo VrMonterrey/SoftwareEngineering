@@ -85,7 +85,7 @@ class DishCategories : AppCompatActivity() {
     }
 
     private fun showCustomDialog() {
-        val builder = AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this,R.style.AlertDialogProducts)
         val dialogLayout = LayoutInflater.from(this).inflate(R.layout.dialog_layout, null)
         val recyclerView = dialogLayout.findViewById<RecyclerView>(R.id.ingredients_rv)
 

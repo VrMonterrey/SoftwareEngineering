@@ -1,6 +1,5 @@
 package com.example.softwareengineering
 
-import ProductAdapterDishDetails
 import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.content.Context
@@ -147,9 +146,9 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
                                     val roundedFats: String = String.format("%.1f", fatsPer100g)
 
                                     dishCalories.text = "kcal: $roundedCalories"
-                                    dishProteins.text = "p: $roundedProteins"
-                                    dishCarbs.text = "c: $roundedCarbs"
-                                    dishFats.text = "f: $roundedFats"
+                                    dishProteins.text = "b: $roundedProteins"
+                                    dishCarbs.text = "w: $roundedCarbs"
+                                    dishFats.text = "tł: $roundedFats | 100g."
 
                                     callback(amount)
                                 }

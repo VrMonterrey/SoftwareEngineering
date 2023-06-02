@@ -75,19 +75,22 @@
                     app:layout_constraintTop_toBottomOf="@+id/email_label"
                     app:layout_constraintLeft_toLeftOf="parent"/>
 
+                <Button
+                    android:id="@+id/dialog_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/transparent"
+                    android:text="Wybierz posiłki"
+                    android:textColor="#29FF03"
+                    android:textSize="14dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.496"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/name_edit_text" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
-
-        <Button
-            android:id="@+id/dialog_btn"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="Wybierz posiłki"
-            android:textSize="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/scroll_view"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageButton

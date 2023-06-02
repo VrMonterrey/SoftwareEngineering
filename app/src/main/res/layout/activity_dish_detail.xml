@@ -76,7 +76,7 @@
                     android:letterSpacing=".1"
                     android:text="@string/kcal"
                     android:textColor="@color/white"
-                    android:textSize="13sp"
+                    android:textSize="12sp"
                     android:textStyle="bold"
                     android:layout_weight="3"
                     android:paddingStart="10dp"
@@ -88,7 +88,7 @@
                     android:letterSpacing=".1"
                     android:text="@string/p"
                     android:textColor="@color/white"
-                    android:textSize="13sp"
+                    android:textSize="12sp"
                     android:textStyle="bold"
                     android:layout_weight="1"
                     android:textAlignment="center"/>
@@ -99,7 +99,7 @@
                     android:letterSpacing=".1"
                     android:text="@string/c"
                     android:textColor="@color/white"
-                    android:textSize="13sp"
+                    android:textSize="12sp"
                     android:textStyle="bold"
                     android:layout_weight="1"
                     android:textAlignment="center"/>
@@ -110,7 +110,7 @@
                     android:letterSpacing=".1"
                     android:text="@string/f"
                     android:textColor="@color/white"
-                    android:textSize="13sp"
+                    android:textSize="12sp"
                     android:textStyle="bold"
                     android:layout_weight="1"
                     android:textAlignment="center"/>
