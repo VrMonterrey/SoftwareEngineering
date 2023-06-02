@@ -19,10 +19,12 @@ import model.SkladPosilku
 import model.Skladnik
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import java.util.concurrent.atomic.AtomicInteger
 
 
-class FavouriteActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapterListener {
+class FavouriteActivity : AppCompatActivity(), FavouriteAdapter.PosilkiAdapterListener {
 
     private lateinit var logout: ImageButton
     private lateinit var home: ImageButton
@@ -33,7 +35,7 @@ class FavouriteActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapterList
     private lateinit var add: ImageView
 
     private lateinit var searchEditText: EditText
-    private lateinit var dishAdapter: PosilkiAdapter
+    private lateinit var dishAdapter: FavouriteAdapter
     private lateinit var dishList: MutableList<Posilki>
     private lateinit var dishRecyclerView: RecyclerView
     private lateinit var database: FirebaseDatabase
@@ -45,7 +47,7 @@ class FavouriteActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapterList
         setContentView(R.layout.activity_list_of_posilki)
 
         dishRecyclerView = findViewById(R.id.dishRecyclerView)
-        dishAdapter = PosilkiAdapter(mutableListOf(), this)
+        dishAdapter = FavouriteAdapter(mutableListOf(), this)
         searchEditText = findViewById(R.id.search)
         dishRecyclerView.setHasFixedSize(true)
         dishRecyclerView.layoutManager =
@@ -130,9 +132,8 @@ class FavouriteActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapterList
                                         }
 
                                         if (asyncTasksCount.decrementAndGet() == 0) {
-                                            val combinedList =
-                                                (dishesMatchedByName + dishesMatchedByProduct).distinct()
-                                            dishAdapter.updateData(combinedList as MutableList<Posilki>)
+                                            val combinedList = (dishesMatchedByName + dishesMatchedByProduct).distinct().toMutableList()
+                                            dishAdapter.updateData(combinedList)
                                         }
                                     }
 
@@ -203,46 +204,26 @@ class FavouriteActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapterList
 
     override fun onDeleteClick(position: Int) {
         val dish = dishList[position]
-        dish.id?.let { dishId ->
-            val dishRef = database.getReference("dishes/$dishId")
-            dishRef.removeValue().addOnSuccessListener {
+        val database = Firebase.database.reference
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid!!
 
+        dish.id?.let {
+            database.child("dishes").child(it).child("liked").addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
 
-                val dailyNutritionRef = database.getReference("scheduled")
-                val query = dailyNutritionRef.orderByChild("posilekId").equalTo(dishId)
-                query.addListenerForSingleValueEvent(object: ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        for (snapshot in dataSnapshot.children) {
-                            snapshot.ref.removeValue()
-                        }
+                    val isLiked = dish.isLikedByUser(currentUserId)
+                    if (isLiked) {
+                        dish.liked.remove(currentUserId)
                     }
-
-                    override fun onCancelled(databaseError: DatabaseError) {
-                    }
-                })
-
-                val comRef = database.getReference("composition")
-                val comQuery = comRef.orderByChild("posilkiId").equalTo(dishId)
-                comQuery.addListenerForSingleValueEvent(object: ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        for (snapshot in dataSnapshot.children) {
-                            snapshot.ref.removeValue()
-                        }
-                    }
-
-                    override fun onCancelled(databaseError: DatabaseError) {
-                    }
-                })
-
-                Toast.makeText(this, "Posiłek został pomyślnie usunięty", Toast.LENGTH_SHORT).show()
-            }
-                .addOnFailureListener {
-                    Toast.makeText(
-                        this,
-                        "Błąd podczas usuwania posiłku: ${it.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    // Update the dish's liked list in the database
+                    val dishRef = database.child("dishes").child(dish.id)
+                    dishRef.child("liked").setValue(dish.liked)
                 }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    //...
+                }
+            })
         }
     }
 

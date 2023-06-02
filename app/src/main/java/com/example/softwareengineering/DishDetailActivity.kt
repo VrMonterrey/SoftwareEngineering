@@ -268,18 +268,11 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
                 val dish = snapshot.getValue(Posilki::class.java)
                 if (dish != null) {
                     // Check if the user has liked the dish
-                    val isLiked = dish.isLikedByUser(currentUserId)
 
-                    // Toggle the heart icons based on liking
                     val likeButton = findViewById<ImageView>(R.id.like_btn)
-                    if (isLiked) {
-                        likeButton.setImageResource(R.drawable.ic_red_heart)
-                    } else {
-                        likeButton.setImageResource(R.drawable.ic_empty_heart)
-                    }
 
-                    // Set an OnClickListener to toggle the like status when the heart icon is clicked
                     likeButton.setOnClickListener {
+                        var isLiked = dish.isLikedByUser(currentUserId)
                         if (isLiked) {
                             // User already liked the dish, so remove their ID from the liked list
                             dish.liked.remove(currentUserId)
@@ -299,6 +292,27 @@ class DishDetailActivity : AppCompatActivity(), ProductAdapterDishDetails.Produc
                         val dishRef = database.child("dishes").child(dishId)
                         dishRef.setValue(dish)
                     }
+
+                    database.child("dishes").child(dishId).child("liked").addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            var isLiked = dish.isLikedByUser(currentUserId)
+
+                            // Toggle the heart icons based on liking
+                            val likeButton = findViewById<ImageView>(R.id.like_btn)
+                            if (isLiked) {
+                                likeButton.setImageResource(R.drawable.ic_red_heart)
+                            } else {
+                                likeButton.setImageResource(R.drawable.ic_empty_heart)
+                            }
+                        }
+
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            // Обработка ошибки, если не удалось получить значение isLiked
+                        }
+                    })
+
+                    // Set an OnClickListener to toggle the like status when the heart icon is clicked
+
                     calculateAverageMacro(dish) { amount ->
                         nameField.text = "${dish?.name}(${amount}g)"
                     }
