@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -33,7 +34,7 @@ class EditDishActivity : AppCompatActivity() {
     private lateinit var categorySpinner: Spinner
     private lateinit var addButton: ImageButton
     private lateinit var dialogButton: Button
-    private lateinit var posilkiArr: TextView
+    private lateinit var posilkiArr: ImageButton
 
     private lateinit var adapter: SkladnikiToChooseAdapter
 
@@ -49,6 +50,8 @@ class EditDishActivity : AppCompatActivity() {
     private var selectedCategory: String = ""
     private var dish: Posilki? = null
 
+    private lateinit var nameWrapper: ConstraintLayout
+    private lateinit var selectedImageWrapper: ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +76,15 @@ class EditDishActivity : AppCompatActivity() {
 
         imageView = findViewById<ImageView>(R.id.image_view)
         chooseImageButton = findViewById<Button>(R.id.choose_image_button)
+        nameWrapper = findViewById<ConstraintLayout>(R.id.name_wrapper)
+        selectedImageWrapper = findViewById<ConstraintLayout>(R.id.selected_image_wrapper)
+
+        selectedImageWrapper.visibility = View.VISIBLE
+
+        val layoutParams = nameWrapper.layoutParams as ConstraintLayout.LayoutParams
+        layoutParams.setMargins(0, 35, 0, 0)
+
+        nameWrapper.layoutParams = layoutParams
 
         galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             if (uri != null) {

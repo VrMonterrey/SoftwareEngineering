@@ -15,6 +15,9 @@ import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.marginTop
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -34,7 +37,7 @@ class PosilkiActivity : AppCompatActivity() {
     private lateinit var home: ImageButton
     private lateinit var categories: ImageButton
     private lateinit var profile: ImageButton
-    private lateinit var posilkiarr: TextView
+    private lateinit var posilkiarr: ImageButton
 
     private lateinit var dishName: EditText
     private lateinit var addButton: ImageButton
@@ -46,6 +49,10 @@ class PosilkiActivity : AppCompatActivity() {
 
     private lateinit var imageView: ImageView
     private lateinit var chooseImageButton: Button
+
+    private lateinit var nameWrapper: ConstraintLayout
+    private lateinit var selectedImageWrapper: ConstraintLayout
+
     private var photoUrl: String = ""
 
     private lateinit var getContent: ActivityResultLauncher<String>
@@ -123,11 +130,20 @@ class PosilkiActivity : AppCompatActivity() {
         //Choose image from gallery
         imageView = findViewById<ImageView>(R.id.image_view)
         chooseImageButton = findViewById<Button>(R.id.choose_image_button)
+        nameWrapper = findViewById<ConstraintLayout>(R.id.name_wrapper)
+        selectedImageWrapper = findViewById<ConstraintLayout>(R.id.selected_image_wrapper)
 
         val storageRef = FirebaseStorage.getInstance().reference.child("images")
 
         getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             if (uri != null) {
+                selectedImageWrapper.visibility = View.VISIBLE
+
+                val layoutParams = nameWrapper.layoutParams as ConstraintLayout.LayoutParams
+                layoutParams.setMargins(0, 35, 0, 0)
+
+                nameWrapper.layoutParams = layoutParams
+
                 imageView.setImageURI(uri)
                 val imageRef = storageRef.child(uri.lastPathSegment!!.substringAfterLast("/"))
                 val uploadTask = contentResolver?.openInputStream(uri)?.readBytes()?.let { imageRef.putBytes(it) }
