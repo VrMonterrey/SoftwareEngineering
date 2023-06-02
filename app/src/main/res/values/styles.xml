@@ -15,7 +15,7 @@
     <item name="android:textColorPrimary">@color/white</item>
 
     <!-- Button colors -->
-    <item name="colorAccent">@color/white</item>
+<!--    <item name="colorAccent">@color/white</item>-->
 </style>
 
     <style name="AlertDialogProducts" parent="Theme.AppCompat.Dialog.Alert">
@@ -26,7 +26,7 @@
         <item name="android:textColorPrimary">@color/white</item>
 
         <!-- Button colors -->
-        <item name="colorAccent">@color/white</item>
+<!--        <item name="colorAccent">@color/white</item>-->
     </style>
 
     <style name="MyTimePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">

@@ -113,8 +113,8 @@ class ListOfPosilkiActivity : AppCompatActivity(), PosilkiAdapter.PosilkiAdapter
                                         }
 
                                         if (asyncTasksCount.decrementAndGet() == 0) {
-                                            val combinedList = (dishesMatchedByName + dishesMatchedByProduct).distinct()
-                                            dishAdapter.updateData(combinedList as MutableList<Posilki>)
+                                            val combinedList = (dishesMatchedByName + dishesMatchedByProduct).distinct().toMutableList()
+                                            dishAdapter.updateData(combinedList)
                                         }
                                     }
 

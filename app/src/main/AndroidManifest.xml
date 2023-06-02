@@ -156,7 +156,7 @@
         <activity
             android:name=".PosilkiActivity"
             android:exported="false"
-            android:theme="@style/Theme.Material3.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".EditActivity"
             android:exported="false"
